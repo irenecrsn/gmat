@@ -1,0 +1,19 @@
+Package: gconc
+Type: Package
+Title: Graphically constrained concentration matrices
+Version: 0.1
+Date: 2018-04-29
+Author: Who wrote it
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: Sampling methods for concentration matrices constrained by an undirected graphical structure
+License: MIT + file LICENSE 
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.0.1
+ByteCompile: true
+Suggests: Rgraphviz,
+          testthat
+Imports:
+	Matrix,
+	igraph,
+	methods,
+	stats
