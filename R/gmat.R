@@ -6,5 +6,5 @@
 #' @import methods
 #'
 #' @docType package
-#' @name gconc
+#' @name gmat 
 NULL
