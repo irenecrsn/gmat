@@ -95,7 +95,7 @@ rgmn <- function(N = 1,
 	return (sam)
 }
 
-#' @useDynLib gconc gram_schmidt_sel
+#' @useDynLib gmat gram_schmidt_sel
 .rgmn_sqrt <- function(N, rentries, ug, zapzeros) {
 
 	p <- length(V(ug))
