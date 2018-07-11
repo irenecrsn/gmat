@@ -30,7 +30,7 @@ test_that("gram schmidt process yields orthogonal base", {
 						   ncol = p,
 						   byrow = TRUE)
 	span_dot_prod <- tcrossprod(span_ort)
-	expect_true(isDiagonal(zapsmall(span_dot_prod)))
+	expect_true(Matrix::isDiagonal(zapsmall(span_dot_prod)))
 })
 
 test_that("selective gram schmidt actually selects", {

@@ -1,8 +1,10 @@
-#' Sample a random Gaussian Markov network 
+#' Sample random covariance/concentration graph matrices. 
 #'
 #' Samples the concentration/covariance matrix corresponding to an 
-#' undirected graph by two different methods: partial orthogonalization
-#' or diagonal dominance.
+#' undirected graph by either partial orthogonalization or diagonal dominance.
+#'
+#' @name rgmat
+#' @rdname rgmat
 #'
 #' @param N sample size
 #' @param ug the undirected graph 
@@ -13,86 +15,17 @@
 #' `diagdom` (diagonal dominance)
 #' @param rentries the random number generator for the
 #'non-zero entries (defaults to `runif`)
-#' @param k real number greater than `1`, the desired condition
-#'number of the resulting matrix
 #' @param zapzeros convert to zero extremely low entries
 #'
 #' @return  A three-dimensional array of length `p*p*N`
 #'
+#' @useDynLib gmat, .registration=TRUE
 #' @export
-rgmn <- function(N = 1,
-                 ug = NULL,
-                 p = 10,
-                 d = 0.25,
-                 method = "port",
-                 rentries = runif,
-                 k = NULL,
-								 zapzeros = FALSE) 
-{
+port <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, zapzeros = TRUE) {
   
   if (is.null(ug)) {
     ug <- igraph::sample_gnp(n = p, p = d)
   }
-  
-  if (method == "port") {
-    sam <- .rgmn_port(N = N, rentries = rentries, ug = ug, zapzeros = zapzeros)
-  } else if (method == "diagdom") {
-    sam <- .rgmn_diagdom(N = N, rentries = rentries, ug = ug)
-  }
-  
-  if (!is.null(k) && k >= 1) {
-    sam <- .kcontrol(sam = sam, k = k)	
-  }
-  
-  return(sam)
-}
-
-.kcontrol <- function(sam, k = 1) {
-
-	N <- dim(sam)[3]
-	p <- dim(sam)[1]
-
-	for (n in 1:N) {
-  		eig_val <- eigen(sam[, , n])$values
-  		if (min(eig_val)<0){
-			warning("matrix is not positive definite, return
-					the original matrix")
-  		} else {
-  			delta <- (max(eig_val) - k*min(eig_val)) / (k - 1)
-  			sam[, , n] <- sam[, , n] + 
-				diag(x = delta, nrow = p)
-		}
-	}
-  	return (sam)
-}
-
-.rgmn_diagdom <- function(N, rentries, ug) {
-  p <- length(V(ug))
-  edges <- as_edgelist(ug)
-
-  sam <- array(dim = c(p, p, N), data = 0)
-  ned <- nrow(edges)
-  if (ned > 0) {
-    for (i in 1:ned) {
-      sam[edges[i, 1], edges[i, 2], ] <- sam[edges[i ,2],
-										    edges[i, 1], ] <-
-											    rentries(N) 
-    }
-  }
-  for (i in 1:p) {
-    sam[i, i, ] <- abs(rentries(N)) 
-  }
-  mdiag <- apply(sam, MARGIN = c(1, 3), 
-                 FUN = function(row) {return(sum(abs(row)))})
-  sam <- sam + array(dim = dim(sam), data = apply(X = mdiag, MARGIN
-												  = 2, FUN = diag,
-												  nrow = p))
-	return (sam)
-}
-
-#' @useDynLib gmat, .registration=TRUE
-.rgmn_port <- function(N, rentries, ug, zapzeros) {
-
 	p <- length(V(ug))
 
 	sam <- array(dim = c(p, p, N), data = 0)
@@ -118,5 +51,66 @@ rgmn <- function(N = 1,
 	return(sam)
 }
 
+#' @rdname rgmat
+#'
+#' @export
+diagdom <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif) {
+  
+  if (is.null(ug)) {
+    ug <- igraph::sample_gnp(n = p, p = d)
+  }
+  p <- length(V(ug))
+  edges <- as_edgelist(ug)
 
+  sam <- array(dim = c(p, p, N), data = 0)
+  ned <- nrow(edges)
+  if (ned > 0) {
+    for (i in 1:ned) {
+      sam[edges[i, 1], edges[i, 2], ] <- sam[edges[i ,2],
+										    edges[i, 1], ] <-
+											    rentries(N) 
+    }
+  }
+  for (i in 1:p) {
+    sam[i, i, ] <- abs(rentries(N)) 
+  }
+  mdiag <- apply(sam, MARGIN = c(1, 3), 
+                 FUN = function(row) {return(sum(abs(row)))})
+  sam <- sam + array(dim = dim(sam), data = apply(X = mdiag, MARGIN
+												  = 2, FUN = diag,
+												  nrow = p))
+	return (sam)
+}
+
+#' Control the condition number of a sample. 
+#'
+#' Adjust the matrix sample provided so that all its elements have the desired
+#' condition number
+#'
+#' @param sam matrix sample already generated
+#' @param k real number greater than `1`, the desired condition
+#'number of the resulting matrix
+#'
+#' @return  A three-dimensional array of length `p*p*N` with adjusted condition
+#' number
+#'
+#' @export
+kcontrol <- function(sam, k = 1) {
+
+	N <- dim(sam)[3]
+	p <- dim(sam)[1]
+
+	for (n in 1:N) {
+  		eig_val <- eigen(sam[, , n])$values
+  		if (min(eig_val)<0){
+			warning("matrix is not positive definite, return
+					the original matrix")
+  		} else {
+  			delta <- (max(eig_val) - k*min(eig_val)) / (k - 1)
+  			sam[, , n] <- sam[, , n] + 
+				diag(x = delta, nrow = p)
+		}
+	}
+  	return (sam)
+}
 
