@@ -11,8 +11,6 @@
 #' @param p Matrix dimension (number of nodes in `ug` if provided) 
 #' @param d number in `[0,1]`, the proportion of non-zero
 #'entries (if `ug` is not provided)
-#' @param method one of the following: `port` (partial orthogonalization), 
-#' `diagdom` (diagonal dominance)
 #' @param rentries the random number generator for the
 #'non-zero entries (defaults to `runif`)
 #' @param zapzeros convert to zero extremely low entries
