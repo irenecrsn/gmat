@@ -16,6 +16,7 @@ This package implements the methods described in the paper:
 > Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P.
 > A partial orthogonalization method for simulating covariance and concentration graph matrices
 > PGM 2018, Accepted.
+
 It is governed by one main function, `rgmn`, which takes as input an undirected
 graph structure `ug` and a sample size `N`, and generates `N`
 covariance/concentration matrices subject to the zeros imposed by the undirected
