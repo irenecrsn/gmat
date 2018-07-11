@@ -1,7 +1,7 @@
 # gmat - An R package for simulating covariance and concentration graph matrices
 
 ## Requirements
-- R packages `igraph`, `Matrix`
+- R package `igraph`
 
 ## Installation instructions
 Probably the easiest way to install the package until it is available on CRAN is
