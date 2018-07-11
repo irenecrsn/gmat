@@ -11,8 +11,7 @@ License: MIT + file LICENSE
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
 ByteCompile: true
-Suggests: Rgraphviz,
-          testthat
+Suggests: testthat
 Imports:
 	Matrix,
 	igraph,
