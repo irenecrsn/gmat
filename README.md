@@ -1,4 +1,5 @@
 # gmat - An R package for simulating covariance and concentration graph matrices
+[![Build Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat)
 
 ## Requirements
 - R package `igraph`
@@ -24,7 +25,7 @@ graph structure `ug`.
 
 By default, it uses the method described in the above
 paper; however, it is possible to also use the classical diagonal dominance
-method by setting `method = "domdiag"` in the parameter list.
+method by setting `method = "diagdom"` in the parameter list.
 
 ## An example of use
 
