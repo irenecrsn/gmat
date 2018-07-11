@@ -1,16 +1,17 @@
 Package: gmat 
 Type: Package
-Title: Graphically constrained matrices
+Title: Simulation of Graphically Constrained Matrices
 Version: 0.1.0
-Date: 2018-05-10
+Date: 2018-07-11
 Encoding: UTF-8
 Author: Irene Córdoba and Gherardo Varando
 Maintainer: Irene Córdoba <irene.cordoba@upm.es>
-Description: Methods for simulating concentration and covariance graph matrices via partial orthogonalization.
+Description: Methods for simulating concentration and covariance graph matrices.
 License: MIT + file LICENSE 
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
 ByteCompile: true
+URL: https://github.com/irenecrsn/gmat
 BugReports: https://github.com/irenecrsn/gmat/issues
 Suggests: testthat
 Imports:
