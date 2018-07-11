@@ -24,7 +24,7 @@ graph structure `ug`.
 
 By default, it uses the method described in the above
 paper; however, it is possible to also use the classical diagonal dominance
-method by setting `method = domdiag` in the parameter list.
+method by setting `method = "domdiag"` in the parameter list.
 
 ## An example of use
 
