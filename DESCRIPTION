@@ -4,8 +4,8 @@ Title: Graphically constrained matrices
 Version: 0.1
 Date: 2018-05-10
 Encoding: UTF-8
-Author: Irene Córdoba-Sánchez and Gherardo Varando
-Maintainer: Irene Córdoba-Sánchez <irene.cordoba@upm.es>
+Author: Irene Córdoba and Gherardo Varando
+Maintainer: Irene Córdoba <irene.cordoba@upm.es>
 Description: Methods for simulating concentration and covariance graph matrices via partial orthogonalization.
 License: MIT + file LICENSE 
 Roxygen: list(markdown = TRUE)
@@ -13,7 +13,6 @@ RoxygenNote: 6.0.1
 ByteCompile: true
 Suggests: testthat
 Imports:
-	Matrix,
 	igraph,
 	methods,
 	stats

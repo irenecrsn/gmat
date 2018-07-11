@@ -1,36 +1,30 @@
 #' Sample a random Gaussian Markov network 
 #'
-#' Samples the concentration matrix corresponding to a Gaussian
-#' Markov network by two different methods: adding a strictly
-#' positive diagonal to the square root of a matrix, or adding
-#' a dominant diagonal to an arbitrary square matrix.
+#' Samples the concentration/covariance matrix corresponding to an 
+#' undirected graph by two different methods: partial orthogonalization
+#' or diagonal dominance.
 #'
-#'@param N sample size.
-#'@param ug the undirected graph 
-#'@param p Positive integer, Number of dimension.
-#'@param d number in `[0,1]`, the proportion of non-zero
-#'entries.
-#'@param method string one of the following: `sqrt`, `domdiag`.
-#'@param rentries function, the random number generator for the
-#'non-zero entries off the diagonal.
-#'@param k real number greater than `1`, the desired condition
-#'number of the resulting matrix.
-#'@param zapzeros convert to zero extremely low entries.
+#' @param N sample size
+#' @param ug the undirected graph 
+#' @param p Matrix dimension (number of nodes in `ug` if provided) 
+#' @param d number in `[0,1]`, the proportion of non-zero
+#'entries (if `ug` is not provided)
+#' @param method one of the following: `port` (partial orthogonalization), 
+#' `diagdom` (diagonal dominance)
+#' @param rentries the random number generator for the
+#'non-zero entries (defaults to `runif`)
+#' @param k real number greater than `1`, the desired condition
+#'number of the resulting matrix
+#' @param zapzeros convert to zero extremely low entries
 #'
-#'@details Sample a sparse symmetric positive definite matrix.
-#'
-#' @return  A list with the following components:
-#'   - `param` A list with the parameters for the concentration
-#'   matrix. In both cases, it consists on a square matrix and
-#'   a diagonal matrix
-#'   - `mconc` The sampled concentration matrix.
+#' @return  A three-dimensional array of length `p*p*N`
 #'
 #' @export
 rgmn <- function(N = 1,
                  ug = NULL,
                  p = 10,
                  d = 0.25,
-                 method = "sqrt",
+                 method = "port",
                  rentries = runif,
                  k = NULL,
 								 zapzeros = FALSE) 
@@ -40,10 +34,10 @@ rgmn <- function(N = 1,
     ug <- igraph::sample_gnp(n = p, p = d)
   }
   
-  if (method == "sqrt") {
-    sam <- .rgmn_sqrt(N = N, rentries = rentries, ug = ug, zapzeros = zapzeros)
-  } else if (method == "domdiag") {
-    sam <- .rgmn_domdiag(N = N, rentries = rentries, ug = ug)
+  if (method == "port") {
+    sam <- .rgmn_port(N = N, rentries = rentries, ug = ug, zapzeros = zapzeros)
+  } else if (method == "diagdom") {
+    sam <- .rgmn_diagdom(N = N, rentries = rentries, ug = ug)
   }
   
   if (!is.null(k) && k >= 1) {
@@ -72,7 +66,7 @@ rgmn <- function(N = 1,
   	return (sam)
 }
 
-.rgmn_domdiag <- function(N, rentries, ug) {
+.rgmn_diagdom <- function(N, rentries, ug) {
   p <- length(V(ug))
   edges <- as_edgelist(ug)
 
@@ -97,7 +91,7 @@ rgmn <- function(N = 1,
 }
 
 #' @useDynLib gmat, .registration=TRUE
-.rgmn_sqrt <- function(N, rentries, ug, zapzeros) {
+.rgmn_port <- function(N, rentries, ug, zapzeros) {
 
 	p <- length(V(ug))
 

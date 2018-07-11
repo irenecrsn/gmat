@@ -4,7 +4,7 @@
 \name{gmat}
 \alias{gmat}
 \alias{gmat-package}
-\title{gconc: Graphically constrained concentration matrices.}
+\title{gmat: Graphically constrained matrices.}
 \description{
-gconc: Graphically constrained concentration matrices.
+gmat: Graphically constrained matrices.
 }

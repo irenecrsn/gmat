@@ -1,6 +1,5 @@
-#' gconc: Graphically constrained concentration matrices.
+#' gmat: Graphically constrained matrices.
 #'
-#' @import Matrix
 #' @import igraph
 #' @importFrom stats rnorm runif rbinom
 #' @import methods

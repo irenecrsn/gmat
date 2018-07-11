@@ -4,44 +4,35 @@
 \alias{rgmn}
 \title{Sample a random Gaussian Markov network}
 \usage{
-rgmn(N = 1, ug = NULL, p = 10, d = 0.25, method = "sqrt",
+rgmn(N = 1, ug = NULL, p = 10, d = 0.25, method = "port",
   rentries = runif, k = NULL, zapzeros = FALSE)
 }
 \arguments{
-\item{N}{sample size.}
+\item{N}{sample size}
 
 \item{ug}{the undirected graph}
 
-\item{p}{Positive integer, Number of dimension.}
+\item{p}{Matrix dimension (number of nodes in \code{ug} if provided)}
 
 \item{d}{number in \code{[0,1]}, the proportion of non-zero
-entries.}
+entries (if \code{ug} is not provided)}
 
-\item{method}{string one of the following: \code{sqrt}, \code{domdiag}.}
+\item{method}{one of the following: \code{port} (partial orthogonalization),
+\code{diagdom} (diagonal dominance)}
 
-\item{rentries}{function, the random number generator for the
-non-zero entries off the diagonal.}
+\item{rentries}{the random number generator for the
+non-zero entries (defaults to \code{runif})}
 
 \item{k}{real number greater than \code{1}, the desired condition
-number of the resulting matrix.}
+number of the resulting matrix}
 
-\item{zapzeros}{convert to zero extremely low entries.}
+\item{zapzeros}{convert to zero extremely low entries}
 }
 \value{
-A list with the following components:
-\itemize{
-\item \code{param} A list with the parameters for the concentration
-matrix. In both cases, it consists on a square matrix and
-a diagonal matrix
-\item \code{mconc} The sampled concentration matrix.
-}
+A three-dimensional array of length \code{p*p*N}
 }
 \description{
-Samples the concentration matrix corresponding to a Gaussian
-Markov network by two different methods: adding a strictly
-positive diagonal to the square root of a matrix, or adding
-a dominant diagonal to an arbitrary square matrix.
-}
-\details{
-Sample a sparse symmetric positive definite matrix.
+Samples the concentration/covariance matrix corresponding to an
+undirected graph by two different methods: partial orthogonalization
+or diagonal dominance.
 }
