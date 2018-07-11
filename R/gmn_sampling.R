@@ -15,6 +15,7 @@
 #'non-zero entries off the diagonal.
 #'@param k real number greater than `1`, the desired condition
 #'number of the resulting matrix.
+#'@param zapzeros convert to zero extremely low entries.
 #'
 #'@details Sample a sparse symmetric positive definite matrix.
 #'
@@ -95,7 +96,7 @@ rgmn <- function(N = 1,
 	return (sam)
 }
 
-#' @useDynLib gmat gram_schmidt_sel
+#' @useDynLib gmat, .registration=TRUE
 .rgmn_sqrt <- function(N, rentries, ug, zapzeros) {
 
 	p <- length(V(ug))

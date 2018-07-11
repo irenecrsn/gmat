@@ -24,6 +24,8 @@ non-zero entries off the diagonal.}
 
 \item{k}{real number greater than \code{1}, the desired condition
 number of the resulting matrix.}
+
+\item{zapzeros}{convert to zero extremely low entries.}
 }
 \value{
 A list with the following components:
