@@ -6,3 +6,7 @@ cache: packages
 branches:
     only:
         - master
+r:
+    - oldrel
+    - release
+    - devel
