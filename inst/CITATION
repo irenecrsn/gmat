@@ -1,0 +1,14 @@
+bibentry(bibtype = "Inproceedings",
+  title        = "A partial orthogonalization method for simulating covariance
+  and concentration graph matrices",
+  author       = c(person(given = "Irene", family = "Córdoba"),
+                   person(given = "Gherardo", family = "Varando"),
+                   person(given = "Concha", family = "Bielza"),
+                   person(given = "Pedro", family = "Larrañaga")),
+  booktitle = "Proceedings of the 9th International Conference on Probabilistic
+  Graphical Models",
+  location = "Prague, Czech Republic",
+  publisher    = "PMLR",
+  year         = "2018",
+  note         = "Accepted",
+)

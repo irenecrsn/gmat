@@ -1,6 +1,6 @@
 #' Sample random covariance/concentration graph matrices. 
 #'
-#' Samples the concentration/covariance matrix corresponding to an 
+#' Samples the covariance/concentration matrix corresponding to an 
 #' undirected graph by either partial orthogonalization or diagonal dominance.
 #'
 #' @name rgmat
@@ -14,6 +14,14 @@
 #' @param rentries the random number generator for the
 #'non-zero entries (defaults to `runif`)
 #' @param zapzeros convert to zero extremely low entries
+#' 
+#' @details Function `port` uses the method described in 
+#' [https://arxiv.org/abs/1807.03090](https://arxiv.org/abs/1807.03090). In summary, it consists on generating a random
+#' matrix `Q` and performing row-wise orthogonalization such that if `i` and `j`
+#' are not adjacent in `ug`, then the rows corresponding to such indices are
+#' orthogonalized, without violating previous orthogonalizations and without
+#' introducing unwanted independences. The resulting matrix after the process
+#' has finished is the crossproduct of `Q`.
 #'
 #' @return  A three-dimensional array of length `p*p*N`
 #' 
@@ -63,8 +71,15 @@ port <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, zapzeros =
 #' @param k real number greater than `1`, the desired condition
 #'	number of the matrices in the resulting sample 
 #'
+#' @details We also provide an implementation of the most commonly used in the
+#' literature `diagdom`. By contrast, this method produces a random matrix `M`
+#' with zeros corresponding to missing edges in `ug`, and then enforces a
+#' dominant diagonal to ensure positive definiteness. Matrices produced by
+#' `diagdom` usually are better conditioned than those by `port`; however, they
+#' typically suffer from small off-diagonal entries, which can compromise model
+#' validation in Gaussian graphical models. This is avoided by `port`.
+#' 
 #' @examples
-#'
 #' # Generate 10 matrices complying with such random structure via 
 #' # diagonal dominance 
 #' gmat::diagdom(N = 10, ug = ug)
