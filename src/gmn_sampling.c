@@ -132,7 +132,7 @@ int gram_schmidt (double **span_ort, double **span,
  */
 int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 {
-	unsigned int i = 0, j = 0;
+	unsigned int i = 0;
 	double dot_uv = 0, dot_uu = 0, lambda = 0;
 
 	if (v_proj_u == NULL || v == NULL || u == NULL || dim == NULL) {
