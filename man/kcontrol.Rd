@@ -20,3 +20,16 @@ number
 Adjust the matrix sample provided so that all its elements have the desired
 condition number
 }
+\examples{
+
+# Generate a random undirected graph structure
+ug <- igraph::sample_gnp(n = 3, p = 0.25)
+
+# Generate 10 matrices complying with such random structure via 
+# diagonal dominance 
+sample <- gmat::diagdom(N = 10, ug = ug)
+
+# Adjust condition number, for example, to 5
+sample <- kcontrol(sam = sample, k = 5)
+
+}

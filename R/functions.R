@@ -16,6 +16,15 @@
 #' @param zapzeros convert to zero extremely low entries
 #'
 #' @return  A three-dimensional array of length `p*p*N`
+#' 
+#' @examples
+#'
+#' # Generate a random undirected graph structure
+#' ug <- igraph::sample_gnp(n = 3, p = 0.25)
+#'
+#' # Generate 10 matrices complying with such random structure via 
+#' # partial orthogonalization
+#' gmat::port(N = 10, ug = ug)
 #'
 #' @useDynLib gmat, .registration=TRUE
 #' @export
@@ -50,6 +59,12 @@ port <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, zapzeros =
 }
 
 #' @rdname rgmat
+#'
+#' @examples
+#'
+#' # Generate 10 matrices complying with such random structure via 
+#' # diagonal dominance 
+#' gmat::diagdom(N = 10, ug = ug)
 #'
 #' @export
 diagdom <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif) {
@@ -91,6 +106,18 @@ diagdom <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif) {
 #'
 #' @return  A three-dimensional array of length `p*p*N` with adjusted condition
 #' number
+#'
+#' @examples
+#'
+#' # Generate a random undirected graph structure
+#' ug <- igraph::sample_gnp(n = 3, p = 0.25)
+#'
+#' # Generate 10 matrices complying with such random structure via 
+#' # diagonal dominance 
+#' sample <- gmat::diagdom(N = 10, ug = ug)
+#'
+#' # Adjust condition number, for example, to 5
+#' sample <- kcontrol(sam = sample, k = 5)
 #'
 #' @export
 kcontrol <- function(sam, k = 1) {

@@ -33,3 +33,18 @@ A three-dimensional array of length \code{p*p*N}
 Samples the concentration/covariance matrix corresponding to an
 undirected graph by either partial orthogonalization or diagonal dominance.
 }
+\examples{
+
+# Generate a random undirected graph structure
+ug <- igraph::sample_gnp(n = 3, p = 0.25)
+
+# Generate 10 matrices complying with such random structure via 
+# partial orthogonalization
+gmat::port(N = 10, ug = ug)
+
+
+# Generate 10 matrices complying with such random structure via 
+# diagonal dominance 
+gmat::diagdom(N = 10, ug = ug)
+
+}
