@@ -18,9 +18,10 @@ An R package for simulating covariance and concentration graph matrices.
 [![Build Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat)
 
 This package implements the methods described in the paper:
+
 > Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P.
-> A partial orthogonalization method for simulating covariance and concentration graph matrices
-> PGM 2018, Accepted.
+A partial orthogonalization method for simulating covariance and concentration
+graph matrices, PGM 2018, Accepted.
 
 It is governed by two main functions, `port` and `diagdom`, which take as input an undirected
 graph structure `ug` and a sample size `N`, and generates `N`

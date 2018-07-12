@@ -7,7 +7,9 @@ An R package for simulating covariance and concentration graph matrices.
 
 [![Build Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat)
 
-This package implements the methods described in the paper: &gt; Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. &gt; A partial orthogonalization method for simulating covariance and concentration graph matrices &gt; PGM 2018, Accepted.
+This package implements the methods described in the paper:
+
+> Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. A partial orthogonalization method for simulating covariance and concentration graph matrices, PGM 2018, Accepted.
 
 It is governed by two main functions, `port` and `diagdom`, which take as input an undirected graph structure `ug` and a sample size `N`, and generates `N` covariance/concentration matrices subject to the zeros imposed by the undirected graph structure `ug`.
 
@@ -37,24 +39,24 @@ matrices <- gmat::port(N = 3, ug = ug)
 matrices
 #> , , 1
 #> 
-#>         [,1]      [,2]      [,3]
-#> [1,] 1.28826 0.0000000 0.0000000
-#> [2,] 0.00000 0.0013066 0.0000000
-#> [3,] 0.00000 0.0000000 0.0242113
+#>          [,1]      [,2]      [,3]
+#> [1,] 1.266063 0.0000000 0.0000000
+#> [2,] 0.000000 0.1099767 0.0181915
+#> [3,] 0.000000 0.0181915 0.1482692
 #> 
 #> , , 2
 #> 
-#>           [,1]      [,2]      [,3]
-#> [1,] 0.9922832 0.0000000 0.0000000
-#> [2,] 0.0000000 0.3958848 0.0000000
-#> [3,] 0.0000000 0.0000000 0.3301135
+#>         [,1]       [,2]       [,3]
+#> [1,] 1.30136  0.0000000  0.0000000
+#> [2,] 0.00000  0.1113999 -0.2605526
+#> [3,] 0.00000 -0.2605526  0.6969884
 #> 
 #> , , 3
 #> 
-#>          [,1]    [,2]      [,3]
-#> [1,] 1.601441 0.00000 0.0000000
-#> [2,] 0.000000 0.36177 0.0000000
-#> [3,] 0.000000 0.00000 0.1108948
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.9065405 0.0000000 0.0000000
+#> [2,] 0.0000000 0.0769226 0.0228817
+#> [3,] 0.0000000 0.0228817 0.0236012
 ```
 
 We apprieciate how the zero pattern is shared by all of the simulated matrices. The return value is an array, and so the individual matrices can be accessed as `matrices[, , n]`, where `n` is the index of the matrix we want to retrieve from the sample, ranging from `1` to `N`.
