@@ -10,10 +10,10 @@ os:
     #- linux
     - osx
 r:
-    - oldrel
+    #- oldrel
     - release
-    - devel
+      #- devel
 install:
   - if [ $TRAVIS_OS_NAME = osx ]; then brew install libgit2; fi
 before_script:
-  - if [ $TRAVIS_OS_NAME = osx ]; then Rscript -e 'install.packages("igraph")'; fi
+  - if [ $TRAVIS_OS_NAME = osx ]; then Rscript -e 'install.packages(c("igraph", "testthat"))'; fi
