@@ -6,7 +6,7 @@ Date: 2018-07-11
 Encoding: UTF-8
 Author: Irene Córdoba and Gherardo Varando
 Maintainer: Irene Córdoba <irene.cordoba@upm.es>
-Description: Methods for simulating concentration and covariance graph matrices.
+Description: Implementation of the simulation method for Gaussian graphical models described in Córdoba et al. (2018) <https://arxiv.org/abs/1807.03090>. The package also provides an alternative method based on diagonally dominant matrices.
 License: GPL (>=2) 
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
