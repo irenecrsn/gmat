@@ -1,7 +1,13 @@
 context("port and domdiag methods")
 
-# TODO change array so that we can do for (m in sample)
-# (that is, first dimension is the number of samples)
+test_that("the condition number is controlled", {
+	N <- 20; p <- 10; d <- 0.15; k <- 5;
+
+	sample <- diagdom(N = N, p = p, d = d, k = k)
+	for (n in 1:N) {
+		expect_equal(kappa(sample[, , n], exact = TRUE), k)
+	}
+})
 
 test_that("selective gram schmidt actually selects", {
 	p <- 10; d <- 0.15;
@@ -36,13 +42,14 @@ test_that("the size of the sample is correct", {
 	expect_equal(dim(sample)[3], N)
 })
 
-test_that("the concentration matrix is symmetric positive definite", {
+test_that("matrices are symmetric positive definite", {
 	N <- 20; p <- 10; d <- 0.15;
 
 	sample <- port(N = N, p = p, d = d) 
 	for (n in 1:N) {
 		expect_true(isSymmetric(sample[, , n]))
-		expect_gt(min(eigen(sample[, , n])$values), 0)
+		# here we do not test positive definiteness since 
+		# sometimes condition numbers are very high
 	}
 
 	sample <- diagdom(N = N, p = p, d = d)

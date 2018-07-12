@@ -60,6 +60,9 @@ port <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, zapzeros =
 
 #' @rdname rgmat
 #'
+#' @param k real number greater than `1`, the desired condition
+#'	number of the matrices in the resulting sample 
+#'
 #' @examples
 #'
 #' # Generate 10 matrices complying with such random structure via 
@@ -67,7 +70,7 @@ port <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, zapzeros =
 #' gmat::diagdom(N = 10, ug = ug)
 #'
 #' @export
-diagdom <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif) {
+diagdom <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, k = NULL) {
   
   if (is.null(ug)) {
     ug <- igraph::sample_gnp(n = p, p = d)
@@ -92,50 +95,14 @@ diagdom <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif) {
   sam <- sam + array(dim = dim(sam), data = apply(X = mdiag, MARGIN
 												  = 2, FUN = diag,
 												  nrow = p))
-	return (sam)
-}
-
-#' Control the condition number of a sample. 
-#'
-#' Adjust the matrix sample provided so that all its elements have the desired
-#' condition number
-#'
-#' @param sam matrix sample already generated
-#' @param k real number greater than `1`, the desired condition
-#'number of the resulting matrix
-#'
-#' @return  A three-dimensional array of length `p*p*N` with adjusted condition
-#' number
-#'
-#' @examples
-#'
-#' # Generate a random undirected graph structure
-#' ug <- igraph::sample_gnp(n = 3, p = 0.25)
-#'
-#' # Generate 10 matrices complying with such random structure via 
-#' # diagonal dominance 
-#' sample <- gmat::diagdom(N = 10, ug = ug)
-#'
-#' # Adjust condition number, for example, to 5
-#' sample <- kcontrol(sam = sample, k = 5)
-#'
-#' @export
-kcontrol <- function(sam, k = 1) {
-
-	N <- dim(sam)[3]
-	p <- dim(sam)[1]
-
-	for (n in 1:N) {
-  		eig_val <- eigen(sam[, , n])$values
-  		if (min(eig_val)<0){
-			warning("matrix is not positive definite, return
-					the original matrix")
-  		} else {
+	if (!is.null(k)) {
+		for (n in 1:N) {
+  			eig_val <- eigen(sam[, , n])$values
   			delta <- (max(eig_val) - k*min(eig_val)) / (k - 1)
-  			sam[, , n] <- sam[, , n] + 
-				diag(x = delta, nrow = p)
+  			sam[, , n] <- sam[, , n] + diag(x = delta, nrow = p)
 		}
 	}
-  	return (sam)
+
+	return (sam)
 }
 

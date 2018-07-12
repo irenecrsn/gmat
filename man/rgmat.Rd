@@ -9,7 +9,8 @@
 port(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif,
   zapzeros = TRUE)
 
-diagdom(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif)
+diagdom(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif,
+  k = NULL)
 }
 \arguments{
 \item{N}{sample size}
@@ -25,6 +26,9 @@ entries (if \code{ug} is not provided)}
 non-zero entries (defaults to \code{runif})}
 
 \item{zapzeros}{convert to zero extremely low entries}
+
+\item{k}{real number greater than \code{1}, the desired condition
+number of the matrices in the resulting sample}
 }
 \value{
 A three-dimensional array of length \code{p*p*N}
