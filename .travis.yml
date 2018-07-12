@@ -6,9 +6,6 @@ cache: packages
 branches:
     only:
         - master
-os:
-    - linux
-    - osx
 r:
     - oldrel
     - release
