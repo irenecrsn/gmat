@@ -1,12 +1,18 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-sudo: false
+sudo: true 
 cache: packages
 branches:
     only:
         - master
+os:
+    #- linux
+    - osx
 r:
     - oldrel
     - release
     - devel
+install:
+  - if [ $TRAVIS_OS_NAME = osx ]; then brew install libgit2; fi
+
