@@ -9,7 +9,8 @@
 port(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif,
   zapzeros = TRUE)
 
-diagdom(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif)
+diagdom(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif,
+  k = NULL)
 }
 \arguments{
 \item{N}{sample size}
@@ -25,13 +26,33 @@ entries (if \code{ug} is not provided)}
 non-zero entries (defaults to \code{runif})}
 
 \item{zapzeros}{convert to zero extremely low entries}
+
+\item{k}{real number greater than \code{1}, the desired condition
+number of the matrices in the resulting sample}
 }
 \value{
 A three-dimensional array of length \code{p*p*N}
 }
 \description{
-Samples the concentration/covariance matrix corresponding to an
+Samples the covariance/concentration matrix corresponding to an
 undirected graph by either partial orthogonalization or diagonal dominance.
+}
+\details{
+Function \code{port} uses the method described in
+\url{https://arxiv.org/abs/1807.03090}. In summary, it consists on generating a random
+matrix \code{Q} and performing row-wise orthogonalization such that if \code{i} and \code{j}
+are not adjacent in \code{ug}, then the rows corresponding to such indices are
+orthogonalized, without violating previous orthogonalizations and without
+introducing unwanted independences. The resulting matrix after the process
+has finished is the crossproduct of \code{Q}.
+
+We also provide an implementation of the most commonly used in the
+literature \code{diagdom}. By contrast, this method produces a random matrix \code{M}
+with zeros corresponding to missing edges in \code{ug}, and then enforces a
+dominant diagonal to ensure positive definiteness. Matrices produced by
+\code{diagdom} usually are better conditioned than those by \code{port}; however, they
+typically suffer from small off-diagonal entries, which can compromise model
+validation in Gaussian graphical models. This is avoided by \code{port}.
 }
 \examples{
 
@@ -41,7 +62,6 @@ ug <- igraph::sample_gnp(n = 3, p = 0.25)
 # Generate 10 matrices complying with such random structure via 
 # partial orthogonalization
 gmat::port(N = 10, ug = ug)
-
 
 # Generate 10 matrices complying with such random structure via 
 # diagonal dominance 
