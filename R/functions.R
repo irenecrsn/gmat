@@ -21,7 +21,7 @@
 #' are not adjacent in `ug`, then the rows corresponding to such indices are
 #' orthogonalized, without violating previous orthogonalizations and without
 #' introducing unwanted independences. The resulting matrix after the process
-#' has finished is the crossproduct of `Q`.
+#' has finished is the cross product of `Q`.
 #'
 #' @return  A three-dimensional array of length `p*p*N`
 #' 

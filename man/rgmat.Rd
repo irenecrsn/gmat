@@ -44,7 +44,7 @@ matrix \code{Q} and performing row-wise orthogonalization such that if \code{i} 
 are not adjacent in \code{ug}, then the rows corresponding to such indices are
 orthogonalized, without violating previous orthogonalizations and without
 introducing unwanted independences. The resulting matrix after the process
-has finished is the crossproduct of \code{Q}.
+has finished is the cross product of \code{Q}.
 
 We also provide an implementation of the most commonly used in the
 literature \code{diagdom}. By contrast, this method produces a random matrix \code{M}
