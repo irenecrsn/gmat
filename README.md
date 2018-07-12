@@ -33,30 +33,29 @@ An example of use
 First, we generate a random graph with `3` nodes and density `0.25`, using the `igraph` package. Then we generate, using our `gmat::port` function, `3` matrices consistent with such random graphical structure.
 
 ``` r
-library("gmat")
 ug <- igraph::sample_gnp(n = 3, p = 0.25)
 matrices <- gmat::port(N = 3, ug = ug)
 matrices
 #> , , 1
 #> 
-#>          [,1]      [,2]      [,3]
-#> [1,] 1.266063 0.0000000 0.0000000
-#> [2,] 0.000000 0.1099767 0.0181915
-#> [3,] 0.000000 0.0181915 0.1482692
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.3673639 0.0000000 0.0000000
+#> [2,] 0.0000000 0.3910358 0.0000000
+#> [3,] 0.0000000 0.0000000 0.1976476
 #> 
 #> , , 2
 #> 
-#>         [,1]       [,2]       [,3]
-#> [1,] 1.30136  0.0000000  0.0000000
-#> [2,] 0.00000  0.1113999 -0.2605526
-#> [3,] 0.00000 -0.2605526  0.6969884
+#>          [,1]      [,2]      [,3]
+#> [1,] 1.709763 0.0000000 0.0000000
+#> [2,] 0.000000 0.0308063 0.0000000
+#> [3,] 0.000000 0.0000000 0.4210357
 #> 
 #> , , 3
 #> 
-#>           [,1]      [,2]      [,3]
-#> [1,] 0.9065405 0.0000000 0.0000000
-#> [2,] 0.0000000 0.0769226 0.0228817
-#> [3,] 0.0000000 0.0228817 0.0236012
+#>          [,1]      [,2]     [,3]
+#> [1,] 1.583466 0.0000000 0.000000
+#> [2,] 0.000000 0.5784272 0.000000
+#> [3,] 0.000000 0.0000000 0.066705
 ```
 
 We apprieciate how the zero pattern is shared by all of the simulated matrices. The return value is an array, and so the individual matrices can be accessed as `matrices[, , n]`, where `n` is the index of the matrix we want to retrieve from the sample, ranging from `1` to `N`.
