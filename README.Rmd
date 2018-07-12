@@ -52,7 +52,6 @@ consistent with such random graphical structure.
 
 
 ```{r example}
-library("igraph")
 library("gmat")
 ug <- igraph::sample_gnp(n = 3, p = 0.25)
 matrices <- gmat::port(N = 3, ug = ug)
