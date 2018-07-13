@@ -2,7 +2,7 @@ Package: gmat
 Type: Package
 Title: Simulation of Graphically Constrained Matrices
 Version: 0.1.0
-Date: 2018-07-11
+Date: 2018-07-13
 Encoding: UTF-8
 Authors@R: c(
     person(given = "Irene", family = "Córdoba", email = "irene.cordoba@upm.es", role = c("aut", "cre"),

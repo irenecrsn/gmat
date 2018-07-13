@@ -13,8 +13,11 @@ This is a resubmission. In this version I have:
 ## R CMD check results
 There were no ERRORs or WARNINGs.
 
-There is one NOTE informing about the mantainer and stating that the submission
-is new.
+There is one NOTE informing about the maintainer and stating that the submission
+is new. 
+
+There is also an indication of possible misspelled words (Córdoba, et, al,
+arXiv), which are all false positives.
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.
