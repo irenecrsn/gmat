@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 An R package for simulating covariance and concentration graph matrices.
 
 [![Build Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat)
+[![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/gmat)](http://cran.r-project.org/package=gmat)
+[![CRAN status](http://www.r-pkg.org/badges/version/gmat)](http://cran.r-project.org/package=gmat)
 
 This package implements the methods described in the paper:
 

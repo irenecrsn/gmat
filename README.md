@@ -5,7 +5,7 @@ gmat
 
 An R package for simulating covariance and concentration graph matrices.
 
-[![Build Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat)
+[![Build Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat) [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/gmat)](http://cran.r-project.org/package=gmat) [![CRAN status](http://www.r-pkg.org/badges/version/gmat)](http://cran.r-project.org/package=gmat)
 
 This package implements the methods described in the paper:
 
@@ -38,24 +38,24 @@ matrices <- gmat::port(N = 3, ug = ug)
 matrices
 #> , , 1
 #> 
-#>           [,1]      [,2]      [,3]
-#> [1,] 0.3673639 0.0000000 0.0000000
-#> [2,] 0.0000000 0.3910358 0.0000000
-#> [3,] 0.0000000 0.0000000 0.1976476
+#>          [,1]      [,2]      [,3]
+#> [1,] 1.020437 0.0000000 0.0000000
+#> [2,] 0.000000 0.0814639 0.0000000
+#> [3,] 0.000000 0.0000000 0.1308512
 #> 
 #> , , 2
 #> 
-#>          [,1]      [,2]      [,3]
-#> [1,] 1.709763 0.0000000 0.0000000
-#> [2,] 0.000000 0.0308063 0.0000000
-#> [3,] 0.000000 0.0000000 0.4210357
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.5807133 0.0000000 0.0000000
+#> [2,] 0.0000000 0.8831826 0.0000000
+#> [3,] 0.0000000 0.0000000 0.0018631
 #> 
 #> , , 3
 #> 
-#>          [,1]      [,2]     [,3]
-#> [1,] 1.583466 0.0000000 0.000000
-#> [2,] 0.000000 0.5784272 0.000000
-#> [3,] 0.000000 0.0000000 0.066705
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.7850547 0.0000000 0.0000000
+#> [2,] 0.0000000 0.2271841 0.0000000
+#> [3,] 0.0000000 0.0000000 0.4894805
 ```
 
 We apprieciate how the zero pattern is shared by all of the simulated matrices. The return value is an array, and so the individual matrices can be accessed as `matrices[, , n]`, where `n` is the index of the matrix we want to retrieve from the sample, ranging from `1` to `N`.
