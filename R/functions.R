@@ -16,7 +16,7 @@
 #' @param zapzeros convert to zero extremely low entries
 #' 
 #' @details Function `port` uses the method described in 
-#' [https://arxiv.org/abs/1807.03090](https://arxiv.org/abs/1807.03090). In summary, it consists on generating a random
+#' Córdoba et al. (2018). In summary, it consists on generating a random
 #' matrix `Q` and performing row-wise orthogonalization such that if `i` and `j`
 #' are not adjacent in `ug`, then the rows corresponding to such indices are
 #' orthogonalized, without violating previous orthogonalizations and without
@@ -24,7 +24,12 @@
 #' has finished is the cross product of `Q`.
 #'
 #' @return  A three-dimensional array of length `p*p*N`
-#' 
+#'
+#' @references Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. A partial
+#' orthogonalization method for simulation covariance and concentration graph
+#' matrices. _Proceedings of Machine Learning Research_ (PGM 2018), vol. 72, pp.
+#' 61 - 72, 2018.
+#'
 #' @examples
 #'
 #' # Generate a random undirected graph structure
