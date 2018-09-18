@@ -23,7 +23,8 @@ This package implements the methods described in the paper:
 
 > Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P.
 A partial orthogonalization method for simulating covariance and concentration
-graph matrices, PGM 2018, Accepted.
+graph matrices, Proceedings of Machine Learning Research (PGM 2018), vol. 72,
+pp. 61 - 72, 2018.
 
 It is governed by two main functions, `port` and `diagdom`, which take as input an undirected
 graph structure `ug` and a sample size `N`, and generates `N`
@@ -36,12 +37,12 @@ method is the one used by function `diagdom`.
 
 ## Installation
 
-Probably the easiest way to install the package until it is available on CRAN is
-to use the R package `devtools`:
+Using the R package `devtools` one may install the development version from this
+branch:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("irenecrsn/gmat")
+devtools::install_github("irenecrsn/gmat", ref = "rchol")
 ```
 
 The only R package required for `gmat` is `igraph`, which can be installed
