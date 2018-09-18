@@ -2,6 +2,7 @@
 
 export(diagdom)
 export(port)
+export(uchol)
 import(igraph)
 import(methods)
 importFrom(stats,rbinom)
