@@ -299,7 +299,8 @@ mh_full_dag <- function(N = 1, dag, h = 100, eps = 0.1){
 }
 
 
-#' rUnifChordalConc
+#' Sample a random Gaussian Bayesian network using a Metropolis-Hastings
+#' algorithm over its Cholesky decomposition 
 #' 
 #' @param  N Number of samples
 #' @param dag directed chordal acyclic graph, use the igraph package graph class or alternatively 
@@ -308,7 +309,7 @@ mh_full_dag <- function(N = 1, dag, h = 100, eps = 0.1){
 #' @param ... additional parameters
 #' 
 #' @export
- rUnifChordalConc <- function(N=1, dag=NULL, return.minvector = FALSE, ... ){
+rgbn_chol <- function(N=1, dag=NULL, return.minvector = FALSE, ... ){
    if (is.matrix(dag)){
      dag <- igraph::graph_from_adjacency_matrix(adjmatrix = dag, mode = "directed")
    }
