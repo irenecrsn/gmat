@@ -7,7 +7,9 @@
 uchol(N = 1, p = 10, return.minvector = FALSE, ...)
 }
 \arguments{
-\item{N}{}
+\item{N}{Number of samples}
+
+\item{p}{Number of variables}
 
 \item{return.minvector}{logical, if TRUE the minimimal vector representation
 is returned (useful to plot in the elliptope)}

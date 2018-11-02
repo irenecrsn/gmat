@@ -19,6 +19,10 @@ sphereSample(N = 1, n, k = 1, h = 100, s = 1, eps = 0.01,
 \item{s}{step
 
 Metropolis-Hasting algorithm to sample in the n dimensional semi-sphere (x_1>0)}
+
+\item{eps}{Perturbation variance}
+
+\item{returnAll}{Include in the output samples from the heat-in phase}
 }
 \description{
 sampling on sphere proportionally to a power of the first coordinate

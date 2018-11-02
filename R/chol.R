@@ -1,7 +1,8 @@
 #' uchol
 #'
 #'
-#' @param  N
+#' @param N Number of samples
+#' @param p Number of variables
 #' @param return.minvector logical, if TRUE the minimimal vector representation
 #' is returned (useful to plot in the elliptope)
 #' @param ... additional parameters
@@ -55,14 +56,14 @@ rgbn <- function(p = 10,
 				 dag = NULL) 
 {  	
 	if (is.null(dag)) {
-		dag <- .rgraph(p, d, dag = TRUE)
+		dag <- rgraph(p, d, dag = TRUE)
 	} 	
 	edges <- as_edgelist(dag)
 
 	if (method == "iidcoef") {
 		param <- list()
 		mcoef <- .rcoef_iid(p = p, rmcoef = rmcoef, edges = edges)
-		mccov <- Diagonal(n = p, runif(p, 0.1, 1))
+		mccov <- Matrix::Diagonal(n = p, runif(p, 0.1, 1))
 		mconc <- t(mcoef) %*% solve(mccov) %*% (mcoef) 
 		param <- list(mcoef = mcoef, mccov = mccov)
 	} else if (method == "unifconc") {
@@ -123,9 +124,9 @@ rgbn <- function(p = 10,
 						 edges) 
 {	
 
-	mcoef <- sparseMatrix(i = edges[, 2], j = edges[, 1], dims = c(p, p),
+	mcoef <- Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], dims = c(p, p),
 						  triangular = TRUE, x = rep(1, nrow(edges)))
-	theta <- drop0(tril(Matrix(pi/2, nrow = p, ncol = p), k = -1))
+	theta <- Matrix::drop0(Matrix::tril(Matrix::Matrix(pi/2, nrow = p, ncol = p), k = -1))
 
 	diag(mcoef) <- 1
 
@@ -219,8 +220,13 @@ rgbn <- function(p = 10,
 }
 
 
+#' Direct sampling using iid coefs
 #'
-#'@export
+#' @param dag Graph for sampling
+#' @param h Heat-in phase
+#' @param eps Perturbation variance
+#'
+#' @export
 directUnifSampling <- function(dag, h=100, eps = 0.001){
   isCh<- is_chordal(dag,fillin=T)
   if (!isCh$chordal){
@@ -266,6 +272,8 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
 #' @param N sample size
 #' @param n dimension
 #' @param k exponent of the density
+#' @param eps Perturbation variance
+#' @param returnAll Include in the output samples from the heat-in phase
 #' @param h heating phase size
 #' @param s step
 #' 
@@ -315,7 +323,7 @@ sphereSample <- function(N = 1, n, k = 1, h = 100, s = 1, eps = 0.01,returnAll=F
   ch <- degree(dag,mode = "out")
   pa <- degree(dag, mode="in")
   for (i in 1:(p-1)){
-    su <- .sphereSample(N = N,n = ch[i]+1 ,k = pa[i]+1,h = h, s = s,eps=eps)
+    su <- sphereSample(N = N,n = ch[i]+1 ,k = pa[i]+1,h = h, s = s,eps=eps)
     U[i,U[i,,1]>0,1:N] <- t(su)
   }
   return(U)
@@ -324,7 +332,7 @@ sphereSample <- function(N = 1, n, k = 1, h = 100, s = 1, eps = 0.01,returnAll=F
 
 #' rUnifChordalConc
 #' 
-#' @param  N 
+#' @param  N Number of samples
 #' @param dag directed chordal acyclic graph, use the igraph package graph class or alternatively 
 #'            a matrix that will be interpreted as an adjacency matrix. 
 #' @param return.minvector logical, if TRUE the minimimal vector representation is returned (useful to plot in the elliptope)
@@ -333,7 +341,7 @@ sphereSample <- function(N = 1, n, k = 1, h = 100, s = 1, eps = 0.01,returnAll=F
 #' @export
  rUnifChordalConc <- function(N=1, dag=NULL, return.minvector = FALSE, ... ){
    if (is.matrix(dag)){
-     dag <- igraph::graph_from_adjacency_matrix(adjmatrix = dag, mode = directed)
+     dag <- igraph::graph_from_adjacency_matrix(adjmatrix = dag, mode = "directed")
    }
    isCh<- is_chordal(dag,fillin=T)
    if (!isCh$chordal){

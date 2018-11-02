@@ -7,7 +7,7 @@
 rUnifChordalConc(N = 1, dag = NULL, return.minvector = FALSE, ...)
 }
 \arguments{
-\item{N}{}
+\item{N}{Number of samples}
 
 \item{dag}{directed chordal acyclic graph, use the igraph package graph class or alternatively
 a matrix that will be interpreted as an adjacency matrix.}
