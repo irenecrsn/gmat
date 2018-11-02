@@ -1,55 +1,3 @@
-mh_row <-
-  function(N = 1,
-           p,
-           i = 1,
-           h = 100,
-           eps = 0.01,
-           returnAll = FALSE) {
-    Tot <- h + N #total number of iteration of MH
-    Sample <- matrix(nrow = Tot, ncol = p) #obj initialization
-    Sample[1, ] <- rnorm(n = p, mean = 0, sd = 1) #first point
-    Sample[1, 1] <-
-      abs(Sample[1, 1]) #absolute value first component (has to be positive)
-    Sample[1, ] <-
-      Sample[1, ] / sqrt(sum(Sample[1,] ^ 2)) #normalization
-    for (j in 2:Tot) {
-      prop <-
-        Sample[j - 1, ] + rnorm(n = p, mean = 0, sd = eps) # perturbate previous sample
-      prop <- prop / sqrt(sum(prop ^ 2)) #normalize propozed
-      if ((prop[1] > 0) &&
-          (log(runif(1)) <= i * log((prop[1])) - i * log(Sample[j - 1 , 1]))) {
-        Sample[j, ] <- prop
-      } else{
-        Sample[j, ] <- Sample[j - 1 ,]
-      }
-    }
-    if (!returnAll) {
-      Sample <- Sample[(h + 1):Tot,]
-    }
-    
-    return(Sample)
-  }
-
-
-mh_full <- function(N = 1,
-                    p = 10,
-                    h = 100,
-                    eps = 0.1) {
-  U <- array(dim = c(p, p, N), data = 0)
-  U[p, p, 1:N] <- 1
-  for (i in 1:(p - 1)) {
-    su <- mh_row(
-      N = N,
-      p = p - i + 1 ,
-      i = i ,
-      h = h,
-      eps = eps
-    )
-    U[i, i:p, 1:N] <- t(su)
-  }
-  return(U)
-}
-
 #' uchol
 #'
 #'
@@ -307,7 +255,6 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
 }
 
 
-#' without checking
 .ljac <- function(u, k){
   return(sum(k*log(abs(u))))
 }
@@ -324,7 +271,7 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
 #' 
 #'  Metropolis-Hasting algorithm to sample in the n dimensional semi-sphere (x_1>0)  
 #' @export
-.sphereSample <- function(N = 1, n, k = 1, h = 100, s = 1, eps = 0.01,returnAll=FALSE){
+sphereSample <- function(N = 1, n, k = 1, h = 100, s = 1, eps = 0.01,returnAll=FALSE){
   Tot <- h + (N-1)*s + 1 #total number of iteration of MH
   Sample <- matrix(nrow = Tot, ncol = n) #obj initialization 
   Sample[1,] <- rnorm(n = n, mean = 0, sd = 1) #first point
@@ -408,4 +355,55 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
 
  }
 
+mh_row <-
+  function(N = 1,
+           p,
+           i = 1,
+           h = 100,
+           eps = 0.01,
+           returnAll = FALSE) {
+    Tot <- h + N #total number of iteration of MH
+    Sample <- matrix(nrow = Tot, ncol = p) #obj initialization
+    Sample[1, ] <- rnorm(n = p, mean = 0, sd = 1) #first point
+    Sample[1, 1] <-
+      abs(Sample[1, 1]) #absolute value first component (has to be positive)
+    Sample[1, ] <-
+      Sample[1, ] / sqrt(sum(Sample[1,] ^ 2)) #normalization
+    for (j in 2:Tot) {
+      prop <-
+        Sample[j - 1, ] + rnorm(n = p, mean = 0, sd = eps) # perturbate previous sample
+      prop <- prop / sqrt(sum(prop ^ 2)) #normalize propozed
+      if ((prop[1] > 0) &&
+          (log(runif(1)) <= i * log((prop[1])) - i * log(Sample[j - 1 , 1]))) {
+        Sample[j, ] <- prop
+      } else{
+        Sample[j, ] <- Sample[j - 1 ,]
+      }
+    }
+    if (!returnAll) {
+      Sample <- Sample[(h + 1):Tot,]
+    }
+    
+    return(Sample)
+  }
+
+
+mh_full <- function(N = 1,
+                    p = 10,
+                    h = 100,
+                    eps = 0.1) {
+  U <- array(dim = c(p, p, N), data = 0)
+  U[p, p, 1:N] <- 1
+  for (i in 1:(p - 1)) {
+    su <- mh_row(
+      N = N,
+      p = p - i + 1 ,
+      i = i ,
+      h = h,
+      eps = eps
+    )
+    U[i, i:p, 1:N] <- t(su)
+  }
+  return(U)
+}
 
