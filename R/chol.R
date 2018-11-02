@@ -266,43 +266,6 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
 }
 
 
-
-#' sampling on sphere proportionally to a power of the first coordinate
-#' 
-#' @param N sample size
-#' @param n dimension
-#' @param k exponent of the density
-#' @param eps Perturbation variance
-#' @param returnAll Include in the output samples from the heat-in phase
-#' @param h heating phase size
-#' @param s step
-#' 
-#'  Metropolis-Hasting algorithm to sample in the n dimensional semi-sphere (x_1>0)  
-#' @export
-sphereSample <- function(N = 1, n, k = 1, h = 100, s = 1, eps = 0.01,returnAll=FALSE){
-  Tot <- h + (N-1)*s + 1 #total number of iteration of MH
-  Sample <- matrix(nrow = Tot, ncol = n) #obj initialization 
-  Sample[1,] <- rnorm(n = n, mean = 0, sd = 1) #first point
-  Sample[1,1]<-abs(Sample[1,1]) #absolute value first component (has to be positive)
-  Sample[1,] <- Sample[1,]/sqrt(sum(Sample[1, ] ^ 2)) #normalization 
- for (i in 2:Tot){
-    prop <- Sample[i-1,] + rnorm(n = n, mean = 0, sd = eps) # perturbate previous sample
-    prop <- prop / sqrt(sum(prop ^ 2)) #normalize propozed
-    #if (runif(1) <= sign(prop[1])*abs(prop[1])^k / Sample[i - 1 , 1]^k){
-    if ((prop[1]>0) && (log(runif(1)) <= k*log((prop[1])) - k*log(Sample[i - 1 , 1]))){
-      Sample[i,] <- prop
-    }else{
-      Sample[i,] <- Sample[i - 1 , ]
-    }
-  }
-  if (!returnAll){
-    Sample <- Sample[seq(from = h+1, to = Tot, by = s),]
-  }
-  
-  return(Sample)
-}
-
-
 #'
 #' @export
 .sampleU <- function(N = 1, dag, h = 100, s = 1, eps = 0.1){
@@ -380,7 +343,7 @@ mh_row <-
     for (j in 2:Tot) {
       prop <-
         Sample[j - 1, ] + rnorm(n = p, mean = 0, sd = eps) # perturbate previous sample
-      prop <- prop / sqrt(sum(prop ^ 2)) #normalize propozed
+      prop <- prop / sqrt(sum(prop ^ 2)) #normalize proposed
       if ((prop[1] > 0) &&
           (log(runif(1)) <= i * log((prop[1])) - i * log(Sample[j - 1 , 1]))) {
         Sample[j, ] <- prop
@@ -388,8 +351,8 @@ mh_row <-
         Sample[j, ] <- Sample[j - 1 ,]
       }
     }
-    if (!returnAll) {
-      Sample <- Sample[(h + 1):Tot,]
+    if (returnAll == FALSE) {
+      Sample <- Sample[(h + 1):Tot, ]
     }
     
     return(Sample)
