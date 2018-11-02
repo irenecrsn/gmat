@@ -121,6 +121,38 @@ diagdom <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, k = NUL
 	return (sam)
 }
 
+
+
+#' uchol
+#'
+#'
+#' @param  N
+#' @param return.minvector logical, if TRUE the minimimal vector representation
+#' is returned (useful to plot in the elliptope)
+#' @param ... additional parameters
+#'
+#' @export
+uchol <- function(N = 1,
+                  p = 10,
+                  dag = NULL,
+                  d = 0.25,
+                  return.minvector = FALSE,
+                  ...) {
+  
+  sU <- mh_full(N = N, p = p, ...)
+  vsC <- apply(sU, MARGIN = 3, function(U)
+    return(U %*% t(U)))
+  sC <- array(data = vsC, dim = dim(sU))
+  if (return.minvector) {
+    mv <- apply(sC, MARGIN = 3, function(m) {
+      return(m[upper.tri(m)])
+    })
+    return(t(mv))
+  } else{
+    return(sC)
+  }
+}
+
 mh_row <-
   function(N = 1,
            p,
@@ -172,32 +204,3 @@ mh_full <- function(N = 1,
   }
   return(U)
 }
-
-#' uchol
-#'
-#'
-#' @param  N
-#' @param return.minvector logical, if TRUE the minimimal vector representation
-#' is returned (useful to plot in the elliptope)
-#' @param ... additional parameters
-#'
-#' @export
-uchol <- function(N = 1,
-                  p = 10,
-                  return.minvector = FALSE,
-                  ...) {
-  sU <- mh_full(N = N, p = p, ...)
-  vsC <- apply(sU, MARGIN = 3, function(U)
-    return(U %*% t(U)))
-  sC <- array(data = vsC, dim = dim(sU))
-  if (return.minvector) {
-    mv <- apply(sC, MARGIN = 3, function(m) {
-      return(m[upper.tri(m)])
-    })
-    return(t(mv))
-  } else{
-    return(sC)
-  }
-}
-
-
