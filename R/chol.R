@@ -266,9 +266,15 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
 }
 
 
+#' Full Metropolis-Hastings algorithm for Gaussian Bayesian networks
+#'
+#' @param N Number of samples
+#' @param dag Acyclic digraph of the GBN to sample
+#' @param h Burn-in phase
+#' @param eps Perturbation variance
 #'
 #' @export
-.sampleU <- function(N = 1, dag, h = 100, s = 1, eps = 0.1){
+mh_full_dag <- function(N = 1, dag, h = 100, eps = 0.1){
   #isCh<- is_chordal(dag,fillin=T)
   #if (!isCh$chordal){
     #warning("Can't sample uniformly for non chordal graph")
@@ -285,9 +291,9 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
   U[p,p,1:N] <- 1
   ch <- degree(dag,mode = "out")
   pa <- degree(dag, mode="in")
-  for (i in 1:(p-1)){
-    su <- sphereSample(N = N,n = ch[i]+1 ,k = pa[i]+1,h = h, s = s,eps=eps)
-    U[i,U[i,,1]>0,1:N] <- t(su)
+  for (j in 1:(p-1)){
+    su <- mh_row(N = N,p = ch[j]+1 ,i = pa[j]+1,h = h, eps=eps)
+    U[j,U[j,,1]>0,1:N] <- t(su)
   }
   return(U)
 }
@@ -312,7 +318,7 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
      #return(NULL)
    }
 
-   sU <- .sampleU(N = N, dag = dag, ... )
+   sU <- mh_full_dag(N = N, dag = dag, ... )
    vsC <- apply(sU,MARGIN = 3, function(U) return(U%*%t(U)) )
    sC <- array(data=vsC, dim=dim(sU))
    if (return.minvector){
@@ -326,6 +332,18 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
 
  }
 
+
+#' sampling on sphere proportionally to a power of the first coordinate
+#' 
+#' @param N sample size
+#' @param p dimension
+#' @param i exponent of the density
+#' @param eps Perturbation variance
+#' @param returnAll Include in the output samples from the heat-in phase
+#' @param h heating phase size
+#' 
+#'  Metropolis-Hasting algorithm to sample in the n dimensional semi-sphere (x_1>0)  
+#' @export
 mh_row <-
   function(N = 1,
            p,
@@ -358,7 +376,15 @@ mh_row <-
     return(Sample)
   }
 
-
+#' Full Metropolis-Hastings algorithm for correlation matrices/saturated
+#' Gaussian Bayesian networks
+#'
+#' @param N Number of samples
+#' @param p Number of variables in the saturated model
+#' @param h Burn-in phase
+#' @param eps Perturbation variance
+#'
+#' @export
 mh_full <- function(N = 1,
                     p = 10,
                     h = 100,
