@@ -28,77 +28,87 @@ uchol <- function(N = 1,
 
 #' Sample a random Gaussian Bayesian network
 #' 
-#' Samples a random Gaussian Bayesian network with different methods.
+#' Samples a random Gaussian Bayesian network with iid coefficients 
 #'
+#' @param  N Number of samples
 #' @param p Positive integer, Number of dimension.
-#' @param method String one of "iidcoef", "unifconc"
-#' @param d number in `[0,1]`, the proportion of non-zero entries.
-#' @param rmcoef function, the random number generator for the non-zero
-#' entries of the coefficient matrix for the "iidcoef" method.
+#' @param dag A graph object of class `igraph`.
+#' @param return.minvector logical, if TRUE the minimimal vector representation is returned (useful to plot in the elliptope)
+#'
+#' @return The sample   
+#' @export
+rgbn_iid <- function(N = 1,
+				 p = 10,
+				 dag = NULL,
+				return.minvector = FALSE) 
+{  	
+	# Saturated model TODO too expensive
+	if (is.null(dag)) {
+		dag <- rgraph(p = p, d = 1, dag = TRUE)
+	} 	
+	edges <- as_edgelist(dag)
+	
+	R <- array(dim = c(p, p, N))
+
+	for (n in 1:N) {
+		L <- Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], x =
+					  rnorm(nrow(edges)), dims = c(p, p), triangular = TRUE)
+		diag(L) <- 1
+		D <- Matrix::Diagonal(n = p, runif(p, 0.1, 1))
+		Omega <- t(L) %*% solve(D) %*% (L) 
+		R[, , n] <- as(Omega, "corMatrix")
+	}
+
+  	if (return.minvector == TRUE) {
+    	mv <- apply(R, MARGIN = 3, function(m) {
+      	return(m[upper.tri(m)])
+    	})
+    	return(t(mv))
+  	} else{
+    	return(R)
+  	}
+}
+
+#' Sample a random Gaussian Bayesian network
+#' 
+#' Samples a random Gaussian Bayesian network with polar parametrization. 
+#'
+#' @param  N Number of samples
+#' @param p Positive integer, Number of dimension.
 #' @param comp String one of "numeric" or "recursive", indicating the
 #' computational method to use for sampling the angles for "unifconc" method
 #' @param dag A graph object of class `igraph`.
+#' @param return.minvector logical, if TRUE the minimimal vector representation is returned (useful to plot in the elliptope)
 #'
-#' @return  A list with the following components:
-#'   - param A list with the parameters for the concentration matrix. For 
-#'   "iidcoef", these are the coefficient matrix and the conditional variance
-#'   matrix. For "unifconc", the parameters are the angle matrix and the
-#'   coefficient matrix.
-#'   - mconc The sampled concentration matrix 
-#'   - dag The resulting dag structure
-#'   
+#' @return The sample   
 #' @export
-rgbn <- function(p = 10,
-                 method = "iidcoef",
-                 d = 0.25,
-                 rmcoef = rnorm, 
+rgbn_polar <- function(N = 1,
+				 p = 10,
                  comp = 'numeric',
-				 dag = NULL) 
+				 dag = NULL,
+				return.minvector = FALSE) 
 {  	
+	# Saturated model
 	if (is.null(dag)) {
-		dag <- rgraph(p, d, dag = TRUE)
+		dag <- rgraph(p = p, d = 1, dag = TRUE)
 	} 	
 	edges <- as_edgelist(dag)
+	
+	R <- array(dim = c(p, p, N))
 
-	if (method == "iidcoef") {
-		param <- list()
-		mcoef <- .rcoef_iid(p = p, rmcoef = rmcoef, edges = edges)
-		mccov <- Matrix::Diagonal(n = p, runif(p, 0.1, 1))
-		mconc <- t(mcoef) %*% solve(mccov) %*% (mcoef) 
-		param <- list(mcoef = mcoef, mccov = mccov)
-	} else if (method == "unifconc") {
-		param <- .rcoef_polar(p = p, method = comp, edges = edges)
-		mconc <- param$mcoef %*% t(param$mcoef)
+	for (n in 1:N) {
+		U <- .rcoef_polar(p = p, method = comp, edges = edges)
+		R[, , n] <- U %*% t(U)
 	}
 
-	
-	l <- list(param = param, mconc = mconc, dag = dag)
-	return(l)
-}
-
-#' Sample a coefficient matrix of iid coefficients.
-#'
-#' @rdname iid
-#'
-#' @param p Positive integer, Number of dimension.
-#' @param rmcoef function, the random number generator for the non-zero entries.
-#' @param edges Matrix containing the edges of the Gaussian Bayesian network (from, to)
-#'
-#' @details Sample a sparse coefficient matrix for a Gaussian Bayesian network.
-#'
-#' @return  mcoef a lower triangular matrix with ones on the diagonal, and entry
-#' (i, j) = 0 if (j, i) is not a row in `edges`.
-#'
-.rcoef_iid <- function(p = 100,
-                       rmcoef = rnorm, 
-					   edges)
-{
-
-	mcoef <- Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], x =
-						  rmcoef(nrow(edges)), dims = c(p, p), triangular = TRUE)
-
-	diag(mcoef) <- 1
-	return(mcoef)
+  	if (return.minvector == TRUE) {
+    	mv <- apply(R, MARGIN = 3, function(m) {
+      	return(m[upper.tri(m)])
+    	})
+    	return(t(mv))
+  	} else{
+    	return(R)
+  	}
 }
 
 
@@ -144,8 +154,7 @@ rgbn <- function(p = 10,
 		}	
 	}
 	mcoef[p, p] <- prod(sin(theta[p, 1:(p - 1)]))
-	l <- list(mcoef = mcoef, mangl = theta)
-	return(l)
+	return(mcoef)
 }
 
 
@@ -237,15 +246,18 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
   v <- V(dag)
   p <- length(v)
   k <- rep(1,p) + degree(dag, mode = "in")
-  U <- .rcoef_iid(p = p, edges = edges) 
+  U <- Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], x =
+						  rnorm(nrow(edges)), dims = c(p, p), triangular = TRUE)
+  diag(U) <- 1
   U <- t(U)
   U <- t(apply(U, MARGIN = 1, FUN = function(u) return(u/sqrt(sum(u^2))) ))
   J <- .ljac(diag(U), k)
   print(J)
   for (i in (1:h)){
-    E <- t(.rcoef_iid(p = p, edges = edges, rmcoef = function(n){
-      return(rnorm(n, mean = 0, sd = eps))
-    }))
+  	E <- Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], x =
+						  rnorm(nrow(edges), mean = 0, sd = eps), dims = c(p, p), triangular = TRUE)
+  	diag(E) <- 1
+ 	E <- t(E)
     diag(E)<-rnorm(p,mean=0,sd=eps)
     Up <- U + E
     Up <- t(apply(Up, MARGIN = 1, FUN = function(u) return(u/sqrt(sum(u^2))) ))
