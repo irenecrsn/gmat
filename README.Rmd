@@ -19,11 +19,11 @@ An R package for simulating covariance and concentration graph matrices.
 [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/gmat)](http://cran.r-project.org/package=gmat)
 [![CRAN status](http://www.r-pkg.org/badges/version/gmat)](http://cran.r-project.org/package=gmat)
 
-This package implements the methods described in the paper:
+This package implements the methods described in the
+[paper](http://proceedings.mlr.press/v72/cordoba18a.html):
 
-> Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P.
-A partial orthogonalization method for simulating covariance and concentration
-graph matrices, PGM 2018, Accepted.
+>  Irene Córdoba, Gherardo Varando, Concha Bielza, Pedro Larrañaga ;
+Proceedings of the Ninth International Conference on Probabilistic Graphical Models, PMLR 72:61-72, 2018.
 
 It is governed by two main functions, `port` and `diagdom`, which take as input an undirected
 graph structure `ug` and a sample size `N`, and generates `N`
@@ -36,12 +36,10 @@ method is the one used by function `diagdom`.
 
 ## Installation
 
-Probably the easiest way to install the package until it is available on CRAN is
-to use the R package `devtools`:
+The package is available in CRAN, and can be installed with
 
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("irenecrsn/gmat")
+install.packages("gmat")
 ```
 
 The only R package required for `gmat` is `igraph`, which can be installed
@@ -49,13 +47,13 @@ directly from CRAN.
 
 ## An example of use 
 
-First, we generate a random graph with `3` nodes and density `0.25`, using the
+First, we generate a random graph with `3` nodes and density `0.4`, using the
 `igraph` package. Then we generate, using our `gmat::port` function, `3` matrices
 consistent with such random graphical structure.
 
 
 ```{r example}
-ug <- igraph::sample_gnp(n = 3, p = 0.25)
+ug <- igraph::sample_gnp(n = 3, p = 0.5)
 matrices <- gmat::port(N = 3, ug = ug)
 matrices
 ```
