@@ -4,10 +4,5 @@
 
 2018-11-07 Gherardo Varando <gherardo.varando@gmail.com> 
 
-* README.Rmd: update citation and link.
-README.md regenerated.
-
-* .gitignore: ignore RStudio metadata files.
-* .Rbuildignore: Likewise.
-
+* README.md: update citation and link.
 
