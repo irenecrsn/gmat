@@ -9,7 +9,7 @@ An R package for simulating covariance and concentration graph matrices.
 
 This package implements the methods described in the [paper](http://proceedings.mlr.press/v72/cordoba18a.html):
 
-> Irene Córdoba, Gherardo Varando, Concha Bielza, Pedro Larrañaga ; Proceedings of the Ninth International Conference on Probabilistic Graphical Models, PMLR 72:61-72, 2018.
+> Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. A partial orthogonalization method for simulating covariance and concentration graph matrices, Proceedings of the Ninth International Conference on Probabilistic Graphical Models, PMLR 72:61-72, 2018.
 
 It is governed by two main functions, `port` and `diagdom`, which take as input an undirected graph structure `ug` and a sample size `N`, and generates `N` covariance/concentration matrices subject to the zeros imposed by the undirected graph structure `ug`.
 
