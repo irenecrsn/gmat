@@ -1,3 +1,10 @@
 2018-09-18 Irene Córdoba <irene.cordoba@upm.es>
 
 * functions.R: doc fixes.
+
+2018-11-07 Gherardo Varando <gherardo.varando@gmail.com> 
+
+* README.Rmd: update citation and link.
+* README.md: upadte generated. 
+* .gitignore: update.
+* .Rbuildignore: update.

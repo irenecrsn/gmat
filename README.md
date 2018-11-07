@@ -29,32 +29,32 @@ The only R package required for `gmat` is `igraph`, which can be installed direc
 An example of use
 -----------------
 
-First, we generate a random graph with `3` nodes and density `0.4`, using the `igraph` package. Then we generate, using our `gmat::port` function, `3` matrices consistent with such random graphical structure.
+First, we generate a random graph with `3` nodes and density `0.25`, using the `igraph` package. Then we generate, using our `gmat::port` function, `3` matrices consistent with such random graphical structure.
 
 ``` r
-ug <- igraph::sample_gnp(n = 3, p = 0.5)
+ug <- igraph::sample_gnp(n = 3, p = 0.25)
 matrices <- gmat::port(N = 3, ug = ug)
 matrices
 #> , , 1
 #> 
-#>           [,1]       [,2]       [,3]
-#> [1,] 0.9757533  0.4518439  0.0000000
-#> [2,] 0.4518439  0.6443843 -0.0632021
-#> [3,] 0.0000000 -0.0632021  0.0149354
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.5460915 0.0000000 0.5952582
+#> [2,] 0.0000000 0.5547673 0.0000000
+#> [3,] 0.5952582 0.0000000 0.9661582
 #> 
 #> , , 2
 #> 
 #>           [,1]      [,2]      [,3]
-#> [1,] 0.0248556 0.0508676 0.0000000
-#> [2,] 0.0508676 0.4165158 0.4047642
-#> [3,] 0.0000000 0.4047642 1.1349846
+#> [1,] 0.7884520 0.0000000 0.7040833
+#> [2,] 0.0000000 0.2736035 0.0000000
+#> [3,] 0.7040833 0.0000000 0.6658877
 #> 
 #> , , 3
 #> 
-#>           [,1]       [,2]       [,3]
-#> [1,] 0.8884782  0.6742819  0.0000000
-#> [2,] 0.6742819  0.6335649 -0.0508280
-#> [3,] 0.0000000 -0.0508280  0.3092062
+#>           [,1]      [,2]     [,3]
+#> [1,] 0.0591827 0.0000000 0.296686
+#> [2,] 0.0000000 0.0090531 0.000000
+#> [3,] 0.2966860 0.0000000 1.521560
 ```
 
 We apprieciate how the zero pattern is shared by all of the simulated matrices. The return value is an array, and so the individual matrices can be accessed as `matrices[, , n]`, where `n` is the index of the matrix we want to retrieve from the sample, ranging from `1` to `N`.
