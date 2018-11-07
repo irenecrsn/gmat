@@ -36,14 +36,14 @@ method is the one used by function `diagdom`.
 
 ## Installation
 
-The package is available in CRAN, and can be installed with
+The package is available on CRAN, and can be installed with
 
 ```{r gh-installation, eval = FALSE}
 install.packages("gmat")
 ```
 
-The only R package required for `gmat` is `igraph`, which can be installed
-directly from CRAN.
+The only R package required for `gmat` is `igraph`, which can also be installed
+from CRAN.
 
 ## An example of use 
 
