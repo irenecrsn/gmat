@@ -3,7 +3,7 @@
 #' Samples the covariance/concentration matrix corresponding to an 
 #' undirected graph by either partial orthogonalization or diagonal dominance.
 #'
-#' @name rgmat
+#' @name undirected graph matrix simulation
 #' @rdname rgmat
 #'
 #' @param N sample size
