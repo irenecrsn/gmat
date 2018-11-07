@@ -2,7 +2,6 @@
 
 export(diagdom)
 export(port)
-import(igraph)
 import(methods)
 importFrom(stats,rbinom)
 importFrom(stats,rnorm)

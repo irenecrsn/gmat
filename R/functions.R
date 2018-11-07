@@ -46,7 +46,7 @@ port <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, zapzeros =
   if (is.null(ug)) {
     ug <- igraph::sample_gnp(n = p, p = d)
   }
-	p <- length(V(ug))
+	p <- length(igraph::V(ug))
 
 	sam <- array(dim = c(p, p, N), data = 0)
 
@@ -95,8 +95,8 @@ diagdom <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, k = NUL
   if (is.null(ug)) {
     ug <- igraph::sample_gnp(n = p, p = d)
   }
-  p <- length(V(ug))
-  edges <- as_edgelist(ug)
+  p <- length(igraph::V(ug))
+  edges <- igraph::as_edgelist(ug)
 
   sam <- array(dim = c(p, p, N), data = 0)
   ned <- nrow(edges)
