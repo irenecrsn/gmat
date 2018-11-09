@@ -39,7 +39,7 @@ undirected graph by either partial orthogonalization or diagonal dominance.
 }
 \details{
 Function \code{port} uses the method described in
-\url{https://arxiv.org/abs/1807.03090}. In summary, it consists on generating a random
+Córdoba et al. (2018). In summary, it consists on generating a random
 matrix \code{Q} and performing row-wise orthogonalization such that if \code{i} and \code{j}
 are not adjacent in \code{ug}, then the rows corresponding to such indices are
 orthogonalized, without violating previous orthogonalizations and without
