@@ -1,2 +1,5 @@
 README.html
-
+*.Rproj
+.Rproj.user
+src/*.so
+src/*.o

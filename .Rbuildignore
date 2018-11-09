@@ -4,3 +4,5 @@ cran-comments.md
 ^README-.*\.png$
 README.html
 LICENSE
+^.*\.Rproj$
+^\.Rproj\.user$

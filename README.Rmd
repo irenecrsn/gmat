@@ -19,7 +19,8 @@ An R package for simulating covariance and concentration graph matrices.
 [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/gmat)](http://cran.r-project.org/package=gmat)
 [![CRAN status](http://www.r-pkg.org/badges/version/gmat)](http://cran.r-project.org/package=gmat)
 
-This package implements the methods described in the paper:
+This package implements the methods described in the
+[paper](http://proceedings.mlr.press/v72/cordoba18a.html):
 
 > Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P.
 A partial orthogonalization method for simulating covariance and concentration
@@ -46,7 +47,7 @@ devtools::install_github("irenecrsn/gmat", ref = "rchol")
 ```
 
 The only R package required for `gmat` is `igraph`, which can be installed
-directly from CRAN.
+from CRAN.
 
 ## An example of use 
 

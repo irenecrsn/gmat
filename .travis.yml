@@ -8,7 +8,7 @@ branches:
         - master
 os:
     - linux
-    - osx
+      #    - osx
 r:
     - oldrel
     - release
