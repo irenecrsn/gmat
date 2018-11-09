@@ -68,3 +68,9 @@ gmat::port(N = 10, ug = ug)
 gmat::diagdom(N = 10, ug = ug)
 
 }
+\references{
+Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. A partial
+orthogonalization method for simulation covariance and concentration graph
+matrices. \emph{Proceedings of Machine Learning Research} (PGM 2018), vol. 72, pp.
+61 - 72, 2018.
+}

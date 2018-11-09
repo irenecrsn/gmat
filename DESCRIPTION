@@ -13,7 +13,7 @@ Authors@R: c(
 	comment = c(ORCID = "0000-0001-7109-2668")),
     person(given = "Pedro", family = "Larrañaga", role = "ths",
 	comment = c(ORCID = "0000-0003-0652-9872")))
-Description: Implementation of the simulation method for Gaussian graphical models described in Córdoba et al. (2018) <arXiv:1807.03090>. The package also provides an alternative method based on diagonally dominant matrices.
+Description: Simulation of covariance and concentration graph matrices by partial orthogonalization. The package also provides an alternative method based on diagonally dominant matrices.
 License: GPL (>=2) 
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
