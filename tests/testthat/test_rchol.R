@@ -4,7 +4,7 @@ test_that("random dags are actually dags", {
 	p <- 10
 
 	dag <- rgraph(p, 0.5, dag = TRUE)
-	expect_true(is_dag(dag))
+	expect_true(igraph::is_dag(dag))
 })
 
 test_that("random dags follow the natural ancestral order", {

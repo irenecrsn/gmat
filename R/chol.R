@@ -20,10 +20,10 @@ rgbn_chol <- function(N = 1,
 		dag <- rgraph(p = p, d = 1, dag = TRUE)
 	} else {
 	# Uniform sampling of chordal DAG
-   	isCh<- is_chordal(dag,fillin=T)
+   	isCh<- igraph::is_chordal(dag,fillin=T)
    	if (isCh$chordal == FALSE){
      	warning("Can't sample uniformly for non chordal graph")
-    	dag <- add_edges(dag,edges = isCh$fillin)
+    	dag <- igraph::add_edges(dag,edges = isCh$fillin)
    		}
 	}
   sU <- mh_full(N = N, dag = dag, p = p, ...)
@@ -60,7 +60,7 @@ rgbn_iid <- function(N = 1,
 	if (is.null(dag)) {
 		dag <- rgraph(p = p, d = 1, dag = TRUE)
 	} 	
-	edges <- as_edgelist(dag)
+	edges <- igraph::as_edgelist(dag)
 	
 	R <- array(dim = c(p, p, N))
 
@@ -106,7 +106,7 @@ rgbn_polar <- function(N = 1,
 	if (is.null(dag)) {
 		dag <- rgraph(p = p, d = 1, dag = TRUE)
 	} 	
-	edges <- as_edgelist(dag)
+	edges <- igraph::as_edgelist(dag)
 	
 	R <- array(dim = c(p, p, N))
 
@@ -251,15 +251,15 @@ rgbn_polar <- function(N = 1,
 #'
 #' @export
 directUnifSampling <- function(dag, h=100, eps = 0.001){
-  isCh<- is_chordal(dag,fillin=T)
+  isCh<- igraph::is_chordal(dag,fillin=T)
   if (isCh$chordal == FALSE){
     warning("Can't sample uniformly for non chordal graph")
-    dag <- add_edges(dag,edges = isCh$fillin)
+    dag <- igraph::add_edges(dag,edges = isCh$fillin)
   }
-  edges <- as_edgelist(dag)
-  v <- V(dag)
+  edges <- igraph::as_edgelist(dag)
+  v <- igraph::V(dag)
   p <- length(v)
-  k <- rep(1,p) + degree(dag, mode = "in")
+  k <- rep(1,p) + igraph::degree(dag, mode = "in")
   U <- Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], x =
 						  rnorm(nrow(edges)), dims = c(p, p), triangular = TRUE)
   diag(U) <- 1
@@ -311,8 +311,8 @@ mh_full <- function(N = 1,
 
 	if (is.null(dag) == FALSE) {
 
-  		p <- length(V(dag)) 
-  		edges <- as_edgelist(dag)
+  		p <- length(igraph::V(dag)) 
+  		edges <- igraph::as_edgelist(dag)
   		u <-  t(as.matrix(Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], dims = c(p, p),
                              triangular = TRUE, x = rep(1, nrow(edges)))))
   		diag(u)<-1
@@ -329,8 +329,8 @@ mh_full <- function(N = 1,
   		}
 	} else {
 		
-  		ch <- degree(dag,mode = "out")
-  		pa <- degree(dag, mode="in")
+  		ch <- igraph::degree(dag,mode = "out")
+  		pa <- igraph::degree(dag, mode="in")
   		for (j in 1:(p-1)){
     		su <- mh_row(N = N, p = ch[j] + 1, i = pa[j] + 1, h = h, eps=eps)
     		U[j, U[j, , 1] > 0, 1:N] <- t(su)

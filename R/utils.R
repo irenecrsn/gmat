@@ -19,11 +19,11 @@
 #' @export
 rgraph <- function(p, d, dag = FALSE) {
 	
-	g <- sample_gnp(n = p, p = d)
+	g <- igraph::sample_gnp(n = p, p = d)
 
 	if (dag == TRUE) {
-		dag_am <- as_adjacency_matrix(g, type = "upper")
-		g <- graph_from_adjacency_matrix(dag_am, mode = "directed")
+		dag_am <- igraph::as_adjacency_matrix(g, type = "upper")
+		g <- igraph::graph_from_adjacency_matrix(dag_am, mode = "directed")
 	} 
 
 	return(g)
