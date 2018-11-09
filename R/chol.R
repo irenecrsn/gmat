@@ -1,18 +1,32 @@
-#' uchol
-#'
+#' Sample a random Gaussian Bayesian network using a Metropolis-Hastings
+#' algorithm over its Cholesky decomposition 
 #'
 #' @param N Number of samples
 #' @param p Number of variables
+#' @param dag directed chordal acyclic graph, use the igraph package graph class 
 #' @param return.minvector logical, if TRUE the minimimal vector representation
 #' is returned (useful to plot in the elliptope)
 #' @param ... additional parameters
 #'
 #' @export
-uchol <- function(N = 1,
+rgbn_chol <- function(N = 1,
                   p = 10,
+				  dag = NULL,
                   return.minvector = FALSE,
                   ...) {
-  sU <- mh_full(N = N, p = p, ...)
+	
+	# Standard correlation matrix uniform sampling 
+	if (is.null(dag) == FALSE) {
+		dag <- rgraph(p = p, d = 1, dag = TRUE)
+	} else {
+	# Uniform sampling of chordal DAG
+   	isCh<- is_chordal(dag,fillin=T)
+   	if (isCh$chordal == FALSE){
+     	warning("Can't sample uniformly for non chordal graph")
+    	dag <- add_edges(dag,edges = isCh$fillin)
+   		}
+	}
+  sU <- mh_full(N = N, dag = dag, p = p, ...)
   vsC <- apply(sU, MARGIN = 3, function(U)
     return(U %*% t(U)))
   sC <- array(data = vsC, dim = dim(sU))
@@ -238,7 +252,7 @@ rgbn_polar <- function(N = 1,
 #' @export
 directUnifSampling <- function(dag, h=100, eps = 0.001){
   isCh<- is_chordal(dag,fillin=T)
-  if (!isCh$chordal){
+  if (isCh$chordal == FALSE){
     warning("Can't sample uniformly for non chordal graph")
     dag <- add_edges(dag,edges = isCh$fillin)
   }
@@ -278,72 +292,52 @@ directUnifSampling <- function(dag, h=100, eps = 0.001){
 }
 
 
-#' Full Metropolis-Hastings algorithm for Gaussian Bayesian networks
+#' Full Metropolis-Hastings algorithm for correlation matrices/
+#' Gaussian Bayesian networks
 #'
 #' @param N Number of samples
+#' @param p Number of variables in the saturated model. This parameter is ignored if `dag` is provided
 #' @param dag Acyclic digraph of the GBN to sample
 #' @param h Burn-in phase
 #' @param eps Perturbation variance
 #'
 #' @export
-mh_full_dag <- function(N = 1, dag, h = 100, eps = 0.1){
-  #isCh<- is_chordal(dag,fillin=T)
-  #if (!isCh$chordal){
-    #warning("Can't sample uniformly for non chordal graph")
-    #return(NULL)
-  #}
-  p <- length(V(dag)) 
-  edges <- as_edgelist(dag)
-  U <- array(dim=c(p,p,N),data = 0)
-  
-  u <-  t(as.matrix(Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], dims = c(p, p),
+mh_full <- function(N = 1,
+                    p = 10,
+					dag = NULL,
+                    h = 100,
+                    eps = 0.1) {
+
+
+	if (is.null(dag) == FALSE) {
+
+  		p <- length(V(dag)) 
+  		edges <- as_edgelist(dag)
+  		u <-  t(as.matrix(Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], dims = c(p, p),
                              triangular = TRUE, x = rep(1, nrow(edges)))))
-  diag(u)<-1
-  U[,,1] <- u
-  U[p,p,1:N] <- 1
-  ch <- degree(dag,mode = "out")
-  pa <- degree(dag, mode="in")
-  for (j in 1:(p-1)){
-    su <- mh_row(N = N,p = ch[j]+1 ,i = pa[j]+1,h = h, eps=eps)
-    U[j,U[j,,1]>0,1:N] <- t(su)
-  }
+  		diag(u)<-1
+  		U[, , 1] <- u
+	}
+
+  	U <- array(dim = c(p, p, N), data = 0)
+  	U[p, p, 1:N] <- 1
+
+	if (is.null(dag) == TRUE) {
+  		for (i in 1:(p - 1)) {
+    		su <- mh_row(N = N,	p = p - i + 1, i = i, h = h, eps = eps)
+    		U[i, i:p, 1:N] <- t(su)
+  		}
+	} else {
+		
+  		ch <- degree(dag,mode = "out")
+  		pa <- degree(dag, mode="in")
+  		for (j in 1:(p-1)){
+    		su <- mh_row(N = N, p = ch[j] + 1, i = pa[j] + 1, h = h, eps=eps)
+    		U[j, U[j, , 1] > 0, 1:N] <- t(su)
+  		}
+	}
   return(U)
 }
-
-
-#' Sample a random Gaussian Bayesian network using a Metropolis-Hastings
-#' algorithm over its Cholesky decomposition 
-#' 
-#' @param  N Number of samples
-#' @param dag directed chordal acyclic graph, use the igraph package graph class or alternatively 
-#'            a matrix that will be interpreted as an adjacency matrix. 
-#' @param return.minvector logical, if TRUE the minimimal vector representation is returned (useful to plot in the elliptope)
-#' @param ... additional parameters
-#' 
-#' @export
-rgbn_chol <- function(N=1, dag=NULL, return.minvector = FALSE, ... ){
-   if (is.matrix(dag)){
-     dag <- igraph::graph_from_adjacency_matrix(adjmatrix = dag, mode = "directed")
-   }
-   isCh<- is_chordal(dag,fillin=T)
-   if (!isCh$chordal){
-     warning("Can't sample uniformly for non chordal graph")
-     #return(NULL)
-   }
-
-   sU <- mh_full_dag(N = N, dag = dag, ... )
-   vsC <- apply(sU,MARGIN = 3, function(U) return(U%*%t(U)) )
-   sC <- array(data=vsC, dim=dim(sU))
-   if (return.minvector){
-     mv <- apply(sC, MARGIN = 3, function(m){
-       return(m[upper.tri(m)])
-     })
-     return(t(mv))
-   }else{
-     return(sC)     
-   }
-
- }
 
 
 #' sampling on sphere proportionally to a power of the first coordinate
@@ -388,32 +382,3 @@ mh_row <-
     
     return(Sample)
   }
-
-#' Full Metropolis-Hastings algorithm for correlation matrices/saturated
-#' Gaussian Bayesian networks
-#'
-#' @param N Number of samples
-#' @param p Number of variables in the saturated model
-#' @param h Burn-in phase
-#' @param eps Perturbation variance
-#'
-#' @export
-mh_full <- function(N = 1,
-                    p = 10,
-                    h = 100,
-                    eps = 0.1) {
-  U <- array(dim = c(p, p, N), data = 0)
-  U[p, p, 1:N] <- 1
-  for (i in 1:(p - 1)) {
-    su <- mh_row(
-      N = N,
-      p = p - i + 1 ,
-      i = i ,
-      h = h,
-      eps = eps
-    )
-    U[i, i:p, 1:N] <- t(su)
-  }
-  return(U)
-}
-

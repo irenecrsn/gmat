@@ -5,15 +5,17 @@
 \title{Sample a random Gaussian Bayesian network using a Metropolis-Hastings
 algorithm over its Cholesky decomposition}
 \usage{
-rgbn_chol(N = 1, dag = NULL, return.minvector = FALSE, ...)
+rgbn_chol(N = 1, p = 10, dag = NULL, return.minvector = FALSE, ...)
 }
 \arguments{
 \item{N}{Number of samples}
 
-\item{dag}{directed chordal acyclic graph, use the igraph package graph class or alternatively
-a matrix that will be interpreted as an adjacency matrix.}
+\item{p}{Number of variables}
 
-\item{return.minvector}{logical, if TRUE the minimimal vector representation is returned (useful to plot in the elliptope)}
+\item{dag}{directed chordal acyclic graph, use the igraph package graph class}
+
+\item{return.minvector}{logical, if TRUE the minimimal vector representation
+is returned (useful to plot in the elliptope)}
 
 \item{...}{additional parameters}
 }

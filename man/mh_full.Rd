@@ -2,21 +2,23 @@
 % Please edit documentation in R/chol.R
 \name{mh_full}
 \alias{mh_full}
-\title{Full Metropolis-Hastings algorithm for correlation matrices/saturated
+\title{Full Metropolis-Hastings algorithm for correlation matrices/
 Gaussian Bayesian networks}
 \usage{
-mh_full(N = 1, p = 10, h = 100, eps = 0.1)
+mh_full(N = 1, p = 10, dag = NULL, h = 100, eps = 0.1)
 }
 \arguments{
 \item{N}{Number of samples}
 
-\item{p}{Number of variables in the saturated model}
+\item{p}{Number of variables in the saturated model. This parameter is ignored if \code{dag} is provided}
+
+\item{dag}{Acyclic digraph of the GBN to sample}
 
 \item{h}{Burn-in phase}
 
 \item{eps}{Perturbation variance}
 }
 \description{
-Full Metropolis-Hastings algorithm for correlation matrices/saturated
+Full Metropolis-Hastings algorithm for correlation matrices/
 Gaussian Bayesian networks
 }
