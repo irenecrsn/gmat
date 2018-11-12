@@ -316,13 +316,13 @@ mh_full <- function(N = 1,
   		u <-  t(as.matrix(Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], dims = c(p, p),
                              triangular = TRUE, x = rep(1, nrow(edges)))))
   		diag(u)<-1
-  		U[, , 1] <- u
 	}
 
   	U <- array(dim = c(p, p, N), data = 0)
   	U[p, p, 1:N] <- 1
 
 	if (is.null(dag) == TRUE) {
+  		U[, , 1] <- u
   		for (i in 1:(p - 1)) {
     		su <- mh_row(N = N,	p = p - i + 1, i = i, h = h, eps = eps)
     		U[i, i:p, 1:N] <- t(su)
