@@ -15,15 +15,13 @@ rgbn_chol <- function(N = 1,
                   return.minvector = FALSE,
                   ...) {
 	
-	# Standard correlation matrix uniform sampling 
-	if (is.null(dag) == TRUE) {
-		dag <- rgraph(p = p, d = 1, dag = TRUE)
-	} else {
 	# Uniform sampling of chordal DAG
-   	isCh<- igraph::is_chordal(dag,fillin=T)
-   	if (isCh$chordal == FALSE){
+	if (is.null(dag) == FALSE) {
+   		isCh <- igraph::is_chordal(dag, fillin = TRUE)
+   		
+		if (isCh$chordal == FALSE){
      	warning("Can't sample uniformly for non chordal graph")
-    	dag <- igraph::add_edges(dag,edges = isCh$fillin)
+    		dag <- igraph::add_edges(dag, edges = isCh$fillin)
    		}
 	}
   sU <- mh_full(N = N, dag = dag, p = p, ...)
