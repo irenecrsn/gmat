@@ -19,14 +19,14 @@ rgbn_chol <- function(N = 1,
                   ...) {
 	
 	# Uniform sampling of chordal DAG
-	if (is.null(dag) == FALSE and add_no_chordal == TRUE) {
+	if (is.null(dag) == FALSE & add_no_chordal == TRUE) {
    		isCh <- igraph::is_chordal(dag, fillin = TRUE)
    		
 		if (isCh$chordal == FALSE){
     		dag <- igraph::add_edges(dag, edges = isCh$fillin)
    		}
 	}
-  sU <- mh_full(N = N, dag = dag, p = p, ...)
+  sU <- mh_full(N = N, dag = dag, ...)
   vsC <- apply(sU, MARGIN = 3, function(U)
     return(U %*% t(U)))
   sC <- array(data = vsC, dim = dim(sU))

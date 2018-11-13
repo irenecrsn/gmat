@@ -5,7 +5,8 @@
 \title{Sample a random Gaussian Bayesian network using a Metropolis-Hastings
 algorithm over its Cholesky decomposition}
 \usage{
-rgbn_chol(N = 1, p = 10, dag = NULL, return.minvector = FALSE, ...)
+rgbn_chol(N = 1, p = 10, dag = NULL, return.minvector = FALSE,
+  add_no_chordal = TRUE, ...)
 }
 \arguments{
 \item{N}{Number of samples}
@@ -16,6 +17,9 @@ rgbn_chol(N = 1, p = 10, dag = NULL, return.minvector = FALSE, ...)
 
 \item{return.minvector}{logical, if TRUE the minimimal vector representation
 is returned (useful to plot in the elliptope)}
+
+\item{add_no_chordal}{logical, if TRUE when the dag provided is not chordal,
+a fill-in is computed, in order to ensure uniform distribution}
 
 \item{...}{additional parameters}
 }
