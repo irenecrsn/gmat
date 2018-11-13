@@ -6,6 +6,8 @@
 #' @param dag directed chordal acyclic graph, use the igraph package graph class 
 #' @param return.minvector logical, if TRUE the minimimal vector representation
 #' is returned (useful to plot in the elliptope)
+#' @param add_no_chordal logical, if TRUE when the dag provided is not chordal,
+#' a fill-in is computed, in order to ensure uniform distribution
 #' @param ... additional parameters
 #'
 #' @export
@@ -13,14 +15,14 @@ rgbn_chol <- function(N = 1,
                   p = 10,
 				  dag = NULL,
                   return.minvector = FALSE,
+				  add_no_chordal = TRUE,
                   ...) {
 	
 	# Uniform sampling of chordal DAG
-	if (is.null(dag) == FALSE) {
+	if (is.null(dag) == FALSE and add_no_chordal == TRUE) {
    		isCh <- igraph::is_chordal(dag, fillin = TRUE)
    		
 		if (isCh$chordal == FALSE){
-     	warning("Can't sample uniformly for non chordal graph")
     		dag <- igraph::add_edges(dag, edges = isCh$fillin)
    		}
 	}
