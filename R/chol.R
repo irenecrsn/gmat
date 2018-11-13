@@ -269,16 +269,15 @@ mh_full <- function(N = 1,
   	U[p, p, 1:N] <- 1
 
 	if (is.null(dag) == TRUE) {
-  		U[, , 1] <- u
   		for (i in 1:(p - 1)) {
     		su <- mh_row(N = N,	p = p - i + 1, i = i, h = h, eps = eps)
     		U[i, i:p, 1:N] <- t(su)
   		}
 	} else {
-		
-  		ch <- igraph::degree(dag,mode = "out")
-  		pa <- igraph::degree(dag, mode="in")
-  		for (j in 1:(p-1)){
+		U[, , 1] <- u
+  		ch <- igraph::degree(dag, mode = "out")
+  		pa <- igraph::degree(dag, mode = "in")
+  		for (j in 1:(p-1)) {
     		su <- mh_row(N = N, p = ch[j] + 1, i = pa[j] + 1, h = h, eps=eps)
     		U[j, U[j, , 1] > 0, 1:N] <- t(su)
   		}
