@@ -79,19 +79,22 @@ test_that("the dag structure is preserved", {
 
 	sample <- rgbn_chol(N = N, dag = dag, add_no_chordal = FALSE)
 	for (n in 1:N) {
-		U <- chol(sample[, , n])
+		L <- t(chol(anti_t(sample[, , n])))
+		U <- t(anti_t(L))
 		expect_equal_dag(m = U, dag = dag)
 	}
 
 	sample <- rgbn_iid(N = N, dag = dag)
 	for (n in 1:N) {
-		U <- chol(sample[, , n])
+		L <- t(chol(anti_t(sample[, , n])))
+		U <- t(anti_t(L))
 		expect_equal_dag(m = U, dag = dag)
 	}
 	
 	sample <- rgbn_polar(N = N, dag = dag)
 	for (n in 1:N) {
-		U <- chol(sample[, , n])
+		L <- t(chol(anti_t(sample[, , n])))
+		U <- t(anti_t(L))
 		expect_equal_dag(m = U, dag = dag)
 	}
 })
