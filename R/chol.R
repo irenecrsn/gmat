@@ -57,7 +57,7 @@ rgbn_iid <- function(N = 1,
 				return.minvector = FALSE) 
 {  	
 	if (is.null(dag) == FALSE) {
-		p <- igraph::V(dag)
+		p <- length(igraph::V(dag))
 		L_init <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
 	} else {
 		L_init <- matrix(nrow = p, ncol = p, data = 0)
@@ -103,7 +103,7 @@ rgbn_polar <- function(N = 1,
 				return.minvector = FALSE) 
 {  	
 	if (is.null(dag) == FALSE) {
-		p <- igraph::V(dag)
+		p <- length(igraph::V(dag))
 		L_init <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
 	} else {
 		L_init <- matrix(nrow = p, ncol = p, data = 0)
