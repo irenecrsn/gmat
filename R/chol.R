@@ -241,55 +241,6 @@ rgbn_polar <- function(N = 1,
 }
 
 
-#' Direct sampling using iid coefs
-#'
-#' @param dag Graph for sampling
-#' @param h Heat-in phase
-#' @param eps Perturbation variance
-#'
-#' @export
-directUnifSampling <- function(dag, h=100, eps = 0.001){
-  isCh<- igraph::is_chordal(dag,fillin=T)
-  if (isCh$chordal == FALSE){
-    warning("Can't sample uniformly for non chordal graph")
-    dag <- igraph::add_edges(dag,edges = isCh$fillin)
-  }
-  edges <- igraph::as_edgelist(dag)
-  v <- igraph::V(dag)
-  p <- length(v)
-  k <- rep(1,p) + igraph::degree(dag, mode = "in")
-  U <- Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], x =
-						  rnorm(nrow(edges)), dims = c(p, p), triangular = TRUE)
-  diag(U) <- 1
-  U <- t(U)
-  U <- t(apply(U, MARGIN = 1, FUN = function(u) return(u/sqrt(sum(u^2))) ))
-  J <- .ljac(diag(U), k)
-  print(J)
-  for (i in (1:h)){
-  	E <- Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], x =
-						  rnorm(nrow(edges), mean = 0, sd = eps), dims = c(p, p), triangular = TRUE)
-  	diag(E) <- 1
- 	E <- t(E)
-    diag(E)<-rnorm(p,mean=0,sd=eps)
-    Up <- U + E
-    Up <- t(apply(Up, MARGIN = 1, FUN = function(u) return(u/sqrt(sum(u^2))) ))
-    Jp <- .ljac(diag(Up), k)
-    print(Jp-J)
-    if (log(runif(1)) <= (Jp - J) ){
-      U <- Up
-      J <- Jp
-      print("step")
-    }
-  }
-  return(U)
-}
-
-
-.ljac <- function(u, k){
-  return(sum(k*log(abs(u))))
-}
-
-
 #' Full Metropolis-Hastings algorithm for correlation matrices/
 #' Gaussian Bayesian networks
 #'
