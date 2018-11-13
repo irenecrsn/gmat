@@ -8,7 +8,7 @@
 \alias{.rsin}
 \title{Sample coefficient matrix with polar parametrization}
 \usage{
-.rcoef_polar(p = 100, method = "numeric", edges)
+.rcoef_polar(p = 100, method = "numeric", L)
 
 .sin_k(x, k)
 
@@ -24,13 +24,13 @@
 \item{method}{String, method to sample from \code{sin(x)^k}: \code{numeric} or
 \code{recursive}}
 
-\item{edges}{Matrix defining the edges of the Bayesian network (from, to).}
-
 \item{x}{value where \code{sin^k} will be calculated}
 
 \item{k}{exponent for \code{sin^k}}
 
 \item{n}{Number of samples to generate}
+
+\item{edges}{Matrix defining the edges of the Bayesian network (from, to).}
 }
 \value{
 \code{mcoef} a lower triangular matrix such that mcoefmcoef' has 1 on diagonal.

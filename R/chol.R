@@ -56,29 +56,29 @@ rgbn_iid <- function(N = 1,
 				 dag = NULL,
 				return.minvector = FALSE) 
 {  	
-	# Saturated model TODO too expensive
-	if (is.null(dag) == TRUE) {
-		dag <- rgraph(p = p, d = 1, dag = TRUE)
-	} 	
-	edges <- igraph::as_edgelist(dag)
-	
+	if (is.null(dag) == FALSE) {
+		p <- igraph::V(dag)
+		L_init <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
+	} else {
+		L_init <- matrix(nrow = p, ncol = p, data = 0)
+		L_init[upper.tri(L_init)] <- 1
+	}
+	diag(L_init) <- 1
 	R <- array(dim = c(p, p, N))
 
 	for (n in 1:N) {
-		L <- Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], x =
-					  rnorm(nrow(edges)), dims = c(p, p), triangular = TRUE)
-		diag(L) <- 1
-		D <- Matrix::Diagonal(n = p, runif(p, 0.1, 1))
-		Omega <- t(L) %*% solve(D) %*% (L) 
-		R[, , n] <- as(Omega, "corMatrix")
+		L <- L_init
+		D <- diag(x = runif(p, 0.1, 1))
+		Omega <- t(L) %*% solve(D) %*% L 
+		R[, , n] <- cov2cor(Omega) 
 	}
 
   	if (return.minvector == TRUE) {
     	mv <- apply(R, MARGIN = 3, function(m) {
-      	return(m[upper.tri(m)])
+      		return(m[upper.tri(m)])
     	})
     	return(t(mv))
-  	} else{
+  	} else {
     	return(R)
   	}
 }
@@ -102,16 +102,18 @@ rgbn_polar <- function(N = 1,
 				 dag = NULL,
 				return.minvector = FALSE) 
 {  	
-	# Saturated model
-	if (is.null(dag) == TRUE) {
-		dag <- rgraph(p = p, d = 1, dag = TRUE)
-	} 	
-	edges <- igraph::as_edgelist(dag)
-	
+	if (is.null(dag) == FALSE) {
+		p <- igraph::V(dag)
+		L_init <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
+	} else {
+		L_init <- matrix(nrow = p, ncol = p, data = 0)
+		L_init[upper.tri(L_init)] <- 1
+	}
+	diag(L_init) <- 1
 	R <- array(dim = c(p, p, N))
 
 	for (n in 1:N) {
-		U <- .rcoef_polar(p = p, method = comp, edges = edges)
+		U <- .rcoef_polar(p = p, method = comp, L = L_init)
 		R[, , n] <- U %*% t(U)
 	}
 
@@ -145,30 +147,26 @@ rgbn_polar <- function(N = 1,
 #'
 .rcoef_polar <- function(p = 100,
                          method = 'numeric',
-						 edges) 
+						 L) 
 {	
-
-	mcoef <- Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], dims = c(p, p),
-						  triangular = TRUE, x = rep(1, nrow(edges)))
-	theta <- Matrix::drop0(Matrix::tril(Matrix::Matrix(pi/2, nrow = p, ncol = p), k = -1))
-
-	diag(mcoef) <- 1
+	theta <- matrix(nrow = p, ncol = p, data = 0)
+	theta[lower.tri(theta)] <- pi/2
 
 	for (icol in 1:(p - 1)) {
 		for (irow in (icol + 1):p) {
-			if (mcoef[irow, icol] != 0) {
+			if (L[irow, icol] != 0) {
 				theta[irow, icol] <- .rsin(n = 1, k = p - icol, method = method)
-				mcoef[irow, icol] <- cos(theta[irow, icol])
+				L[irow, icol] <- cos(theta[irow, icol])
 			} 
 		}
 		if (icol >= 2) {
 			for (j in 1:(icol - 1)) {
-				mcoef[icol:p, icol] <- mcoef[icol:p, icol] * sin(theta[icol:p, j])
+				L[icol:p, icol] <- L[icol:p, icol] * sin(theta[icol:p, j])
 			}
-		}	
+		}
 	}
-	mcoef[p, p] <- prod(sin(theta[p, 1:(p - 1)]))
-	return(mcoef)
+	L[p, p] <- prod(sin(theta[p, 1:(p - 1)]))
+	return(L)
 }
 
 
@@ -312,9 +310,7 @@ mh_full <- function(N = 1,
 	if (is.null(dag) == FALSE) {
 
   		p <- length(igraph::V(dag)) 
-  		edges <- igraph::as_edgelist(dag)
-  		u <-  t(as.matrix(Matrix::sparseMatrix(i = edges[, 2], j = edges[, 1], dims = c(p, p),
-                             triangular = TRUE, x = rep(1, nrow(edges)))))
+  		u <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
   		diag(u)<-1
 	}
 
