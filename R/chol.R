@@ -16,7 +16,7 @@ rgbn_chol <- function(N = 1,
                   ...) {
 	
 	# Standard correlation matrix uniform sampling 
-	if (is.null(dag) == FALSE) {
+	if (is.null(dag) == TRUE) {
 		dag <- rgraph(p = p, d = 1, dag = TRUE)
 	} else {
 	# Uniform sampling of chordal DAG
@@ -57,7 +57,7 @@ rgbn_iid <- function(N = 1,
 				return.minvector = FALSE) 
 {  	
 	# Saturated model TODO too expensive
-	if (is.null(dag)) {
+	if (is.null(dag) == TRUE) {
 		dag <- rgraph(p = p, d = 1, dag = TRUE)
 	} 	
 	edges <- igraph::as_edgelist(dag)
@@ -103,7 +103,7 @@ rgbn_polar <- function(N = 1,
 				return.minvector = FALSE) 
 {  	
 	# Saturated model
-	if (is.null(dag)) {
+	if (is.null(dag) == TRUE) {
 		dag <- rgraph(p = p, d = 1, dag = TRUE)
 	} 	
 	edges <- igraph::as_edgelist(dag)
