@@ -72,16 +72,19 @@ rgbn_iid <- function(N = 1,
 {  	
 	if (is.null(dag) == FALSE) {
 		p <- length(igraph::V(dag))
-		L_init <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
+		L_init <- t(igraph::as_adjacency_matrix(dag, sparse = FALSE))
+		n_edges <- length(igraph::E(dag))
 	} else {
 		L_init <- matrix(nrow = p, ncol = p, data = 0)
-		L_init[upper.tri(L_init)] <- 1
+		L_init[lower.tri(L_init)] <- 1 
+		n_edges <- p*(p - 1)/2
 	}
-	diag(L_init) <- 1
 	R <- array(dim = c(p, p, N))
 
 	for (n in 1:N) {
 		L <- L_init
+		L[L != 0] <- - runif(n = n_edges, min = 0.1, max = 1)
+		diag(L) <- 1
 		D <- diag(x = runif(p, 0.1, 1))
 		Omega <- t(L) %*% solve(D) %*% L 
 		R[, , n] <- stats::cov2cor(Omega) 
