@@ -1,5 +1,9 @@
-#' Sample a random Gaussian Bayesian network using a Metropolis-Hastings
-#' algorithm over its Cholesky decomposition 
+#' Sample a random Gaussian Bayesian network using different parametrizations
+#' for the Cholesky decomposition. 
+#' 
+#' @name directed graph matrix simulation
+#'
+#' @rdname gbn-sim
 #'
 #' @param N Number of samples
 #' @param p Number of variables
@@ -9,6 +13,17 @@
 #' @param add_no_chordal logical, if TRUE when the dag provided is not chordal,
 #' a fill-in is computed, in order to ensure uniform distribution
 #' @param ... additional parameters
+#'
+#' @details Function `rgbn_chol` uses the method described in Córdoba et al.
+#' (2018), based on a Metropolis-Hastings algorithm over the upper Cholesky
+#' factorization. 
+#'
+#' @return A three-dimensional array of length `p*p*N`
+#'
+#' @references Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
+#' Metropolis-Hastings method for generating random correlation matrices. Intelligent Data
+#' Engineering and Automated Learning – IDEAL 2018. Lecture Notes in
+#' Computer Science, vol 11314, pp. 117-124, 2018. 
 #'
 #' @export
 rgbn_chol <- function(N = 1,
@@ -40,16 +55,11 @@ rgbn_chol <- function(N = 1,
   }
 }
 
-#' Sample a random Gaussian Bayesian network
-#' 
-#' Samples a random Gaussian Bayesian network with iid coefficients 
+#' @rdname gbn-sim
 #'
-#' @param  N Number of samples
-#' @param p Positive integer, Number of dimension.
-#' @param dag A graph object of class `igraph`.
-#' @param return.minvector logical, if TRUE the minimimal vector representation is returned (useful to plot in the elliptope)
+#' @details The entries in the upper Cholesky factor are sampled i.i.d. by
+#' function `rgbn_iid`. 
 #'
-#' @return The sample   
 #' @export
 rgbn_iid <- function(N = 1,
 				 p = 10,
@@ -83,18 +93,18 @@ rgbn_iid <- function(N = 1,
   	}
 }
 
-#' Sample a random Gaussian Bayesian network
-#' 
-#' Samples a random Gaussian Bayesian network with polar parametrization. 
+#' @rdname gbn-sim
 #'
-#' @param  N Number of samples
-#' @param p Positive integer, Number of dimension.
 #' @param comp String one of "numeric" or "recursive", indicating the
 #' computational method to use for sampling the angles for "unifconc" method
-#' @param dag A graph object of class `igraph`.
-#' @param return.minvector logical, if TRUE the minimimal vector representation is returned (useful to plot in the elliptope)
+#' 
+#' @details Function `rgbn_polar` reparametrizes the Cholesky factor following
+#' the approach by Pourahmadi and Wang (2015).
+#' 
+#' @references Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
+#' Hyperspherical parameterization of the Cholesky factor, Statistics &
+#' Probability Letters, 106:5-12, 2015.
 #'
-#' @return The sample   
 #' @export
 rgbn_polar <- function(N = 1,
 				 p = 10,
