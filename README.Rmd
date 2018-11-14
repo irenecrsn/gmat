@@ -43,7 +43,7 @@ branch:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("irenecrsn/gmat", ref = "rchol")
+devtools::install_github("irenecrsn/gmat", ref = "port-upd")
 ```
 
 The only R package required for `gmat` is `igraph`, which can be installed
