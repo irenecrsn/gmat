@@ -23,5 +23,4 @@ BugReports: https://github.com/irenecrsn/gmat/issues
 Suggests: testthat
 Imports:
 	igraph,
-	methods,
 	stats

@@ -80,7 +80,7 @@ rgbn_iid <- function(N = 1,
 		L <- L_init
 		D <- diag(x = runif(p, 0.1, 1))
 		Omega <- t(L) %*% solve(D) %*% L 
-		R[, , n] <- cov2cor(Omega) 
+		R[, , n] <- stats::cov2cor(Omega) 
 	}
 
   	if (return.minvector == TRUE) {
@@ -178,8 +178,8 @@ rgbn_polar <- function(N = 1,
 	}
 
 	if (method == "numeric") {
-		const <- integrate(.sin_k, lower = 0, upper = pi, k = k)$value
-		return(integrate(.sin_k, lower = 0, upper = x, k = k)$value / const)
+		const <- stats::integrate(.sin_k, lower = 0, upper = pi, k = k)$value
+		return(stats::integrate(.sin_k, lower = 0, upper = x, k = k)$value / const)
 	}
 	const <- .sin_int(pi, k)
 	return(.sin_int(x, k) / const)
@@ -211,7 +211,7 @@ rgbn_polar <- function(N = 1,
 	}
 
 	.sin_k_invsampl <- function(u) {
-		return(uniroot(.sin_k_inv_unif, u = u, interval = c(0, pi), 
+		return(stats::uniroot(.sin_k_inv_unif, u = u, interval = c(0, pi), 
 					   extendInt = "upX")$root)
 	}
 
