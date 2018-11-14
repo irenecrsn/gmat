@@ -48,19 +48,19 @@ test_that("matrices are symmetric positive definite", {
 
 	sample <- rgbn_chol(N = N, p = p) 
 	for (n in 1:N) {
-		expect_true(isSymmetric(sample[, , n]))
+		expect_equal(sample[, , n], t(sample[, , n]))
 		expect_gt(min(eigen(sample[, , n])$values), 0)
 	}
 
 	sample <- rgbn_iid(N = N, p = p)
 	for (n in 1:N) {
-		expect_true(isSymmetric(sample[, , n]))
+		expect_equal(sample[, , n], t(sample[, , n]))
 		expect_gt(min(eigen(sample[, , n])$values), 0)
 	}
 	
 	sample <- rgbn_polar(N = N, p = p)
 	for (n in 1:N) {
-		expect_true(isSymmetric(sample[, , n]))
+		expect_equal(sample[, , n], t(sample[, , n]))
 		expect_gt(min(eigen(sample[, , n])$values), 0)
 	}
 })

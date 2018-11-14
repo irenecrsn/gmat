@@ -1,4 +1,4 @@
-context("port and domdiag methods")
+context("Sampling of matrices constrained by undirected graphs")
 
 test_that("the condition number is controlled", {
 	N <- 20; p <- 10; d <- 0.15; k <- 5;
@@ -12,10 +12,10 @@ test_that("the condition number is controlled", {
 test_that("selective gram schmidt actually selects", {
 	p <- 10; d <- 0.15;
 
-	span <- matrix(ncol = p, nrow = p, rnorm(p^2))
+	span <- matrix(ncol = p, nrow = p, stats::rnorm(p^2))
 	
 	madj <- upper.tri(matrix(NA, p, p))
-	madj[madj] <- rbinom(n = (p - 1)*p / 2, size = 1, prob = d)
+	madj[madj] <- stats::rbinom(n = (p - 1)*p / 2, size = 1, prob = d)
 	madj <- madj + t(madj)
 
 	span_ort <- matrix(.C("gram_schmidt_sel", 
@@ -47,14 +47,14 @@ test_that("matrices are symmetric positive definite", {
 
 	sample <- port(N = N, p = p, d = d) 
 	for (n in 1:N) {
-		expect_true(isSymmetric(sample[, , n]))
+		expect_equal(sample[, , n], t(sample[, , n]))
 		# here we do not test positive definiteness since 
 		# sometimes condition numbers are very high
 	}
 
 	sample <- diagdom(N = N, p = p, d = d)
 	for (n in 1:N) {
-		expect_true(isSymmetric(sample[, , n]))
+		expect_equal(sample[, , n], t(sample[, , n]))
 		expect_gt(min(eigen(sample[, , n])$values), 0)
 	}
 })
