@@ -39,12 +39,11 @@ method is the one used by function `diagdom`.
 ## Installation
 
 The package is available on `CRAN`, to get the latest stable version use
-```{r gh-installation, eval = FALSE}
+```{r cran-installation, eval = FALSE}
 install.packages("gmat")
 ```
 
 Alternatively, using the R package `devtools` one may install the current development version:
-
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
 devtools::install_github("irenecrsn/gmat")
