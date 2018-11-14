@@ -12,3 +12,6 @@
 * functions.R: Explicit use of :: for igraph functions.
 * gmat.R: Removed import of igraph package.
 * NAMESPACE: Regenerated.
+
+* functions.R: Doc descriptive update.
+* man/rgmat.Rd: Regenerated.
