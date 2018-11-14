@@ -47,7 +47,7 @@ Function \code{rgbn_chol} uses the method described in Córdoba et al.
 factorization.
 
 The entries in the upper Cholesky factor are sampled i.i.d. by
-function \code{rgbn_iid}.
+function \code{rgbn_iid}, following Kalisch and Buhlmann (2007).
 
 Function \code{rgbn_polar} reparametrizes the Cholesky factor following
 the approach by Pourahmadi and Wang (2015).
@@ -57,6 +57,10 @@ Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
 Metropolis-Hastings method for generating random correlation matrices. Intelligent Data
 Engineering and Automated Learning – IDEAL 2018. Lecture Notes in
 Computer Science, vol 11314, pp. 117-124, 2018.
+
+Kalisch, M., Buhlmann, P. Estimating high-dimensional directed
+acyclic graphs with the PC-algorithm, Journal of Machine Learning Research,
+8:613-636, 2007.
 
 Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
 Hyperspherical parameterization of the Cholesky factor, Statistics &

@@ -58,7 +58,11 @@ rgbn_chol <- function(N = 1,
 #' @rdname gbn-sim
 #'
 #' @details The entries in the upper Cholesky factor are sampled i.i.d. by
-#' function `rgbn_iid`. 
+#' function `rgbn_iid`, following Kalisch and Buhlmann (2007). 
+#'
+#' @references Kalisch, M., Buhlmann, P. Estimating high-dimensional directed
+#' acyclic graphs with the PC-algorithm, Journal of Machine Learning Research,
+#' 8:613-636, 2007.
 #'
 #' @export
 rgbn_iid <- function(N = 1,
