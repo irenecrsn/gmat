@@ -138,23 +138,6 @@ rgbn_polar <- function(N = 1,
 }
 
 
-#' Sample coefficient matrix with polar parametrization
-#'
-#' Sample a polar parametrization of the Cholesky factor in the LL' decomposition of
-#' the concentration matrix.
-#'
-#' @rdname polar
-#'
-#' @param p positive integer, the dimension of the square matrix
-#' @param method String, method to sample from `sin(x)^k`: `numeric` or
-#' `recursive`
-#' @param edges Matrix defining the edges of the Bayesian network (from, to).
-#'
-#' @details The mcoef factor is sampled such that mcoefmcoef' is uniformly
-#'distributed among the correlation matrices.
-#'
-#' @return `mcoef` a lower triangular matrix such that mcoefmcoef' has 1 on diagonal.
-#'
 .rcoef_polar <- function(p = 100,
                          method = 'numeric',
 						 L) 
@@ -180,17 +163,10 @@ rgbn_polar <- function(N = 1,
 }
 
 
-#' @rdname polar
-#'
-#' @param k exponent for `sin^k`
-#' @param x value where `sin^k` will be calculated
 .sin_k <- function(x, k) {
 	return (sin(x)^k)
 }
 
-#' @rdname polar
-#'
-#' @importFrom stats integrate
 .sin_k_cum <- function(x, k, method = "numeric") {
 	
 	if (x <= 0) {
@@ -209,9 +185,6 @@ rgbn_polar <- function(N = 1,
 	return(.sin_int(x, k) / const)
 }
 
-#' @rdname polar
-#' 
-#' @details recursive computation 
 .sin_int <- function(x, k = 1){
 	if (length(x)>1){
 		return(sapply(x,.sin_int,k))
@@ -232,11 +205,6 @@ rgbn_polar <- function(N = 1,
 	}
 }
 
-#' @rdname polar
-#'
-#' @param n Number of samples to generate
-#'
-#' @importFrom stats uniroot
 .rsin <- function(n, k = 1, method = 'numeric') {
 	.sin_k_inv_unif <- function(x, u) {
 		return (.sin_k_cum(x, k, method) - u)
