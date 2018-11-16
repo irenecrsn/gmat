@@ -52,6 +52,21 @@ function \code{rgbn_iid}, following Kalisch and Buhlmann (2007).
 Function \code{rgbn_polar} reparametrizes the Cholesky factor following
 the approach by Pourahmadi and Wang (2015).
 }
+\examples{
+
+# Generate a random acyclic digraph structure
+dag <- gmat::rgraph(p = 3, d = 0.25, dag = TRUE)
+
+# Generate 10 matrices via Cholesky decomposition
+rgbn_chol(N = 10, dag = dag, add_no_chordal = FALSE)
+
+# Generate 10 matrices with i.i.d. entries in the Cholesky factor
+rgbn_iid(N = 10, dag = dag)
+
+# Generate 10 matrices using the polar parametrization of the Cholesky factor
+rgbn_polar(N = 1, dag = dag)
+
+}
 \references{
 Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
 Metropolis-Hastings method for generating random correlation matrices. Intelligent Data

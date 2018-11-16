@@ -20,3 +20,8 @@
 
 * README.md: Update installation instructions.
 
+* DESCRIPTION: Incorporated acyclic digraphs to description.
+
+2018-11-16 Irene Córdoba <irene.cordoba@upm.es>
+* README.md: Removed references already in the doc and updated description. 
+

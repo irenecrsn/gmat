@@ -24,6 +24,14 @@
 #' Metropolis-Hastings method for generating random correlation matrices. Intelligent Data
 #' Engineering and Automated Learning – IDEAL 2018. Lecture Notes in
 #' Computer Science, vol 11314, pp. 117-124, 2018. 
+#' 
+#' @examples
+#'
+#' # Generate a random acyclic digraph structure
+#' dag <- gmat::rgraph(p = 3, d = 0.25, dag = TRUE)
+#'
+#' # Generate 10 matrices via Cholesky decomposition
+#' rgbn_chol(N = 10, dag = dag, add_no_chordal = FALSE)
 #'
 #' @export
 rgbn_chol <- function(N = 1,
@@ -63,6 +71,10 @@ rgbn_chol <- function(N = 1,
 #' @references Kalisch, M., Buhlmann, P. Estimating high-dimensional directed
 #' acyclic graphs with the PC-algorithm, Journal of Machine Learning Research,
 #' 8:613-636, 2007.
+#'
+#' @examples
+#' # Generate 10 matrices with i.i.d. entries in the Cholesky factor
+#' rgbn_iid(N = 10, dag = dag)
 #'
 #' @export
 rgbn_iid <- function(N = 1,
@@ -111,6 +123,10 @@ rgbn_iid <- function(N = 1,
 #' @references Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
 #' Hyperspherical parameterization of the Cholesky factor, Statistics &
 #' Probability Letters, 106:5-12, 2015.
+#'
+#' @examples
+#' # Generate 10 matrices using the polar parametrization of the Cholesky factor
+#' rgbn_polar(N = 1, dag = dag)
 #'
 #' @export
 rgbn_polar <- function(N = 1,
