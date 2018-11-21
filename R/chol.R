@@ -129,10 +129,9 @@ chol_iid<- function(N = 1,
 #' chol_polar(N = 2, dag = dag)
 #'
 #' @export
-chol_polar <- function(N = 1,
-				 p = 10,
-                 comp = 'numeric',
+chol_polar <- function(N = 1,				 p = 10,
 				 dag = NULL,
+                 comp = 'numeric',
 				return.minvector = FALSE) 
 {  	
 	if (is.null(dag) == FALSE) {

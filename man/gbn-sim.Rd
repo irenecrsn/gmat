@@ -13,7 +13,7 @@ chol_mh(N = 1, p = 10, dag = NULL, return.minvector = FALSE,
 
 chol_iid(N = 1, p = 10, dag = NULL, return.minvector = FALSE)
 
-chol_polar(N = 1, p = 10, comp = "numeric", dag = NULL,
+chol_polar(N = 1, p = 10, dag = NULL, comp = "numeric",
   return.minvector = FALSE)
 }
 \arguments{

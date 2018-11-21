@@ -110,10 +110,10 @@ undirected graph by either partial orthogonalization or diagonal dominance.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>port</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>rentries</span> <span class='kw'>=</span> <span class='no'>runif</span>,
+    <pre class="usage"><span class='fu'>port</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rentries</span> <span class='kw'>=</span> <span class='no'>runif</span>,
   <span class='kw'>zapzeros</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>diagdom</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>rentries</span> <span class='kw'>=</span> <span class='no'>runif</span>,
+<span class='fu'>diagdom</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rentries</span> <span class='kw'>=</span> <span class='no'>runif</span>,
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -124,10 +124,6 @@ undirected graph by either partial orthogonalization or diagonal dominance.</p>
       <td><p>sample size</p></td>
     </tr>
     <tr>
-      <th>ug</th>
-      <td><p>the undirected graph</p></td>
-    </tr>
-    <tr>
       <th>p</th>
       <td><p>Matrix dimension (number of nodes in <code>ug</code> if provided)</p></td>
     </tr>
@@ -135,6 +131,10 @@ undirected graph by either partial orthogonalization or diagonal dominance.</p>
       <th>d</th>
       <td><p>number in <code>[0,1]</code>, the proportion of non-zero
 entries (if <code>ug</code> is not provided)</p></td>
+    </tr>
+    <tr>
+      <th>ug</th>
+      <td><p>the undirected graph</p></td>
     </tr>
     <tr>
       <th>rentries</th>

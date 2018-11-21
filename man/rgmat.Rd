@@ -6,21 +6,21 @@
 \alias{diagdom}
 \title{Sample random covariance/concentration graph matrices.}
 \usage{
-port(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif,
+port(N = 1, p = 5, d = 0.25, ug = NULL, rentries = runif,
   zapzeros = TRUE)
 
-diagdom(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif,
+diagdom(N = 1, p = 5, d = 0.25, ug = NULL, rentries = runif,
   k = NULL)
 }
 \arguments{
 \item{N}{sample size}
 
-\item{ug}{the undirected graph}
-
 \item{p}{Matrix dimension (number of nodes in \code{ug} if provided)}
 
 \item{d}{number in \code{[0,1]}, the proportion of non-zero
 entries (if \code{ug} is not provided)}
+
+\item{ug}{the undirected graph}
 
 \item{rentries}{the random number generator for the
 non-zero entries (defaults to \code{runif})}

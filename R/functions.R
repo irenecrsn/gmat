@@ -41,7 +41,7 @@
 #'
 #' @useDynLib gmat, .registration=TRUE
 #' @export
-port <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, zapzeros = TRUE) {
+port <- function(N = 1, p = 5, d = 0.25, ug = NULL, rentries = runif, zapzeros = TRUE) {
   
   if (is.null(ug)) {
     ug <- igraph::sample_gnp(n = p, p = d)
@@ -90,7 +90,7 @@ port <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, zapzeros =
 #' gmat::diagdom(N = 10, ug = ug)
 #'
 #' @export
-diagdom <- function(N = 1, ug = NULL, p = 5, d = 0.25, rentries = runif, k = NULL) {
+diagdom <- function(N = 1, p = 5, d = 0.25, ug = NULL, rentries = runif, k = NULL) {
   
   if (is.null(ug)) {
     ug <- igraph::sample_gnp(n = p, p = d)
