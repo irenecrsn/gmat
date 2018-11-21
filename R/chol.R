@@ -28,7 +28,7 @@
 #' @examples
 #'
 #' # Generate a random acyclic digraph structure
-#' dag <- gmat::rgraph(p = 3, d = 0.25, dag = TRUE)
+#' dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
 #'
 #' # Generate 2 matrices via Cholesky decomposition
 #' chol_mh(N = 2, dag = dag, add_no_chordal = FALSE)
