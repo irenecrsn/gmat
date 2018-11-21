@@ -81,36 +81,36 @@
 <p>The current version on <code>CRAN</code> only includes the methods for undirected graph models.</p>
 <p>Alternatively, using the R package <code>devtools</code> one may install the development version:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools::<span class="kw">install_github</span>(<span class="st">"irenecrsn/gmat"</span>)</code></pre></div>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"irenecrsn/gmat"</span>)</code></pre></div>
 <p>The only R package required for <code>gmat</code> is <code>igraph</code>, which can also be installed from CRAN.</p>
 </div>
 <div id="an-example-of-use" class="section level2">
 <h2 class="hasAnchor">
 <a href="#an-example-of-use" class="anchor"></a>An example of use</h2>
 <p>First, we generate a random graph with <code>3</code> nodes and density <code>0.25</code>, using the <code>igraph</code> package. Then we generate, using our <code><a href="http://www.rdocumentation.org/packages/gmat/topics/rgmat">gmat::port</a></code> function, <code>3</code> matrices consistent with such random graphical structure.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ug &lt;-<span class="st"> </span>igraph::<span class="kw">sample_gnp</span>(<span class="dt">n =</span> <span class="dv">3</span>, <span class="dt">p =</span> <span class="fl">0.25</span>)
-matrices &lt;-<span class="st"> </span>gmat::<span class="kw">port</span>(<span class="dt">N =</span> <span class="dv">3</span>, <span class="dt">ug =</span> ug)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ug &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/sample_gnp">sample_gnp</a></span>(<span class="dt">n =</span> <span class="dv">3</span>, <span class="dt">p =</span> <span class="fl">0.25</span>)
+matrices &lt;-<span class="st"> </span>gmat<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gmat/topics/rgmat">port</a></span>(<span class="dt">N =</span> <span class="dv">3</span>, <span class="dt">ug =</span> ug)
 matrices
 <span class="co">#&gt; , , 1</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;           [,1]     [,2]      [,3]</span>
-<span class="co">#&gt; [1,] 0.8538279 0.000000 0.0000000</span>
-<span class="co">#&gt; [2,] 0.0000000 0.512714 0.0000000</span>
-<span class="co">#&gt; [3,] 0.0000000 0.000000 0.8514279</span>
+<span class="co">#&gt;         [,1]      [,2]      [,3]</span>
+<span class="co">#&gt; [1,] 1.29087 0.0000000 0.0000000</span>
+<span class="co">#&gt; [2,] 0.00000 0.1067365 0.0000000</span>
+<span class="co">#&gt; [3,] 0.00000 0.0000000 0.0406733</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; , , 2</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;          [,1]      [,2]      [,3]</span>
-<span class="co">#&gt; [1,] 1.930795 0.0000000 0.0000000</span>
-<span class="co">#&gt; [2,] 0.000000 0.0057131 0.0000000</span>
-<span class="co">#&gt; [3,] 0.000000 0.0000000 0.0665206</span>
+<span class="co">#&gt;           [,1]      [,2]      [,3]</span>
+<span class="co">#&gt; [1,] 0.9144923 0.0000000 0.0000000</span>
+<span class="co">#&gt; [2,] 0.0000000 0.2757859 0.0000000</span>
+<span class="co">#&gt; [3,] 0.0000000 0.0000000 0.1059224</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; , , 3</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;           [,1]      [,2]      [,3]</span>
-<span class="co">#&gt; [1,] 0.8776844 0.0000000 0.0000000</span>
-<span class="co">#&gt; [2,] 0.0000000 0.4995626 0.0000000</span>
-<span class="co">#&gt; [3,] 0.0000000 0.0000000 0.2067063</span></code></pre></div>
+<span class="co">#&gt; [1,] 0.3608943 0.0000000 0.0000000</span>
+<span class="co">#&gt; [2,] 0.0000000 0.4093627 0.0000000</span>
+<span class="co">#&gt; [3,] 0.0000000 0.0000000 0.0066037</span></code></pre></div>
 <p>We apprieciate how the zero pattern is shared by all of the simulated matrices. The return value is an array, and so the individual matrices can be accessed as <code>matrices[, , n]</code>, where <code>n</code> is the index of the matrix we want to retrieve from the sample, ranging from <code>1</code> to <code>N</code>.</p>
 </div>
 </div>
