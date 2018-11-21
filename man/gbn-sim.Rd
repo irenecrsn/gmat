@@ -2,18 +2,18 @@
 % Please edit documentation in R/chol.R
 \name{directed graph matrix simulation}
 \alias{directed graph matrix simulation}
-\alias{rgbn_chol}
-\alias{rgbn_iid}
-\alias{rgbn_polar}
+\alias{chol_mh}
+\alias{chol_iid}
+\alias{chol_polar}
 \title{Sample a random Gaussian Bayesian network using different parametrizations
 for the Cholesky decomposition.}
 \usage{
-rgbn_chol(N = 1, p = 10, dag = NULL, return.minvector = FALSE,
+chol_mh(N = 1, p = 10, dag = NULL, return.minvector = FALSE,
   add_no_chordal = TRUE, ...)
 
-rgbn_iid(N = 1, p = 10, dag = NULL, return.minvector = FALSE)
+chol_iid(N = 1, p = 10, dag = NULL, return.minvector = FALSE)
 
-rgbn_polar(N = 1, p = 10, comp = "numeric", dag = NULL,
+chol_polar(N = 1, p = 10, comp = "numeric", dag = NULL,
   return.minvector = FALSE)
 }
 \arguments{
@@ -57,14 +57,14 @@ the approach by Pourahmadi and Wang (2015).
 # Generate a random acyclic digraph structure
 dag <- gmat::rgraph(p = 3, d = 0.25, dag = TRUE)
 
-# Generate 10 matrices via Cholesky decomposition
-rgbn_chol(N = 10, dag = dag, add_no_chordal = FALSE)
+# Generate 2 matrices via Cholesky decomposition
+chol_mh(N = 2, dag = dag, add_no_chordal = FALSE)
 
-# Generate 10 matrices with i.i.d. entries in the Cholesky factor
-rgbn_iid(N = 10, dag = dag)
+# Generate 2 matrices with i.i.d. entries in the Cholesky factor
+chol_iid(N = 2, dag = dag)
 
-# Generate 10 matrices using the polar parametrization of the Cholesky factor
-rgbn_polar(N = 1, dag = dag)
+# Generate 2 matrices using the polar parametrization of the Cholesky factor
+chol_polar(N = 2, dag = dag)
 
 }
 \references{

@@ -30,11 +30,11 @@
 #' # Generate a random acyclic digraph structure
 #' dag <- gmat::rgraph(p = 3, d = 0.25, dag = TRUE)
 #'
-#' # Generate 10 matrices via Cholesky decomposition
-#' rgbn_chol(N = 10, dag = dag, add_no_chordal = FALSE)
+#' # Generate 2 matrices via Cholesky decomposition
+#' chol_mh(N = 2, dag = dag, add_no_chordal = FALSE)
 #'
 #' @export
-rgbn_chol <- function(N = 1,
+chol_mh <- function(N = 1,
                   p = 10,
 				  dag = NULL,
                   return.minvector = FALSE,
@@ -73,11 +73,11 @@ rgbn_chol <- function(N = 1,
 #' 8:613-636, 2007.
 #'
 #' @examples
-#' # Generate 10 matrices with i.i.d. entries in the Cholesky factor
-#' rgbn_iid(N = 10, dag = dag)
+#' # Generate 2 matrices with i.i.d. entries in the Cholesky factor
+#' chol_iid(N = 2, dag = dag)
 #'
 #' @export
-rgbn_iid <- function(N = 1,
+chol_iid<- function(N = 1,
 				 p = 10,
 				 dag = NULL,
 				return.minvector = FALSE) 
@@ -125,11 +125,11 @@ rgbn_iid <- function(N = 1,
 #' Probability Letters, 106:5-12, 2015.
 #'
 #' @examples
-#' # Generate 10 matrices using the polar parametrization of the Cholesky factor
-#' rgbn_polar(N = 1, dag = dag)
+#' # Generate 2 matrices using the polar parametrization of the Cholesky factor
+#' chol_polar(N = 2, dag = dag)
 #'
 #' @export
-rgbn_polar <- function(N = 1,
+chol_polar <- function(N = 1,
 				 p = 10,
                  comp = 'numeric',
 				 dag = NULL,
