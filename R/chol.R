@@ -36,18 +36,25 @@
 #' @export
 chol_mh <- function(N = 1,
                   p = 10,
+				  d = 1,
 				  dag = NULL,
                   return.minvector = FALSE,
 				  add_no_chordal = TRUE,
                   ...) {
-	
-	# Uniform sampling of chordal DAG
-	if (is.null(dag) == FALSE & add_no_chordal == TRUE) {
-   		isCh <- igraph::is_chordal(dag, fillin = TRUE)
+	if (is.null(dag) == TRUE) {
+		# We generate the dag if a zero pattern is requested
+		if (d != 1) {
+			dag <- rgraph(p = p, d = d, dag = TRUE)
+		}
+	} else {
+		# Uniform sampling of chordal DAG
+		if (add_no_chordal == TRUE) {
+   			isCh <- igraph::is_chordal(dag, fillin = TRUE)
    		
-		if (isCh$chordal == FALSE){
-    		dag <- igraph::add_edges(dag, edges = isCh$fillin)
-   		}
+			if (isCh$chordal == FALSE){
+    			dag <- igraph::add_edges(dag, edges = isCh$fillin)
+   			}
+		}
 	}
   sU <- mh_full(N = N, dag = dag, ...)
   vsC <- apply(sU, MARGIN = 3, function(U)
@@ -77,11 +84,17 @@ chol_mh <- function(N = 1,
 #' chol_iid(N = 2, dag = dag)
 #'
 #' @export
-chol_iid<- function(N = 1,
+chol_iid <- function(N = 1,
 				 p = 10,
+				 d = 1,
 				 dag = NULL,
 				return.minvector = FALSE) 
 {  	
+
+	# We generate the dag if a zero pattern is requested 
+	if (is.null(dag) == TRUE & d != 1) {
+		dag <- rgraph(p = p, d = d, dag = TRUE)
+	}
 	if (is.null(dag) == FALSE) {
 		p <- length(igraph::V(dag))
 		L_init <- t(igraph::as_adjacency_matrix(dag, sparse = FALSE))
@@ -130,10 +143,15 @@ chol_iid<- function(N = 1,
 #'
 #' @export
 chol_polar <- function(N = 1,				 p = 10,
+					   d = 1,
 				 dag = NULL,
                  comp = 'numeric',
 				return.minvector = FALSE) 
 {  	
+	# We generate the dag if a zero pattern is requested
+	if (is.null(dag) == TRUE & d != 1) {
+		dag <- rgraph(p = p, d = d, dag = TRUE)
+	}
 	if (is.null(dag) == FALSE) {
 		p <- length(igraph::V(dag))
 		L_init <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
