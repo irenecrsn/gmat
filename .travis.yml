@@ -23,3 +23,8 @@ install:
   - if [ $TRAVIS_OS_NAME = osx ]; then brew install libgit2; fi
 before_script:
   - Rscript -e 'install.packages(c("igraph", "testthat"))'
+r_packages:
+  - covr
+after_success:
+  - Rscript -e 'library(covr); codecov()'
+
