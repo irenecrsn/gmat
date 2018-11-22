@@ -33,39 +33,45 @@
 #' @examples
 #'
 #' # Generate a random undirected graph structure
-#' ug <- igraph::sample_gnp(n = 3, p = 0.25)
+#' ug <- rgraph(p = 3, d = 0.25)
 #'
-#' # Generate 10 matrices complying with such random structure via 
+#' # Generate 2 matrices complying with such random structure via 
 #' # partial orthogonalization
-#' gmat::port(N = 10, ug = ug)
+#' port(N = 2, ug = ug)
 #'
 #' @useDynLib gmat, .registration=TRUE
 #' @export
-port <- function(N = 1, p = 5, d = 0.25, ug = NULL, rentries = runif, zapzeros = TRUE) {
+port <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, zapzeros = TRUE) {
   
-  if (is.null(ug)) {
-    ug <- igraph::sample_gnp(n = p, p = d)
-  }
-	p <- length(igraph::V(ug))
+	if (is.null(ug) == TRUE & d != 1) {
+    	ug <- rgraph(p = p, d = d)
+  	}
+	if (is.null(ug) == FALSE) {
+		p <- length(igraph::V(ug))
 
-	sam <- array(dim = c(p, p, N), data = 0)
-
-	madj <- igraph::as_adjacency_matrix(ug, type = "both", 
+		sam <- array(dim = c(p, p, N), data = 0)
+		madj <- igraph::as_adjacency_matrix(ug, type = "both", 
 										sparse = FALSE)
-	for (n in 1:N) {
-	  sam[, , n] <- matrix(nrow = p, ncol = p, data = rentries(p^2))
-	  sam[, , n] <- matrix(.C("gram_schmidt_sel", 
+		for (n in 1:N) {
+	  		sam[, , n] <- matrix(nrow = p, ncol = p, data = rentries(p^2))
+	  		sam[, , n] <- matrix(.C("gram_schmidt_sel", 
 							  double(p * p),
 							  as.logical(madj),
 							  as.double(t(sam[, , n])),
 							  as.integer(p))[[1]], 
 						   ncol = p,
 						   byrow = TRUE)
-	  sam[, , n] <- tcrossprod(sam[, , n])
+	  		sam[, , n] <- tcrossprod(sam[, , n])
 	  
-	  if (zapzeros == TRUE) {
-	  	sam[, , n] <- zapsmall(sam[, , n])
-	  }
+	  		if (zapzeros == TRUE) {
+	  			sam[, , n] <- zapsmall(sam[, , n])
+	  		}
+		}
+	} else {
+		sam <- array(dim = c(p, p, N), data = rentries(p * p * N))
+		for (n in 1:N) {
+	  		sam[, , n] <- tcrossprod(sam[, , n])
+		}
 	}
 	 
 	return(sam)
@@ -85,28 +91,35 @@ port <- function(N = 1, p = 5, d = 0.25, ug = NULL, rentries = runif, zapzeros =
 #' validation in Gaussian graphical models. This is avoided by `port`.
 #' 
 #' @examples
-#' # Generate 10 matrices complying with such random structure via 
+#' # Generate 2 matrices complying with such random structure via 
 #' # diagonal dominance 
-#' gmat::diagdom(N = 10, ug = ug)
+#' diagdom(N = 2, ug = ug)
 #'
 #' @export
-diagdom <- function(N = 1, p = 5, d = 0.25, ug = NULL, rentries = runif, k = NULL) {
-  
-  if (is.null(ug)) {
-    ug <- igraph::sample_gnp(n = p, p = d)
-  }
-  p <- length(igraph::V(ug))
-  edges <- igraph::as_edgelist(ug)
-
-  sam <- array(dim = c(p, p, N), data = 0)
-  ned <- nrow(edges)
-  if (ned > 0) {
-    for (i in 1:ned) {
-      sam[edges[i, 1], edges[i, 2], ] <- sam[edges[i ,2],
+diagdom <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, k = NULL) {
+ 
+	# We generated the ug if a zero pattern is requested
+  if (is.null(ug) == TRUE & d != 1) {
+    	ug <- rgraph(p = p, d = d)
+  } 
+  if (is.null(ug) == FALSE) {
+  		p <- length(igraph::V(ug))
+  		edges <- igraph::as_edgelist(ug)
+  		
+		sam <- array(dim = c(p, p, N), data = 0)
+  		ned <- nrow(edges)
+  		if (ned > 0) {
+    		for (i in 1:ned) {
+      			sam[edges[i, 1], edges[i, 2], ] <- sam[edges[i ,2],
 										    edges[i, 1], ] <-
 											    rentries(N) 
-    }
+    		}
+  		}
+	} else {
+		# Full covariance matrix
+		sam <- array(dim = c(p, p, N), data = rentries(p * p * N))
   }
+
   for (i in 1:p) {
     sam[i, i, ] <- abs(rentries(N)) 
   }
