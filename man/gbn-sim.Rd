@@ -8,18 +8,21 @@
 \title{Sample a random Gaussian Bayesian network using different parametrizations
 for the Cholesky decomposition.}
 \usage{
-chol_mh(N = 1, p = 10, dag = NULL, return.minvector = FALSE,
+chol_mh(N = 1, p = 10, d = 1, dag = NULL, return.minvector = FALSE,
   add_no_chordal = TRUE, ...)
 
-chol_iid(N = 1, p = 10, dag = NULL, return.minvector = FALSE)
+chol_iid(N = 1, p = 10, d = 1, dag = NULL, return.minvector = FALSE)
 
-chol_polar(N = 1, p = 10, dag = NULL, comp = "numeric",
+chol_polar(N = 1, p = 10, d = 1, dag = NULL, comp = "numeric",
   return.minvector = FALSE)
 }
 \arguments{
 \item{N}{Number of samples}
 
 \item{p}{Number of variables}
+
+\item{d}{number in \code{[0,1]}, the proportion of non-zero
+entries (if \code{ug} is not provided)}
 
 \item{dag}{directed chordal acyclic graph, use the igraph package graph class}
 

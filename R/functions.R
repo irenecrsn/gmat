@@ -41,31 +41,37 @@
 #'
 #' @useDynLib gmat, .registration=TRUE
 #' @export
-port <- function(N = 1, p = 5, d = 0.25, ug = NULL, rentries = runif, zapzeros = TRUE) {
+port <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, zapzeros = TRUE) {
   
-  if (is.null(ug)) {
-    ug <- rgraph(p = p, d = d)
-  }
-	p <- length(igraph::V(ug))
+	if (is.null(ug) == TRUE & d != 1) {
+    	ug <- rgraph(p = p, d = d)
+  	}
+	if (is.null(ug) == FALSE) {
+		p <- length(igraph::V(ug))
 
-	sam <- array(dim = c(p, p, N), data = 0)
-
-	madj <- igraph::as_adjacency_matrix(ug, type = "both", 
+		sam <- array(dim = c(p, p, N), data = 0)
+		madj <- igraph::as_adjacency_matrix(ug, type = "both", 
 										sparse = FALSE)
-	for (n in 1:N) {
-	  sam[, , n] <- matrix(nrow = p, ncol = p, data = rentries(p^2))
-	  sam[, , n] <- matrix(.C("gram_schmidt_sel", 
+		for (n in 1:N) {
+	  		sam[, , n] <- matrix(nrow = p, ncol = p, data = rentries(p^2))
+	  		sam[, , n] <- matrix(.C("gram_schmidt_sel", 
 							  double(p * p),
 							  as.logical(madj),
 							  as.double(t(sam[, , n])),
 							  as.integer(p))[[1]], 
 						   ncol = p,
 						   byrow = TRUE)
-	  sam[, , n] <- tcrossprod(sam[, , n])
+	  		sam[, , n] <- tcrossprod(sam[, , n])
 	  
-	  if (zapzeros == TRUE) {
-	  	sam[, , n] <- zapsmall(sam[, , n])
-	  }
+	  		if (zapzeros == TRUE) {
+	  			sam[, , n] <- zapsmall(sam[, , n])
+	  		}
+		}
+	} else {
+		sam <- array(dim = c(p, p, N), data = rentries(p * p * N))
+		for (n in 1:N) {
+	  		sam[, , n] <- tcrossprod(sam[, , n])
+		}
 	}
 	 
 	return(sam)

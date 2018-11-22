@@ -6,11 +6,10 @@
 \alias{diagdom}
 \title{Sample random covariance/concentration graph matrices.}
 \usage{
-port(N = 1, p = 5, d = 0.25, ug = NULL, rentries = runif,
+port(N = 1, p = 5, d = 1, ug = NULL, rentries = runif,
   zapzeros = TRUE)
 
-diagdom(N = 1, p = 5, d = 0.25, ug = NULL, rentries = runif,
-  k = NULL)
+diagdom(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, k = NULL)
 }
 \arguments{
 \item{N}{sample size}
@@ -57,15 +56,15 @@ validation in Gaussian graphical models. This is avoided by \code{port}.
 \examples{
 
 # Generate a random undirected graph structure
-ug <- igraph::sample_gnp(n = 3, p = 0.25)
+ug <- rgraph(p = 3, d = 0.25)
 
-# Generate 10 matrices complying with such random structure via 
+# Generate 2 matrices complying with such random structure via 
 # partial orthogonalization
-gmat::port(N = 10, ug = ug)
+port(N = 2, ug = ug)
 
-# Generate 10 matrices complying with such random structure via 
+# Generate 2 matrices complying with such random structure via 
 # diagonal dominance 
-gmat::diagdom(N = 10, ug = ug)
+diagdom(N = 2, ug = ug)
 
 }
 \references{

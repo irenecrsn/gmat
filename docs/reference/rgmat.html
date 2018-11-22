@@ -110,11 +110,10 @@ undirected graph by either partial orthogonalization or diagonal dominance.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>port</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rentries</span> <span class='kw'>=</span> <span class='no'>runif</span>,
+    <pre class="usage"><span class='fu'>port</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rentries</span> <span class='kw'>=</span> <span class='no'>runif</span>,
   <span class='kw'>zapzeros</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>diagdom</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rentries</span> <span class='kw'>=</span> <span class='no'>runif</span>,
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='fu'>diagdom</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rentries</span> <span class='kw'>=</span> <span class='no'>runif</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,11 +183,11 @@ matrices. <em>Proceedings of Machine Learning Research</em> (PGM 2018), vol. 72,
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Generate a random undirected graph structure</span>
-<span class='no'>ug</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/sample_gnp'>sample_gnp</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>0.25</span>)
+<span class='no'>ug</span> <span class='kw'>&lt;-</span> <span class='fu'>rgraph</span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>0.25</span>)
 
-<span class='co'># Generate 10 matrices complying with such random structure via </span>
+<span class='co'># Generate 2 matrices complying with such random structure via </span>
 <span class='co'># partial orthogonalization</span>
-<span class='kw pkg'>gmat</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/gmat/topics/rgmat'>port</a></span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='no'>ug</span>)</div><div class='output co'>#&gt; , , 1
+<span class='fu'>port</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='no'>ug</span>)</div><div class='output co'>#&gt; , , 1
 #&gt; 
 #&gt;          [,1]      [,2]      [,3]
 #&gt; [1,] 0.815679 0.0000000 0.0000000
@@ -201,134 +200,22 @@ matrices. <em>Proceedings of Machine Learning Research</em> (PGM 2018), vol. 72,
 #&gt; [1,] 0.8202095 0.000000 0.0000000
 #&gt; [2,] 0.0000000 0.006034 0.0000000
 #&gt; [3,] 0.0000000 0.000000 0.1098381
-#&gt; 
-#&gt; , , 3
-#&gt; 
-#&gt;          [,1]      [,2]      [,3]
-#&gt; [1,] 0.849249 0.0000000 0.0000000
-#&gt; [2,] 0.000000 0.7142947 0.0000000
-#&gt; [3,] 0.000000 0.0000000 0.2544714
-#&gt; 
-#&gt; , , 4
-#&gt; 
-#&gt;           [,1]      [,2]      [,3]
-#&gt; [1,] 0.4673946 0.0000000 0.0000000
-#&gt; [2,] 0.0000000 0.3224596 0.0000000
-#&gt; [3,] 0.0000000 0.0000000 0.3816333
-#&gt; 
-#&gt; , , 5
-#&gt; 
-#&gt;          [,1]      [,2]      [,3]
-#&gt; [1,] 1.984416 0.0000000 0.0000000
-#&gt; [2,] 0.000000 0.3756904 0.0000000
-#&gt; [3,] 0.000000 0.0000000 0.1635731
-#&gt; 
-#&gt; , , 6
-#&gt; 
-#&gt;          [,1]      [,2]      [,3]
-#&gt; [1,] 1.942188 0.0000000 0.0000000
-#&gt; [2,] 0.000000 0.0816003 0.0000000
-#&gt; [3,] 0.000000 0.0000000 0.0035043
-#&gt; 
-#&gt; , , 7
-#&gt; 
-#&gt;          [,1]      [,2]      [,3]
-#&gt; [1,] 2.157675 0.0000000 0.0000000
-#&gt; [2,] 0.000000 0.0028581 0.0000000
-#&gt; [3,] 0.000000 0.0000000 0.1656709
-#&gt; 
-#&gt; , , 8
-#&gt; 
-#&gt;           [,1]      [,2]      [,3]
-#&gt; [1,] 0.5115809 0.0000000 0.0000000
-#&gt; [2,] 0.0000000 0.4206054 0.0000000
-#&gt; [3,] 0.0000000 0.0000000 0.0724862
-#&gt; 
-#&gt; , , 9
-#&gt; 
-#&gt;           [,1]      [,2]      [,3]
-#&gt; [1,] 0.9772383 0.0000000 0.0000000
-#&gt; [2,] 0.0000000 0.2643161 0.0000000
-#&gt; [3,] 0.0000000 0.0000000 0.0075914
-#&gt; 
-#&gt; , , 10
-#&gt; 
-#&gt;          [,1]      [,2]      [,3]
-#&gt; [1,] 1.630759 0.0000000 0.0000000
-#&gt; [2,] 0.000000 0.5727955 0.0000000
-#&gt; [3,] 0.000000 0.0000000 0.1979728
 #&gt; </div><div class='input'>
-<span class='co'># Generate 10 matrices complying with such random structure via </span>
+<span class='co'># Generate 2 matrices complying with such random structure via </span>
 <span class='co'># diagonal dominance </span>
-<span class='kw pkg'>gmat</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/gmat/topics/rgmat'>diagdom</a></span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='no'>ug</span>)</div><div class='output co'>#&gt; , , 1
+<span class='fu'>diagdom</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>ug</span> <span class='kw'>=</span> <span class='no'>ug</span>)</div><div class='output co'>#&gt; , , 1
 #&gt; 
-#&gt;           [,1]     [,2]       [,3]
-#&gt; [1,] 0.7009731 0.000000 0.00000000
-#&gt; [2,] 0.0000000 1.712162 0.00000000
-#&gt; [3,] 0.0000000 0.000000 0.08665688
+#&gt;          [,1]     [,2]     [,3]
+#&gt; [1,] 1.484652 0.000000 0.000000
+#&gt; [2,] 0.000000 1.269089 0.000000
+#&gt; [3,] 0.000000 0.000000 1.860467
 #&gt; 
 #&gt; , , 2
 #&gt; 
-#&gt;           [,1]      [,2]     [,3]
-#&gt; [1,] 0.9530082 0.0000000 0.000000
-#&gt; [2,] 0.0000000 0.2600487 0.000000
-#&gt; [3,] 0.0000000 0.0000000 1.584206
-#&gt; 
-#&gt; , , 3
-#&gt; 
-#&gt;          [,1]     [,2]      [,3]
-#&gt; [1,] 1.932319 0.000000 0.0000000
-#&gt; [2,] 0.000000 1.583815 0.0000000
-#&gt; [3,] 0.000000 0.000000 0.4053979
-#&gt; 
-#&gt; , , 4
-#&gt; 
-#&gt;           [,1]     [,2]      [,3]
-#&gt; [1,] 0.5943239 0.000000 0.0000000
-#&gt; [2,] 0.0000000 0.711803 0.0000000
-#&gt; [3,] 0.0000000 0.000000 0.1375909
-#&gt; 
-#&gt; , , 5
-#&gt; 
-#&gt;           [,1]     [,2]     [,3]
-#&gt; [1,] 0.5812966 0.000000 0.000000
-#&gt; [2,] 0.0000000 1.928688 0.000000
-#&gt; [3,] 0.0000000 0.000000 1.728882
-#&gt; 
-#&gt; , , 6
-#&gt; 
-#&gt;          [,1]      [,2]      [,3]
-#&gt; [1,] 1.719444 0.0000000 0.0000000
-#&gt; [2,] 0.000000 0.2373664 0.0000000
-#&gt; [3,] 0.000000 0.0000000 0.1541797
-#&gt; 
-#&gt; , , 7
-#&gt; 
-#&gt;           [,1]      [,2]      [,3]
-#&gt; [1,] 0.3866253 0.0000000 0.0000000
-#&gt; [2,] 0.0000000 0.9163213 0.0000000
-#&gt; [3,] 0.0000000 0.0000000 0.8620068
-#&gt; 
-#&gt; , , 8
-#&gt; 
-#&gt;          [,1]     [,2]     [,3]
-#&gt; [1,] 1.618217 0.000000 0.000000
-#&gt; [2,] 0.000000 1.047301 0.000000
-#&gt; [3,] 0.000000 0.000000 1.947245
-#&gt; 
-#&gt; , , 9
-#&gt; 
-#&gt;          [,1]     [,2]     [,3]
-#&gt; [1,] 0.730973 0.000000 0.000000
-#&gt; [2,] 0.000000 1.674123 0.000000
-#&gt; [3,] 0.000000 0.000000 1.141915
-#&gt; 
-#&gt; , , 10
-#&gt; 
-#&gt;           [,1]       [,2]     [,3]
-#&gt; [1,] 0.5053993 0.00000000 0.000000
-#&gt; [2,] 0.0000000 0.06700807 0.000000
-#&gt; [3,] 0.0000000 0.00000000 1.508813
+#&gt;          [,1]      [,2]     [,3]
+#&gt; [1,] 1.098441 0.0000000 0.000000
+#&gt; [2,] 0.000000 0.2732572 0.000000
+#&gt; [3,] 0.000000 0.0000000 1.302237
 #&gt; </div><div class='input'>
 </div></pre>
   </div>

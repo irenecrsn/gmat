@@ -7,6 +7,8 @@
 #'
 #' @param N Number of samples
 #' @param p Number of variables
+#' @param d number in `[0,1]`, the proportion of non-zero
+#'entries (if `ug` is not provided)
 #' @param dag directed chordal acyclic graph, use the igraph package graph class 
 #' @param return.minvector logical, if TRUE the minimimal vector representation
 #' is returned (useful to plot in the elliptope)

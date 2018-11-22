@@ -113,12 +113,12 @@ for the Cholesky decomposition.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>chol_mh</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <pre class="usage"><span class='fu'>chol_mh</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>add_no_chordal</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>chol_iid</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>chol_iid</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>chol_polar</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>comp</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>,
+<span class='fu'>chol_polar</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>comp</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>,
   <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -131,6 +131,11 @@ for the Cholesky decomposition.</p>
     <tr>
       <th>p</th>
       <td><p>Number of variables</p></td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td><p>number in <code>[0,1]</code>, the proportion of non-zero
+entries (if <code>ug</code> is not provided)</p></td>
     </tr>
     <tr>
       <th>dag</th>
