@@ -1,4 +1,4 @@
-Package: gmat 
+Package: gmat
 Type: Package
 Title: Simulation of Graphically Constrained Matrices
 Version: 0.1.0.9000
@@ -16,7 +16,7 @@ Authors@R: c(
 Description: Simulation of positive definite matrices constrained by an undirected or acyclic directed graph structure.
 License: GPL (>=2) 
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 ByteCompile: true
 URL: https://github.com/irenecrsn/gmat
 BugReports: https://github.com/irenecrsn/gmat/issues

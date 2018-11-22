@@ -9,22 +9,24 @@
 port(N = 1, p = 5, d = 1, ug = NULL, rentries = runif,
   zapzeros = TRUE)
 
-diagdom(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, k = NULL)
+diagdom(N = 1, p = 5, d = 1, ug = NULL, rentries = runif,
+  k = NULL)
 }
 \arguments{
-\item{N}{sample size}
+\item{N}{Number of samples.}
 
-\item{p}{Matrix dimension (number of nodes in \code{ug} if provided)}
+\item{p}{Matrix dimension. Ignored if \code{ug} is provided.}
 
-\item{d}{number in \code{[0,1]}, the proportion of non-zero
-entries (if \code{ug} is not provided)}
+\item{d}{Number in \code{[0,1]}, the proportion of non-zero
+entries in the sampled matrices. Ignored if \code{ug} is provided.}
 
-\item{ug}{the undirected graph}
+\item{ug}{An undirected graph specifying the zero pattern in the sampled matrices.}
 
-\item{rentries}{the random number generator for the
+\item{rentries}{Function, the random number generator for
+the
 non-zero entries (defaults to \code{runif})}
 
-\item{zapzeros}{convert to zero extremely low entries}
+\item{zapzeros}{Boolean, convert to zero extremely low entries? Defaults to \code{TRUE}.}
 
 \item{k}{real number greater than \code{1}, the desired condition
 number of the matrices in the resulting sample}

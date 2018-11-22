@@ -5,15 +5,15 @@
 #'
 #' @rdname gbn-sim
 #'
-#' @param N Number of samples
-#' @param p Number of variables
-#' @param d number in `[0,1]`, the proportion of non-zero
-#'entries (if `ug` is not provided)
-#' @param dag directed chordal acyclic graph, use the igraph package graph class 
-#' @param return.minvector logical, if TRUE the minimimal vector representation
-#' is returned (useful to plot in the elliptope)
-#' @param add_no_chordal logical, if TRUE when the dag provided is not chordal,
-#' a fill-in is computed, in order to ensure uniform distribution
+#' @param N Number of samples.
+#' @param p Matrix dimension. Ignored if `ug` is provided.
+#' @param d Number in `[0,1]`, the proportion of non-zero
+#' entries in the Cholesky factor of the sampled matrices. Ignored if `ug` is provided.
+#' @param dag A directed acyclic graph specifying the zero pattern in the Cholesky factor of the sampled matrices. 
+#' @param return.minvector Logical, if TRUE the minimimal vector representation of the sampled matrices
+#' is returned.
+#' @param add_no_chordal Logical, if TRUE when the dag provided is not chordal,
+#' a fill-in is computed, in order to ensure uniform distribution. Ignored if `dag` or `d` are not provided.
 #' @param ... additional parameters
 #'
 #' @details Function `rgbn_chol` uses the method described in Córdoba et al.

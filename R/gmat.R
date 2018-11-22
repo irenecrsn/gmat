@@ -3,5 +3,5 @@
 #' @importFrom stats runif rnorm
 #'
 #' @docType package
-#' @name gmat 
+#' @name gmat
 NULL
