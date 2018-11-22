@@ -6,13 +6,19 @@ cache: packages
 branches:
     only:
         - master
-os:
-    - linux
-      #    - osx
-r:
-    - oldrel
-    - release
-    - devel
+        - dev
+matrix:
+    include:
+        - os: linux
+          r: release
+        - os: linux
+          r: oldrel 
+        - os: linux
+          r: devel
+        - os: osx
+          r: release
+        - os: osx
+          r: oldrel
 install:
   - if [ $TRAVIS_OS_NAME = osx ]; then brew install libgit2; fi
 before_script:
