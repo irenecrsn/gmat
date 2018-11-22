@@ -4,7 +4,7 @@ gmat
 
 An R package for simulating positive definite matrices constrained by acyclic directed and undirected graphs.
 
-[![Build Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat) [![codecov](https://codecov.io/gh/irenecrsn/gmat/branch/master/graph/badge.svg)](https://codecov.io/gh/irenecrsn/gmat) [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/gmat)](http://cran.r-project.org/package=gmat) [![CRAN status](http://www.r-pkg.org/badges/version/gmat)](http://cran.r-project.org/package=gmat)
+[![Build Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat) [![codecov](https://codecov.io/gh/irenecrsn/gmat/branch/dev/graph/badge.svg)](https://codecov.io/gh/irenecrsn/gmat) [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/gmat)](http://cran.r-project.org/package=gmat) [![CRAN status](http://www.r-pkg.org/badges/version/gmat)](http://cran.r-project.org/package=gmat)
 
 Installation
 ------------
@@ -37,24 +37,24 @@ matrices <- gmat::port(N = 3, ug = ug)
 matrices
 #> , , 1
 #> 
-#>         [,1]      [,2]      [,3]
-#> [1,] 1.53998 0.0000000 0.0000000
-#> [2,] 0.00000 0.3770087 0.0000000
-#> [3,] 0.00000 0.0000000 0.4616244
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.8442051 0.0000000 0.0000000
+#> [2,] 0.0000000 0.0061811 0.0000000
+#> [3,] 0.0000000 0.0000000 0.2806543
 #> 
 #> , , 2
 #> 
-#>          [,1]      [,2]      [,3]
-#> [1,] 1.313659 0.0000000 0.0000000
-#> [2,] 0.000000 0.0145703 0.0000000
-#> [3,] 0.000000 0.0000000 0.4890558
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.7875601 0.0000000 0.0000000
+#> [2,] 0.0000000 0.0307394 0.0000000
+#> [3,] 0.0000000 0.0000000 0.0060911
 #> 
 #> , , 3
 #> 
-#>          [,1]      [,2]      [,3]
-#> [1,] 1.048078 0.0000000 0.0000000
-#> [2,] 0.000000 0.0866317 0.0000000
-#> [3,] 0.000000 0.0000000 0.1614992
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.6683202 0.0000000 0.0000000
+#> [2,] 0.0000000 0.3324887 0.0000000
+#> [3,] 0.0000000 0.0000000 0.1573669
 ```
 
 We apprieciate how the zero pattern is shared by all of the simulated matrices. The return value is an array, and so the individual matrices can be accessed as `matrices[, , n]`, where `n` is the index of the matrix we want to retrieve from the sample, ranging from `1` to `N`.
