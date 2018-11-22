@@ -8,11 +8,11 @@ branches:
         - master
 os:
     - linux
-      #    - osx
+    - osx
 r:
     - oldrel
     - release
-    - devel
+    - if [ $TRAVIS_OS_NAME = linux ]; then devel; fi
 install:
   - if [ $TRAVIS_OS_NAME = osx ]; then brew install libgit2; fi
 before_script:
