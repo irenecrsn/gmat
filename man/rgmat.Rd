@@ -9,7 +9,8 @@
 port(N = 1, p = 5, d = 1, ug = NULL, rentries = runif,
   zapzeros = TRUE)
 
-diagdom(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, k = NULL)
+diagdom(N = 1, p = 5, d = 1, ug = NULL, rentries = runif,
+  k = NULL)
 }
 \arguments{
 \item{N}{sample size}

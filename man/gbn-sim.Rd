@@ -8,10 +8,11 @@
 \title{Sample a random Gaussian Bayesian network using different parametrizations
 for the Cholesky decomposition.}
 \usage{
-chol_mh(N = 1, p = 10, d = 1, dag = NULL, return.minvector = FALSE,
-  add_no_chordal = TRUE, ...)
+chol_mh(N = 1, p = 10, d = 1, dag = NULL,
+  return.minvector = FALSE, add_no_chordal = FALSE, ...)
 
-chol_iid(N = 1, p = 10, d = 1, dag = NULL, return.minvector = FALSE)
+chol_iid(N = 1, p = 10, d = 1, dag = NULL,
+  return.minvector = FALSE)
 
 chol_polar(N = 1, p = 10, d = 1, dag = NULL, comp = "numeric",
   return.minvector = FALSE)
@@ -30,7 +31,8 @@ entries (if \code{ug} is not provided)}
 is returned (useful to plot in the elliptope)}
 
 \item{add_no_chordal}{logical, if TRUE when the dag provided is not chordal,
-a fill-in is computed, in order to ensure uniform distribution}
+a fill-in is computed, in order to ensure uniform distribution. Defaults to
+FALSE.}
 
 \item{...}{additional parameters}
 
@@ -61,7 +63,7 @@ the approach by Pourahmadi and Wang (2015).
 dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
 
 # Generate 2 matrices via Cholesky decomposition
-chol_mh(N = 2, dag = dag, add_no_chordal = FALSE)
+chol_mh(N = 2, dag = dag)
 
 # Generate 2 matrices with i.i.d. entries in the Cholesky factor
 chol_iid(N = 2, dag = dag)
