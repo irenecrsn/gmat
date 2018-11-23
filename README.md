@@ -4,7 +4,7 @@ gmat
 
 An R package for simulating positive definite matrices constrained by acyclic directed and undirected graphs.
 
-[![Build Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat) [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/gmat)](http://cran.r-project.org/package=gmat) [![CRAN status](http://www.r-pkg.org/badges/version/gmat)](http://cran.r-project.org/package=gmat)
+[![Build Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat) [![codecov](https://codecov.io/gh/irenecrsn/gmat/branch/dev/graph/badge.svg)](https://codecov.io/gh/irenecrsn/gmat) [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/gmat)](http://cran.r-project.org/package=gmat) [![CRAN status](http://www.r-pkg.org/badges/version/gmat)](http://cran.r-project.org/package=gmat)
 
 Installation
 ------------
@@ -38,23 +38,23 @@ matrices
 #> , , 1
 #> 
 #>           [,1]      [,2]      [,3]
-#> [1,] 0.9742306 0.0000000 0.2382255
-#> [2,] 0.0000000 0.0174842 0.0458809
-#> [3,] 0.2382255 0.0458809 0.4161402
+#> [1,] 0.8442051 0.0000000 0.0000000
+#> [2,] 0.0000000 0.0061811 0.0000000
+#> [3,] 0.0000000 0.0000000 0.2806543
 #> 
 #> , , 2
 #> 
-#>          [,1]       [,2]       [,3]
-#> [1,] 1.315333  0.0000000  1.0398587
-#> [2,] 0.000000  0.0975722 -0.0574187
-#> [3,] 1.039859 -0.0574187  0.9387271
+#>           [,1]      [,2]      [,3]
+#> [1,] 0.7875601 0.0000000 0.0000000
+#> [2,] 0.0000000 0.0307394 0.0000000
+#> [3,] 0.0000000 0.0000000 0.0060911
 #> 
 #> , , 3
 #> 
 #>           [,1]      [,2]      [,3]
-#> [1,] 1.5970788 0.0000000 0.8978575
-#> [2,] 0.0000000 0.1401653 0.0450929
-#> [3,] 0.8978575 0.0450929 0.5553658
+#> [1,] 0.6683202 0.0000000 0.0000000
+#> [2,] 0.0000000 0.3324887 0.0000000
+#> [3,] 0.0000000 0.0000000 0.1573669
 ```
 
 We apprieciate how the zero pattern is shared by all of the simulated matrices. The return value is an array, and so the individual matrices can be accessed as `matrices[, , n]`, where `n` is the index of the matrix we want to retrieve from the sample, ranging from `1` to `N`.

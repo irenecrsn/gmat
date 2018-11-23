@@ -6,14 +6,15 @@
 #' @name undirected graph matrix simulation
 #' @rdname rgmat
 #'
-#' @param N sample size
-#' @param ug the undirected graph 
-#' @param p Matrix dimension (number of nodes in `ug` if provided) 
-#' @param d number in `[0,1]`, the proportion of non-zero
-#'entries (if `ug` is not provided)
-#' @param rentries the random number generator for the
+#' @param N Number of samples.
+#' @param p Matrix dimension. Ignored if `ug` is provided.
+#' @param d Number in `[0,1]`, the proportion of non-zero
+#' entries in the sampled matrices. Ignored if `ug` is provided.
+#' @param ug An undirected graph specifying the zero pattern in the sampled matrices. 
+#' @param rentries Function, the random number generator for
+#' the
 #'non-zero entries (defaults to `runif`)
-#' @param zapzeros convert to zero extremely low entries
+#' @param zapzeros Boolean, convert to zero extremely low entries? Defaults to `TRUE`.
 #' 
 #' @details Function `port` uses the method described in 
 #' Córdoba et al. (2018). In summary, it consists on generating a random
@@ -39,7 +40,7 @@
 #' # partial orthogonalization
 #' port(N = 2, ug = ug)
 #'
-#' @useDynLib gmat, .registration=TRUE
+#' @useDynLib gmat
 #' @export
 port <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, zapzeros = TRUE) {
   

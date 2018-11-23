@@ -18,21 +18,21 @@ chol_polar(N = 1, p = 10, d = 1, dag = NULL, comp = "numeric",
   return.minvector = FALSE)
 }
 \arguments{
-\item{N}{Number of samples}
+\item{N}{Number of samples.}
 
-\item{p}{Number of variables}
+\item{p}{Matrix dimension. Ignored if \code{ug} is provided.}
 
-\item{d}{number in \code{[0,1]}, the proportion of non-zero
-entries (if \code{ug} is not provided)}
+\item{d}{Number in \code{[0,1]}, the proportion of non-zero
+entries in the Cholesky factor of the sampled matrices. Ignored if \code{ug} is provided.}
 
-\item{dag}{directed chordal acyclic graph, use the igraph package graph class}
+\item{dag}{A directed acyclic graph specifying the zero pattern in the Cholesky factor of the sampled matrices.}
 
-\item{return.minvector}{logical, if TRUE the minimimal vector representation
-is returned (useful to plot in the elliptope)}
+\item{return.minvector}{Logical, if TRUE the minimimal vector representation of the sampled matrices
+is returned.}
 
-\item{add_no_chordal}{logical, if TRUE when the dag provided is not chordal,
-a fill-in is computed, in order to ensure uniform distribution. Defaults to
-FALSE.}
+\item{add_no_chordal}{Logical, if TRUE when the dag provided is not chordal,
+a fill-in is computed, in order to ensure uniform distribution. Ignored if
+\code{dag} or \code{d} are not provided. Defaults to FALSE.}
 
 \item{...}{additional parameters}
 
