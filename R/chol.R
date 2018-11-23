@@ -13,7 +13,8 @@
 #' @param return.minvector logical, if TRUE the minimimal vector representation
 #' is returned (useful to plot in the elliptope)
 #' @param add_no_chordal logical, if TRUE when the dag provided is not chordal,
-#' a fill-in is computed, in order to ensure uniform distribution
+#' a fill-in is computed, in order to ensure uniform distribution. Defaults to
+#' FALSE.
 #' @param ... additional parameters
 #'
 #' @details Function `rgbn_chol` uses the method described in Córdoba et al.
@@ -33,7 +34,7 @@
 #' dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
 #'
 #' # Generate 2 matrices via Cholesky decomposition
-#' chol_mh(N = 2, dag = dag, add_no_chordal = FALSE)
+#' chol_mh(N = 2, dag = dag)
 #'
 #' @export
 chol_mh <- function(N = 1,
@@ -41,7 +42,7 @@ chol_mh <- function(N = 1,
 				  d = 1,
 				  dag = NULL,
                   return.minvector = FALSE,
-				  add_no_chordal = TRUE,
+				  add_no_chordal = FALSE,
                   ...) {
 	if (is.null(dag) == TRUE) {
 		# We generate the dag if a zero pattern is requested

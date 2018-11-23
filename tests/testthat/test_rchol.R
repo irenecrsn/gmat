@@ -77,7 +77,7 @@ test_that("the dag structure is preserved", {
 
 	dag <- rgraph(p = p, d = d, dag = TRUE)
 
-	sample <- chol_mh(N = N, dag = dag, add_no_chordal = FALSE)
+	sample <- chol_mh(N = N, dag = dag)
 	for (n in 1:N) {
 		L <- t(chol(anti_t(sample[, , n])))
 		U <- t(anti_t(L))
