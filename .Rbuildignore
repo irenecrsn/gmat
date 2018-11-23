@@ -1,5 +1,5 @@
 rebuild.R
-docs/
+docs
 .travis.yml
 cran-comments.md
 ^README\.Rmd$
