@@ -4,7 +4,7 @@
 \alias{ug-constrained covariance matrices}
 \alias{port}
 \alias{diagdom}
-\title{Sample random covariance matrices.}
+\title{Simulation of covariance matrices.}
 \usage{
 port(N = 1, p = 5, d = 1, ug = NULL, rentries = runif,
   zapzeros = TRUE)
@@ -35,11 +35,11 @@ number of the matrices in the resulting sample}
 A three-dimensional array of length \code{p x p x N}
 }
 \description{
-Samples covariance matrices, possibly with a zero pattern constrained by an
+Sample covariance matrices, possibly with a zero pattern constrained by an
 undirected graph.
 }
 \details{
-Function \code{port} uses the method described in
+Function \code{\link[=port]{port()}} uses the method described in
 Córdoba et al. (2018). In summary, it consists on generating a random
 matrix \code{Q} and performing row-wise orthogonalization such that if \code{i} and \code{j}
 are not adjacent in \code{ug}, then the rows corresponding to such indices are
@@ -48,7 +48,7 @@ introducing unwanted independences. The resulting matrix after the process
 has finished is the cross product of \code{Q}.
 
 We also provide an implementation of the most commonly used in the
-literature \code{diagdom}. By contrast, this method produces a random matrix \code{M}
+literature \code{\link[=diagdom]{diagdom()}}. By contrast, this method produces a random matrix \code{M}
 with zeros corresponding to missing edges in \code{ug}, and then enforces a
 dominant diagonal to ensure positive definiteness. Matrices produced by
 \code{diagdom} usually are better conditioned than those by \code{port}; however, they

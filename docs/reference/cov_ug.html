@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sample random covariance matrices. — ug-constrained covariance matrices • gmat</title>
+<title>Simulation of covariance matrices. — ug-constrained covariance matrices • gmat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Sample random covariance matrices. — ug-constrained covariance matrices" />
+<meta property="og:title" content="Simulation of covariance matrices. — ug-constrained covariance matrices" />
 
-<meta property="og:description" content="Samples covariance matrices, possibly with a zero pattern constrained by an
+<meta property="og:description" content="Sample covariance matrices, possibly with a zero pattern constrained by an
 undirected graph." />
 <meta name="twitter:card" content="summary" />
 
@@ -100,14 +100,14 @@ undirected graph." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Sample random covariance matrices.</h1>
+    <h1>Simulation of covariance matrices.</h1>
     <small class="dont-index">Source: <a href='https://github.com/irenecrsn/gmat/blob/master/R/cov_ug.R'><code>R/cov_ug.R</code></a></small>
     <div class="hidden name"><code>cov_ug.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Samples covariance matrices, possibly with a zero pattern constrained by an
+    <p>Sample covariance matrices, possibly with a zero pattern constrained by an
 undirected graph.</p>
     
     </div>
@@ -161,7 +161,7 @@ number of the matrices in the resulting sample</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Function <code>port</code> uses the method described in
+    <p>Function <code>port()</code> uses the method described in
 Córdoba et al. (2018). In summary, it consists on generating a random
 matrix <code>Q</code> and performing row-wise orthogonalization such that if <code>i</code> and <code>j</code>
 are not adjacent in <code>ug</code>, then the rows corresponding to such indices are
@@ -169,7 +169,7 @@ orthogonalized, without violating previous orthogonalizations and without
 introducing unwanted independences. The resulting matrix after the process
 has finished is the cross product of <code>Q</code>.</p>
 <p>We also provide an implementation of the most commonly used in the
-literature <code>diagdom</code>. By contrast, this method produces a random matrix <code>M</code>
+literature <code>diagdom()</code>. By contrast, this method produces a random matrix <code>M</code>
 with zeros corresponding to missing edges in <code>ug</code>, and then enforces a
 dominant diagonal to ensure positive definiteness. Matrices produced by
 <code>diagdom</code> usually are better conditioned than those by <code>port</code>; however, they

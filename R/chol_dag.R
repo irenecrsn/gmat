@@ -1,32 +1,31 @@
-#' Sample random correlation matrices
+#' Simulation of correlation matrices
 #'
-#' Sample correlation matrices, possibly with a zero pattern constrained by an
-#' acyclic digraph.
+#' Sample correlation matrices, possibly with a zero pattern in its Cholesky
+#' decomposition constrained by an acyclic digraph.
 #' 
 #' @name dag-constrained correlation matrices
 #'
 #' @rdname chol_dag 
 #'
 #' @param N Number of samples.
-#' @param p Matrix dimension. Ignored if `ug` is provided.
+#' @param p Matrix dimension. Ignored if `dag` is provided.
 #' @param d Number in `[0,1]`, the proportion of non-zero
-#' entries in the Cholesky factor of the sampled matrices. Ignored if `ug` is provided.
-#' @param dag A directed acyclic graph specifying the zero pattern in the Cholesky factor of the sampled matrices. 
+#' entries in the Cholesky factor of the sampled matrices. Ignored if `dag` is provided.
+#' @param dag An acyclic digraph specifying the zero pattern in the Cholesky factor of the sampled matrices. 
 #' @param add_no_chordal Logical, if TRUE when the dag provided is not chordal,
 #' a fill-in is computed, in order to ensure uniform distribution. Ignored if
 #' `dag` or `d` are not provided. Defaults to FALSE.
 #' @param ... additional parameters
 #'
-#' @details Function `rgbn_chol` uses the method described in Córdoba et al.
+#' @details Function [chol_mh()] uses the method described in Córdoba et al.
 #' (2018), based on a Metropolis-Hastings algorithm over the upper Cholesky
 #' factorization. 
 #'
 #' @return A three-dimensional array of length `p x p x N`
 #'
 #' @references Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
-#' Metropolis-Hastings method for generating random correlation matrices. Intelligent Data
-#' Engineering and Automated Learning – IDEAL 2018. Lecture Notes in
-#' Computer Science, vol 11314, pp. 117-124, 2018. 
+#' Metropolis-Hastings method for generating random correlation matrices. _Lecture Notes in
+#' Computer Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018. 
 #' 
 #' @examples
 #'
@@ -72,10 +71,10 @@ chol_mh <- function(N = 1,
 #' @rdname chol_dag
 #'
 #' @details The entries in the upper Cholesky factor are sampled i.i.d. by
-#' function `rgbn_iid`, following Kalisch and Buhlmann (2007). 
+#' function [chol_iid()], following Kalisch and Buhlmann (2007). 
 #'
 #' @references Kalisch, M., Buhlmann, P. Estimating high-dimensional directed
-#' acyclic graphs with the PC-algorithm, Journal of Machine Learning Research,
+#' acyclic graphs with the PC-algorithm, _Journal of Machine Learning Research_,
 #' 8:613-636, 2007.
 #'
 #' @examples
@@ -121,12 +120,12 @@ chol_iid <- function(N = 1,
 #' @param comp String one of "numeric" or "recursive", indicating the
 #' computational method to use for sampling the angles for "unifconc" method
 #' 
-#' @details Function `rgbn_polar` reparametrizes the Cholesky factor following
+#' @details Function [chol_polar()] reparametrizes the Cholesky factor following
 #' the approach by Pourahmadi and Wang (2015).
 #' 
 #' @references Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
-#' Hyperspherical parameterization of the Cholesky factor, Statistics &
-#' Probability Letters, 106:5-12, 2015.
+#' Hyperspherical parameterization of the Cholesky factor, _Statistics &
+#' Probability Letters_, 106:5-12, 2015.
 #'
 #' @examples
 #' # Generate 2 matrices using the polar parametrization of the Cholesky factor

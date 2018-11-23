@@ -1,6 +1,6 @@
-#' Sample random covariance matrices. 
+#' Simulation of covariance matrices. 
 #'
-#' Samples covariance matrices, possibly with a zero pattern constrained by an
+#' Sample covariance matrices, possibly with a zero pattern constrained by an
 #' undirected graph.
 #'
 #' @name ug-constrained covariance matrices 
@@ -16,7 +16,7 @@
 #'non-zero entries (defaults to `runif`)
 #' @param zapzeros Boolean, convert to zero extremely low entries? Defaults to `TRUE`.
 #' 
-#' @details Function `port` uses the method described in 
+#' @details Function [port()] uses the method described in 
 #' Córdoba et al. (2018). In summary, it consists on generating a random
 #' matrix `Q` and performing row-wise orthogonalization such that if `i` and `j`
 #' are not adjacent in `ug`, then the rows corresponding to such indices are
@@ -84,7 +84,7 @@ port <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, zapzeros = TR
 #'	number of the matrices in the resulting sample 
 #'
 #' @details We also provide an implementation of the most commonly used in the
-#' literature `diagdom`. By contrast, this method produces a random matrix `M`
+#' literature [diagdom()]. By contrast, this method produces a random matrix `M`
 #' with zeros corresponding to missing edges in `ug`, and then enforces a
 #' dominant diagonal to ensure positive definiteness. Matrices produced by
 #' `diagdom` usually are better conditioned than those by `port`; however, they

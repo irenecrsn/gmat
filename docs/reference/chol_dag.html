@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sample random correlation matrices — dag-constrained correlation matrices • gmat</title>
+<title>Simulation of correlation matrices — dag-constrained correlation matrices • gmat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,10 @@
 
 
 
-<meta property="og:title" content="Sample random correlation matrices — dag-constrained correlation matrices" />
+<meta property="og:title" content="Simulation of correlation matrices — dag-constrained correlation matrices" />
 
-<meta property="og:description" content="Sample correlation matrices, possibly with a zero pattern constrained by an
-acyclic digraph." />
+<meta property="og:description" content="Sample correlation matrices, possibly with a zero pattern in its Cholesky
+decomposition constrained by an acyclic digraph." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -100,15 +100,15 @@ acyclic digraph." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Sample random correlation matrices</h1>
+    <h1>Simulation of correlation matrices</h1>
     <small class="dont-index">Source: <a href='https://github.com/irenecrsn/gmat/blob/master/R/chol_dag.R'><code>R/chol_dag.R</code></a></small>
     <div class="hidden name"><code>chol_dag.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Sample correlation matrices, possibly with a zero pattern constrained by an
-acyclic digraph.</p>
+    <p>Sample correlation matrices, possibly with a zero pattern in its Cholesky
+decomposition constrained by an acyclic digraph.</p>
     
     </div>
 
@@ -128,16 +128,16 @@ acyclic digraph.</p>
     </tr>
     <tr>
       <th>p</th>
-      <td><p>Matrix dimension. Ignored if <code>ug</code> is provided.</p></td>
+      <td><p>Matrix dimension. Ignored if <code>dag</code> is provided.</p></td>
     </tr>
     <tr>
       <th>d</th>
       <td><p>Number in <code>[0,1]</code>, the proportion of non-zero
-entries in the Cholesky factor of the sampled matrices. Ignored if <code>ug</code> is provided.</p></td>
+entries in the Cholesky factor of the sampled matrices. Ignored if <code>dag</code> is provided.</p></td>
     </tr>
     <tr>
       <th>dag</th>
-      <td><p>A directed acyclic graph specifying the zero pattern in the Cholesky factor of the sampled matrices.</p></td>
+      <td><p>An acyclic digraph specifying the zero pattern in the Cholesky factor of the sampled matrices.</p></td>
     </tr>
     <tr>
       <th>add_no_chordal</th>
@@ -162,26 +162,25 @@ computational method to use for sampling the angles for "unifconc" method</p></t
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Function <code>rgbn_chol</code> uses the method described in Córdoba et al.
+    <p>Function <code>chol_mh()</code> uses the method described in Córdoba et al.
 (2018), based on a Metropolis-Hastings algorithm over the upper Cholesky
 factorization.</p>
 <p>The entries in the upper Cholesky factor are sampled i.i.d. by
-function <code>rgbn_iid</code>, following Kalisch and Buhlmann (2007).</p>
-<p>Function <code>rgbn_polar</code> reparametrizes the Cholesky factor following
+function <code>chol_iid()</code>, following Kalisch and Buhlmann (2007).</p>
+<p>Function <code>chol_polar()</code> reparametrizes the Cholesky factor following
 the approach by Pourahmadi and Wang (2015).</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
-Metropolis-Hastings method for generating random correlation matrices. Intelligent Data
-Engineering and Automated Learning – IDEAL 2018. Lecture Notes in
-Computer Science, vol 11314, pp. 117-124, 2018.</p>
+Metropolis-Hastings method for generating random correlation matrices. <em>Lecture Notes in
+Computer Science</em> (IDEAL 2018), vol 11314, pp. 117-124, 2018.</p>
 <p>Kalisch, M., Buhlmann, P. Estimating high-dimensional directed
-acyclic graphs with the PC-algorithm, Journal of Machine Learning Research,
+acyclic graphs with the PC-algorithm, <em>Journal of Machine Learning Research</em>,
 8:613-636, 2007.</p>
 <p>Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
-Hyperspherical parameterization of the Cholesky factor, Statistics &amp;
-Probability Letters, 106:5-12, 2015.</p>
+Hyperspherical parameterization of the Cholesky factor, <em>Statistics &amp;
+Probability Letters</em>, 106:5-12, 2015.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
