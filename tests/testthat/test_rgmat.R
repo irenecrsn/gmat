@@ -1,28 +1,5 @@
 context("SPD matrices, possibly with a zero pattern")
 
-test_that("selective gram schmidt actually selects", {
-	p <- 5; d <- 0.25;
-
-	span <- matrix(ncol = p, nrow = p, stats::rnorm(p^2))
-	
-	madj <- upper.tri(matrix(NA, p, p))
-	madj[madj] <- stats::rbinom(n = (p - 1)*p / 2, size = 1, prob = d)
-	madj <- madj + t(madj)
-
-	span_ort <- matrix(.C("gram_schmidt_sel", 
-							  double(p * p),
-							  as.logical(madj),
-							  as.double(t(span)),
-							  as.integer(p))[[1]], 
-						   ncol = p,
-						   byrow = TRUE)
-	
-	span_dot_prod <- tcrossprod(span_ort)
-	madj_learned <- (zapsmall(span_dot_prod) != 0) * 1
-	diag(madj_learned) <- 0
-	expect_equal(length(which((madj_learned - madj) != 0)), 0)
-})
-
 test_that("the size of the sample is correct", {
 	N <- 10; p <- 5; d <- 0.25;
 
@@ -88,6 +65,29 @@ test_that("matrices are symmetric positive definite", {
 		expect_equal(sample[, , n], t(sample[, , n]))
 		expect_gt(min(eigen(sample[, , n])$values), 0)
 	}
+})
+
+test_that("selective gram schmidt actually selects", {
+	p <- 5; d <- 0.25;
+
+	span <- matrix(ncol = p, nrow = p, stats::rnorm(p^2))
+	
+	madj <- upper.tri(matrix(NA, p, p))
+	madj[madj] <- stats::rbinom(n = (p - 1)*p / 2, size = 1, prob = d)
+	madj <- madj + t(madj)
+
+	span_ort <- matrix(.C("gram_schmidt_sel", 
+							  double(p * p),
+							  as.logical(madj),
+							  as.double(t(span)),
+							  as.integer(p))[[1]], 
+						   ncol = p,
+						   byrow = TRUE)
+	
+	span_dot_prod <- tcrossprod(span_ort)
+	madj_learned <- (zapsmall(span_dot_prod) != 0) * 1
+	diag(madj_learned) <- 0
+	expect_equal(length(which((madj_learned - madj) != 0)), 0)
 })
 
 test_that("the graph structure is preserved", {
