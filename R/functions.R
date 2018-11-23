@@ -118,8 +118,13 @@ diagdom <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, k = NULL) 
   		}
 	} else {
 		# Full covariance matrix
-		sam <- array(dim = c(p, p, N), data = rentries(p * p * N))
-  }
+		sam <- array(dim = c(p, p, N))
+		for (i in 1:p) {
+			for (j in 1:p) {
+				sam[i, j, ] <- sam[j, i, ] <- rentries(N)
+			}
+		}
+  	}
 
   for (i in 1:p) {
     sam[i, i, ] <- abs(rentries(N)) 

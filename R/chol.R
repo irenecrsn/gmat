@@ -48,8 +48,11 @@ chol_mh <- function(N = 1,
 		# We generate the dag if a zero pattern is requested
 		if (d != 1) {
 			dag <- rgraph(p = p, d = d, dag = TRUE)
+		} else {
+			sU <- mh_full(N = N, p = p, ...)
 		}
-	} else {
+	} 
+	if (is.null(dag) == FALSE) {
 		# Uniform sampling of chordal DAG
 		if (add_no_chordal == TRUE) {
    			isCh <- igraph::is_chordal(dag, fillin = TRUE)
@@ -58,8 +61,8 @@ chol_mh <- function(N = 1,
     			dag <- igraph::add_edges(dag, edges = isCh$fillin)
    			}
 		}
+  		sU <- mh_full(N = N, dag = dag, ...)
 	}
-  sU <- mh_full(N = N, dag = dag, ...)
   vsC <- apply(sU, MARGIN = 3, function(U)
     return(U %*% t(U)))
   sC <- array(data = vsC, dim = dim(sU))

@@ -116,7 +116,7 @@ for the Cholesky decomposition.</p>
     </div>
 
     <pre class="usage"><span class='fu'>chol_mh</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>add_no_chordal</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+  <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>add_no_chordal</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='fu'>chol_iid</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -152,7 +152,8 @@ is returned.</p></td>
     <tr>
       <th>add_no_chordal</th>
       <td><p>Logical, if TRUE when the dag provided is not chordal,
-a fill-in is computed, in order to ensure uniform distribution. Ignored if <code>dag</code> or <code>d</code> are not provided.</p></td>
+a fill-in is computed, in order to ensure uniform distribution. Ignored if
+<code>dag</code> or <code>d</code> are not provided. Defaults to FALSE.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -199,7 +200,7 @@ Probability Letters, 106:5-12, 2015.</p>
 <span class='no'>dag</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rgraph.html'>rgraph</a></span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Generate 2 matrices via Cholesky decomposition</span>
-<span class='fu'>chol_mh</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='no'>dag</span>, <span class='kw'>add_no_chordal</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; , , 1
+<span class='fu'>chol_mh</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='no'>dag</span>)</div><div class='output co'>#&gt; , , 1
 #&gt; 
 #&gt;      [,1] [,2] [,3]
 #&gt; [1,]    1    0    0
