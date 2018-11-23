@@ -115,14 +115,12 @@ for the Cholesky decomposition.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>chol_mh</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>add_no_chordal</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>chol_mh</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>add_no_chordal</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>)
 
-<span class='fu'>chol_iid</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>chol_iid</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
-<span class='fu'>chol_polar</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>comp</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>,
-  <span class='kw'>return.minvector</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>chol_polar</span>(<span class='kw'>N</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>comp</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,11 +141,6 @@ entries in the Cholesky factor of the sampled matrices. Ignored if <code>ug</cod
     <tr>
       <th>dag</th>
       <td><p>A directed acyclic graph specifying the zero pattern in the Cholesky factor of the sampled matrices.</p></td>
-    </tr>
-    <tr>
-      <th>return.minvector</th>
-      <td><p>Logical, if TRUE the minimimal vector representation of the sampled matrices
-is returned.</p></td>
     </tr>
     <tr>
       <th>add_no_chordal</th>

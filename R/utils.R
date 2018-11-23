@@ -47,3 +47,16 @@ anti_t <- function(m) {
 	return(j %*% t(m) %*% j)
 }
 
+#' Vectorize a sample of covariance/correlation matrices
+#'
+#' @param sample Array, the `p x p x N` sample to vectorize
+#' 
+#' @return A `p*(p - 1)/2 x N` matrix containing the vectorized sample
+#' @export
+vectorize <- function(sample) {
+    vec_sample <- apply(sample, MARGIN = 3, function(m) {
+      return(m[upper.tri(m)])
+    })
+    return(t(vec_sample))
+}
+

@@ -8,14 +8,12 @@
 \title{Sample a random Gaussian Bayesian network using different parametrizations
 for the Cholesky decomposition.}
 \usage{
-chol_mh(N = 1, p = 10, d = 1, dag = NULL,
-  return.minvector = FALSE, add_no_chordal = FALSE, ...)
+chol_mh(N = 1, p = 10, d = 1, dag = NULL, add_no_chordal = FALSE,
+  ...)
 
-chol_iid(N = 1, p = 10, d = 1, dag = NULL,
-  return.minvector = FALSE)
+chol_iid(N = 1, p = 10, d = 1, dag = NULL)
 
-chol_polar(N = 1, p = 10, d = 1, dag = NULL, comp = "numeric",
-  return.minvector = FALSE)
+chol_polar(N = 1, p = 10, d = 1, dag = NULL, comp = "numeric")
 }
 \arguments{
 \item{N}{Number of samples.}
@@ -26,9 +24,6 @@ chol_polar(N = 1, p = 10, d = 1, dag = NULL, comp = "numeric",
 entries in the Cholesky factor of the sampled matrices. Ignored if \code{ug} is provided.}
 
 \item{dag}{A directed acyclic graph specifying the zero pattern in the Cholesky factor of the sampled matrices.}
-
-\item{return.minvector}{Logical, if TRUE the minimimal vector representation of the sampled matrices
-is returned.}
 
 \item{add_no_chordal}{Logical, if TRUE when the dag provided is not chordal,
 a fill-in is computed, in order to ensure uniform distribution. Ignored if

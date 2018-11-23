@@ -10,8 +10,6 @@
 #' @param d Number in `[0,1]`, the proportion of non-zero
 #' entries in the Cholesky factor of the sampled matrices. Ignored if `ug` is provided.
 #' @param dag A directed acyclic graph specifying the zero pattern in the Cholesky factor of the sampled matrices. 
-#' @param return.minvector Logical, if TRUE the minimimal vector representation of the sampled matrices
-#' is returned.
 #' @param add_no_chordal Logical, if TRUE when the dag provided is not chordal,
 #' a fill-in is computed, in order to ensure uniform distribution. Ignored if
 #' `dag` or `d` are not provided. Defaults to FALSE.
@@ -41,7 +39,6 @@ chol_mh <- function(N = 1,
                   p = 10,
 				  d = 1,
 				  dag = NULL,
-                  return.minvector = FALSE,
 				  add_no_chordal = FALSE,
                   ...) {
 	if (is.null(dag) == TRUE) {
@@ -66,14 +63,8 @@ chol_mh <- function(N = 1,
   vsC <- apply(sU, MARGIN = 3, function(U)
     return(U %*% t(U)))
   sC <- array(data = vsC, dim = dim(sU))
-  if (return.minvector) {
-    mv <- apply(sC, MARGIN = 3, function(m) {
-      return(m[upper.tri(m)])
-    })
-    return(t(mv))
-  } else{
-    return(sC)
-  }
+  
+  return(sC)
 }
 
 #' @rdname gbn-sim
@@ -93,8 +84,7 @@ chol_mh <- function(N = 1,
 chol_iid <- function(N = 1,
 				 p = 10,
 				 d = 1,
-				 dag = NULL,
-				return.minvector = FALSE) 
+				 dag = NULL) 
 {  	
 
 	# We generate the dag if a zero pattern is requested 
@@ -121,14 +111,7 @@ chol_iid <- function(N = 1,
 		R[, , n] <- stats::cov2cor(Omega) 
 	}
 
-  	if (return.minvector == TRUE) {
-    	mv <- apply(R, MARGIN = 3, function(m) {
-      		return(m[upper.tri(m)])
-    	})
-    	return(t(mv))
-  	} else {
-    	return(R)
-  	}
+    return(R)
 }
 
 #' @rdname gbn-sim
@@ -151,8 +134,7 @@ chol_iid <- function(N = 1,
 chol_polar <- function(N = 1,				 p = 10,
 					   d = 1,
 				 dag = NULL,
-                 comp = 'numeric',
-				return.minvector = FALSE) 
+                 comp = 'numeric') 
 {  	
 	# We generate the dag if a zero pattern is requested
 	if (is.null(dag) == TRUE & d != 1) {
@@ -173,14 +155,7 @@ chol_polar <- function(N = 1,				 p = 10,
 		R[, , n] <- U %*% t(U)
 	}
 
-  	if (return.minvector == TRUE) {
-    	mv <- apply(R, MARGIN = 3, function(m) {
-      	return(m[upper.tri(m)])
-    	})
-    	return(t(mv))
-  	} else{
-    	return(R)
-  	}
+   	return(R)
 }
 
 

@@ -28,5 +28,14 @@ test_that("random ugs are actually ugs", {
 	expect_identical(sum(diag(ug_am)), 0)
 })
 
+test_that("sample vectorization works correctly", {
+	N <- 10; p <- 5;
+	p_vectorized <- p*(p - 1)/2
+
+	sample <- array(dim = c(p, p, N), data = runif(N))
+	sample <- vectorize(sample)
+	expect_equal(length(dim(sample)), 2)
+	expect_equal(dim(sample)[2], p_vectorized)
+})
 
 

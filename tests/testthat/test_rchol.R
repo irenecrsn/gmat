@@ -29,7 +29,7 @@ test_that("the size of the sample is correct", {
 	expect_equal(dim(sample)[3], N)
 })
 
-test_that("matrix dimension is correct (full matrix)", {
+test_that("matrix dimension is correct", {
 	N <- 10; p <- 5;
 
 	sample <- chol_mh(N = N, p = p)
@@ -43,19 +43,6 @@ test_that("matrix dimension is correct (full matrix)", {
 	expect_equal(dim(sample)[1], p)
 })
 
-test_that("matrix dimension is correct (vectorized)", {
-	N <- 10; p <- 5;
-	p_vectorized <- p*(p - 1)/2
-
-	sample <- chol_mh(N = N, p = p, return.minvector = TRUE)
-	expect_equal(dim(sample)[2], p_vectorized)
-
-	sample <- chol_iid(N = N, p = p, return.minvector = TRUE)
-	expect_equal(dim(sample)[2], p_vectorized)
-
-	sample <- chol_polar(N = N, p = p, return.minvector = TRUE)
-	expect_equal(dim(sample)[2], p_vectorized)
-})
 
 test_that("matrices are symmetric positive definite", {
 	N <- 10; p <- 5; d <- 0.25;
