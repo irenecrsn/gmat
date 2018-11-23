@@ -1,10 +1,10 @@
-#' Sample random covariance/concentration graph matrices. 
+#' Sample random covariance matrices. 
 #'
-#' Samples the covariance/concentration matrix corresponding to an 
-#' undirected graph by either partial orthogonalization or diagonal dominance.
+#' Samples covariance matrices, possibly with a zero pattern constrained by an
+#' undirected graph.
 #'
-#' @name undirected graph matrix simulation
-#' @rdname rgmat
+#' @name ug-constrained covariance matrices 
+#' @rdname cov_ug
 #'
 #' @param N Number of samples.
 #' @param p Matrix dimension. Ignored if `ug` is provided.
@@ -24,7 +24,7 @@
 #' introducing unwanted independences. The resulting matrix after the process
 #' has finished is the cross product of `Q`.
 #'
-#' @return  A three-dimensional array of length `p*p*N`
+#' @return  A three-dimensional array of length `p x p x N`
 #'
 #' @references Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. A partial
 #' orthogonalization method for simulation covariance and concentration graph
@@ -78,7 +78,7 @@ port <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, zapzeros = TR
 	return(sam)
 }
 
-#' @rdname rgmat
+#' @rdname cov_ug
 #'
 #' @param k real number greater than `1`, the desired condition
 #'	number of the matrices in the resulting sample 

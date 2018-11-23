@@ -1,9 +1,11 @@
-#' Sample a random Gaussian Bayesian network using different parametrizations
-#' for the Cholesky decomposition. 
-#' 
-#' @name directed graph matrix simulation
+#' Sample random correlation matrices
 #'
-#' @rdname gbn-sim
+#' Sample correlation matrices, possibly with a zero pattern constrained by an
+#' acyclic digraph.
+#' 
+#' @name dag-constrained correlation matrices
+#'
+#' @rdname chol_dag 
 #'
 #' @param N Number of samples.
 #' @param p Matrix dimension. Ignored if `ug` is provided.
@@ -19,7 +21,7 @@
 #' (2018), based on a Metropolis-Hastings algorithm over the upper Cholesky
 #' factorization. 
 #'
-#' @return A three-dimensional array of length `p*p*N`
+#' @return A three-dimensional array of length `p x p x N`
 #'
 #' @references Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
 #' Metropolis-Hastings method for generating random correlation matrices. Intelligent Data
@@ -67,7 +69,7 @@ chol_mh <- function(N = 1,
   return(sC)
 }
 
-#' @rdname gbn-sim
+#' @rdname chol_dag
 #'
 #' @details The entries in the upper Cholesky factor are sampled i.i.d. by
 #' function `rgbn_iid`, following Kalisch and Buhlmann (2007). 
@@ -114,7 +116,7 @@ chol_iid <- function(N = 1,
     return(R)
 }
 
-#' @rdname gbn-sim
+#' @rdname chol_dag
 #'
 #' @param comp String one of "numeric" or "recursive", indicating the
 #' computational method to use for sampling the angles for "unifconc" method
