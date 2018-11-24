@@ -61,8 +61,7 @@ chol_mh <- function(N = 1,
 		}
   		sU <- mh_full(N = N, dag = dag, ...)
 	}
-  vsC <- apply(sU, MARGIN = 3, function(U)
-    return(U %*% t(U)))
+  vsC <- apply(sU, MARGIN = 3, tcrossprod)
   sC <- array(data = vsC, dim = dim(sU))
   
   return(sC)
@@ -153,7 +152,7 @@ chol_polar <- function(N = 1,				 p = 10,
 
 	for (n in 1:N) {
 		U <- .rcoef_polar(p = p, method = comp, L = L_init)
-		R[, , n] <- U %*% t(U)
+		R[, , n] <- tcrossprod(U)
 	}
 
    	return(R)
