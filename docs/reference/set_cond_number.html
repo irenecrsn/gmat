@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • gmat</title>
+<title>Set the condition number of the matrices in a sample of covariance/correlation matrices — set_cond_number • gmat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Set the condition number of the matrices in a sample of covariance/correlation matrices — set_cond_number" />
+
+<meta property="og:description" content="Set the condition number of the matrices in a sample of covariance/correlation matrices" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -47,7 +50,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -94,91 +97,48 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Set the condition number of the matrices in a sample of covariance/correlation matrices</h1>
+    <small class="dont-index">Source: <a href='https://github.com/irenecrsn/gmat/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <div class="hidden name"><code>set_cond_number.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>Set the condition number of the matrices in a sample of covariance/correlation matrices</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
-
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="anti_t.html">anti_t()</a></code> </p>
-        </td>
-        <td><p>Compute the anti transpose of a matrix (transpose with respect to the off-diagonal)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="chol_dag.html">chol_mh()</a></code> <code><a href="chol_dag.html">chol_iid()</a></code> <code><a href="chol_dag.html">chol_polar()</a></code> </p>
-        </td>
-        <td><p>Simulation of correlation matrices</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cov_ug.html">port()</a></code> <code><a href="cov_ug.html">diagdom()</a></code> </p>
-        </td>
-        <td><p>Simulation of covariance matrices.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gmat.html">gmat</a></code> </p>
-        </td>
-        <td><p>gmat: Graphically constrained matrices.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mh_full.html">mh_full()</a></code> </p>
-        </td>
-        <td><p>Full Metropolis-Hastings algorithm for correlation matrices/
-Gaussian Bayesian networks</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mh_row.html">mh_row()</a></code> </p>
-        </td>
-        <td><p>sampling on sphere proportionally to a power of the first coordinate</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rgraph.html">rgraph()</a></code> </p>
-        </td>
-        <td><p>Random generation of acyclic digraphs and undirected graphs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="set_cond_number.html">set_cond_number()</a></code> </p>
-        </td>
-        <td><p>Set the condition number of the matrices in a sample of covariance/correlation matrices</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="vectorize.html">vectorize()</a></code> </p>
-        </td>
-        <td><p>Vectorize a sample of covariance/correlation matrices</p></td>
-      </tr>
-    </tbody>
+    <pre class="usage"><span class='fu'>set_cond_number</span>(<span class='no'>sample</span>, <span class='no'>k</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>sample</th>
+      <td><p>Array, the <code>p x p x N</code> matrix sample</p></td>
+    </tr>
+    <tr>
+      <th>k</th>
+      <td><p>Condition number to be set</p></td>
+    </tr>
     </table>
-  </div>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A <code>p x p x N</code> array containing the matrices with the fixed condition number</p>
+    
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
-    </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
+
   </div>
 </div>
 
