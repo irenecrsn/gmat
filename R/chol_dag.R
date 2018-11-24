@@ -11,7 +11,7 @@
 #' @param p Matrix dimension. Ignored if `dag` is provided.
 #' @param d Number in `[0,1]`, the proportion of non-zero
 #' entries in the Cholesky factor of the sampled matrices. Ignored if `dag` is provided.
-#' @param dag An acyclic digraph specifying the zero pattern in the Cholesky factor of the sampled matrices. 
+#' @param dag An [igraph][igraph::igraph] acyclic digraph specifying the zero pattern in the Cholesky factor of the sampled matrices. 
 #' @param add_no_chordal Logical, if TRUE when the dag provided is not chordal,
 #' a fill-in is computed, in order to ensure uniform distribution. Ignored if
 #' `dag` or `d` are not provided. Defaults to FALSE.
@@ -157,7 +157,6 @@ chol_polar <- function(N = 1,				 p = 10,
 
    	return(R)
 }
-
 
 .rcoef_polar <- function(p = 100,
                          method = 'numeric',

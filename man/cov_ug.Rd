@@ -19,7 +19,7 @@ diagdom(N = 1, p = 5, d = 1, ug = NULL, rentries = runif)
 \item{d}{Number in \code{[0,1]}, the proportion of non-zero
 entries in the sampled matrices. Ignored if \code{ug} is provided.}
 
-\item{ug}{An undirected graph specifying the zero pattern in the sampled matrices.}
+\item{ug}{An \link[igraph:igraph]{igraph} undirected graph specifying the zero pattern in the sampled matrices.}
 
 \item{rentries}{Function, the random number generator for
 the

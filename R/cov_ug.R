@@ -10,7 +10,7 @@
 #' @param p Matrix dimension. Ignored if `ug` is provided.
 #' @param d Number in `[0,1]`, the proportion of non-zero
 #' entries in the sampled matrices. Ignored if `ug` is provided.
-#' @param ug An undirected graph specifying the zero pattern in the sampled matrices. 
+#' @param ug An [igraph][igraph::igraph] undirected graph specifying the zero pattern in the sampled matrices. 
 #' @param rentries Function, the random number generator for
 #' the
 #'non-zero entries (defaults to `runif`)
