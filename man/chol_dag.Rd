@@ -22,7 +22,7 @@ chol_polar(N = 1, p = 10, d = 1, dag = NULL, comp = "numeric")
 \item{d}{Number in \code{[0,1]}, the proportion of non-zero
 entries in the Cholesky factor of the sampled matrices. Ignored if \code{dag} is provided.}
 
-\item{dag}{An \link[igraph:igraph]{igraph} acyclic digraph specifying the zero pattern in the Cholesky factor of the sampled matrices.}
+\item{dag}{An \href{https://CRAN.R-project.org/package=igraph}{igraph} acyclic digraph specifying the zero pattern in the Cholesky factor of the sampled matrices.}
 
 \item{add_no_chordal}{Logical, if TRUE when the dag provided is not chordal,
 a fill-in is computed, in order to ensure uniform distribution. Ignored if
