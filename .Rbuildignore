@@ -1,6 +1,4 @@
 _pkgdown.yml
-rebuild.R
-docs
 .travis.yml
 cran-comments.md
 ^README\.Rmd$
