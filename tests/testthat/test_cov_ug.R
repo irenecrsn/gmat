@@ -21,6 +21,30 @@ test_that("the size of the sample is correct", {
 	check_sample_size(N = N, ug = ug)
 })
 
+test_that("matrix dimension is correct", {
+	N <- 10; p <- 5; d <- 0.25;
+
+	check_matrix_dim <- function(N, p_exp, ...) {
+		sample <- port(N = N, ...)
+		expect_equal(dim(sample)[1], dim(sample)[2])
+		expect_equal(dim(sample)[1], p_exp)
+		sample <- diagdom(N = N, ...)
+		expect_equal(dim(sample)[1], dim(sample)[2])
+		expect_equal(dim(sample)[1], p_exp)
+	}
+	
+	# no zeros
+	check_matrix_dim(N = N, p_exp = p, p = p)
+
+	# with a percentage of zeros
+	check_matrix_dim(N = N, p_exp = p, p = p, d = d)
+
+	# with a predefined pattern of zeros
+	ug <- rgraph(p = p, d = d)
+	check_matrix_dim(N = N, p_exp = p, ug = ug)
+})
+
+
 test_that("matrices are symmetric positive definite", {
 	N <- 10; p <- 5; d <- 0.25;
 

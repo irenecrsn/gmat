@@ -24,24 +24,36 @@ test_that("the size of the sample is correct", {
 })
 
 test_that("matrix dimension is correct", {
-	N <- 10; p <- 5;
+	N <- 10; p <- 5; d <- 0.25;
 
-	sample <- chol_mh(N = N, p = p)
-	expect_equal(dim(sample)[1], dim(sample)[2])
-	expect_equal(dim(sample)[1], p)
-	sample <- chol_iid(N = N, p = p)
-	expect_equal(dim(sample)[1], dim(sample)[2])
-	expect_equal(dim(sample)[1], p)
-	sample <- chol_polar(N = N, p = p)
-	expect_equal(dim(sample)[1], dim(sample)[2])
-	expect_equal(dim(sample)[1], p)
+	check_matrix_dim <- function(N, p_exp, ...) {
+		sample <- chol_mh(N = N, ...)
+		expect_equal(dim(sample)[1], dim(sample)[2])
+		expect_equal(dim(sample)[1], p_exp)
+		sample <- chol_iid(N = N, ...)
+		expect_equal(dim(sample)[1], dim(sample)[2])
+		expect_equal(dim(sample)[1], p_exp)
+		sample <- chol_polar(N = N, ...)
+		expect_equal(dim(sample)[1], dim(sample)[2])
+		expect_equal(dim(sample)[1], p_exp)
+	}
+	
+	# no zeros
+	check_matrix_dim(N = N, p_exp = p, p = p)
+
+	# with a percentage of zeros
+	check_matrix_dim(N = N, p_exp = p, p = p, d = d)
+
+	# with a predefined pattern of zeros
+	dag <- rgraph(p = p, d = d, dag = TRUE)
+	check_matrix_dim(N = N, p_exp = p, dag = dag)
 })
 
 
 test_that("matrices are symmetric positive definite", {
 	N <- 10; p <- 5; d <- 0.25;
 
-	check_spd <- function(N = N, ...) {
+	check_spd <- function(N, ...) {
 		sample <- chol_mh(N = N, ...) 
 		for (n in 1:N) {
 			expect_equal(sample[, , n], t(sample[, , n]))
