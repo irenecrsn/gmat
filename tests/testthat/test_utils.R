@@ -32,10 +32,19 @@ test_that("sample vectorization works correctly", {
 	N <- 10; p <- 5;
 	p_vectorized <- p*(p - 1)/2
 
-	sample <- array(dim = c(p, p, N), data = runif(N))
+	sample <- diagdom(N = N, p = p)
 	sample <- vectorize(sample)
 	expect_equal(length(dim(sample)), 2)
 	expect_equal(dim(sample)[2], p_vectorized)
 })
 
+test_that("the condition number is correctly set", {
+	N <- 10; p <- 5; k <- 5;
+
+	sample <- diagdom(N = N, p = p)
+	sample <- set_cond_number(sample = sample, k = k)
+	for (n in 1:N) {
+		expect_equal(kappa(sample[, , n], exact = TRUE), k)
+	}
+})
 

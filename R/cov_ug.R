@@ -80,9 +80,6 @@ port <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, zapzeros = TR
 
 #' @rdname cov_ug
 #'
-#' @param k real number greater than `1`, the desired condition
-#'	number of the matrices in the resulting sample 
-#'
 #' @details We also provide an implementation of the most commonly used in the
 #' literature [diagdom()]. By contrast, this method produces a random matrix `M`
 #' with zeros corresponding to missing edges in `ug`, and then enforces a
@@ -97,7 +94,7 @@ port <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, zapzeros = TR
 #' diagdom(N = 2, ug = ug)
 #'
 #' @export
-diagdom <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, k = NULL) {
+diagdom <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif) {
  
 	# We generated the ug if a zero pattern is requested
   if (is.null(ug) == TRUE & d != 1) {
@@ -134,14 +131,6 @@ diagdom <- function(N = 1, p = 5, d = 1, ug = NULL, rentries = runif, k = NULL) 
   sam <- sam + array(dim = dim(sam), data = apply(X = mdiag, MARGIN
 												  = 2, FUN = diag,
 												  nrow = p))
-	if (!is.null(k)) {
-		for (n in 1:N) {
-  			eig_val <- eigen(sam[, , n])$values
-  			delta <- (max(eig_val) - k*min(eig_val)) / (k - 1)
-  			sam[, , n] <- sam[, , n] + diag(x = delta, nrow = p)
-		}
-	}
- 
 	return (sam)
 }
 

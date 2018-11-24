@@ -96,27 +96,4 @@ test_that("the graph structure is preserved", {
 	}
 })
 
-test_that("the condition number is controlled", {
-	N <- 10; p <- 5; d <- 0.25; k <- 5;
-
-	# no zeros
-	sample <- diagdom(N = N, p = p, k = k)
-	for (n in 1:N) {
-		expect_equal(kappa(sample[, , n], exact = TRUE), k)
-	}
-	# with a percentage of zeros
-	sample <- diagdom(N = N, p = p, d = d, k = k)
-	for (n in 1:N) {
-		expect_equal(kappa(sample[, , n], exact = TRUE), k)
-	}
-	# with a predefined zero pattern 
-	ug <- rgraph(p = p, d = d)
-	sample <- diagdom(N = N, ug = ug, k = k)
-	for (n in 1:N) {
-		expect_equal(kappa(sample[, , n], exact = TRUE), k)
-	}
-})
-
-
-
 
