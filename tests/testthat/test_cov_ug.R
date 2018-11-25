@@ -46,32 +46,28 @@ test_that("matrix dimension is correct", {
 
 
 test_that("matrices are symmetric positive definite", {
-	N <- 10; p <- 5; d <- 0.25;
+	p <- 5; d <- 0.25;
 
-	check_spd <- function(N = N, ...) {
+	check_spd <- function(...) {
 
-		sample <- port(N = N, ...) 
-		for (n in 1:N) {
-			expect_equal(sample[, , n], t(sample[, , n]))
-			# here we do not test positive definiteness since 
-			# sometimes condition numbers are very high
-		}
-		sample <- diagdom(N = N, ...)
-		for (n in 1:N) {
-			expect_equal(sample[, , n], t(sample[, , n]))
-			expect_gt(min(eigen(sample[, , n])$values), 0)
-		}
+		sample <- port(...) 
+		expect_equal(sample[, , 1], t(sample[, , 1]))
+		# here we do not test positive definiteness since 
+		# sometimes condition numbers are very high
+		sample <- diagdom(...)
+		expect_equal(sample[, , 1], t(sample[, , 1]))
+		expect_gt(min(eigen(sample[, , 1])$values), 0)
 	}
 
 	# no zeros
-	check_spd(N = N, p = p)
+	check_spd(p = p)
 
 	# with a percentage of zeros
-	check_spd(N = N, p = p, d = d)
+	check_spd(p = p, d = d)
 	
 	# with a predefined zero pattern 
 	ug <- rgraph(p = p, d = d)
-	check_spd(N = N, ug = ug)
+	check_spd(ug = ug)
 })
 
 test_that("selective gram schmidt actually selects", {
@@ -98,7 +94,7 @@ test_that("selective gram schmidt actually selects", {
 })
 
 test_that("the graph structure is preserved", {
-	N <- 10; p <- 5; d <- 0.25;
+	p <- 5; d <- 0.25;
 
 	expect_equal_ug <- function(m, ug) {
 		madj <- igraph::as_adjacency_matrix(ug, sparse = FALSE)
@@ -109,15 +105,11 @@ test_that("the graph structure is preserved", {
 
 	ug <- rgraph(p = p, d = d)
 
-	sample <- port(N = N, ug = ug)
-	for (n in 1:N) {
-		expect_equal_ug(m = sample[, , n], ug = ug)
-	}
+	sample <- port(ug = ug)
+	expect_equal_ug(m = sample[, , 1], ug = ug)
 
-	sample <- diagdom(N = N, ug = ug)
-	for (n in 1:N) {
-		expect_equal_ug(m = sample[, , n], ug = ug)
-	}
+	sample <- diagdom(ug = ug)
+	expect_equal_ug(m = sample[, , 1], ug = ug)
 })
 
 

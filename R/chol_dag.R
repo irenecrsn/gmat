@@ -11,7 +11,7 @@
 #' @param p Matrix dimension. Ignored if `dag` is provided.
 #' @param d Number in `[0,1]`, the proportion of non-zero
 #' entries in the Cholesky factor of the sampled matrices. Ignored if `dag` is provided.
-#' @param dag An [igraph](https://CRAN.R-project.org/package=igraph) acyclic digraph specifying the zero pattern in the Cholesky factor of the sampled matrices. 
+#' @param dag An [igraph](https://CRAN.R-project.org/package=igraph) acyclic digraph specifying the zero pattern in the Cholesky factor of the sampled matrices. Nodes must be in ancestral order, with the first one having no parents. 
 #' @param add_no_chordal Logical, if TRUE when the dag provided is not chordal,
 #' a fill-in is computed, in order to ensure uniform distribution. Ignored if
 #' `dag` or `d` are not provided. Defaults to FALSE.
@@ -36,7 +36,7 @@
 #' chol_mh(d = 0.5)
 #'
 #' # Generate a random acyclic digraph structure
-#' dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+#' dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
 #' igraph::print.igraph(dag)
 #'
 #' # Generate a matrix complying with the predefined zero pattern
@@ -92,7 +92,7 @@ chol_mh <- function(N = 1,
 #' chol_iid(d = 0.5)
 #'
 #' # Generate a random acyclic digraph structure
-#' dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+#' dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
 #' igraph::print.igraph(dag)
 #'
 #' # Generate a matrix complying with the predefined zero pattern
@@ -152,15 +152,15 @@ chol_iid <- function(N = 1,
 #' chol_polar(d = 0.5)
 #'
 #' # Generate a random acyclic digraph structure
-#' dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+#' dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
 #' igraph::print.igraph(dag)
 #'
 #' # Generate a matrix complying with the predefined zero pattern
 #' chol_polar(dag = dag)
 #'
 #' # Performance comparison of numeric vs recursive integral (full matrix)
-#' system.time(chol_polar())
-#' system.time(chol_polar(comp = 'recursive'))
+#' system.time(chol_polar(N = 10, p = 5))
+#' system.time(chol_polar(N = 10, p = 5, comp = 'recursive'))
 #' @export
 chol_polar <- function(N = 1,				 p = 3,
 					   d = 1,
@@ -173,39 +173,37 @@ chol_polar <- function(N = 1,				 p = 3,
 	}
 	if (is.null(dag) == FALSE) {
 		p <- length(igraph::V(dag))
-		L_init <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
+		L_init <- t(igraph::as_adjacency_matrix(dag, sparse = FALSE))
 	} else {
 		L_init <- matrix(nrow = p, ncol = p, data = 0)
-		L_init[upper.tri(L_init)] <- 1
+		L_init[lower.tri(L_init)] <- 1
 	}
 	diag(L_init) <- 1
 	R <- array(dim = c(p, p, N))
 
 	for (n in 1:N) {
-		U <- .rcoef_polar(p = p, method = comp, L = L_init)
-		R[, , n] <- tcrossprod(U)
+		L <- .rcoef_polar(p = p, method = comp, L = L_init)
+		R[, , n] <- tcrossprod(L)
 	}
 
    	return(R)
 }
 
-.rcoef_polar <- function(p = 30,
-                         method = 'numeric',
-						 L) 
+.rcoef_polar <- function(p, method, L) 
 {	
 	theta <- matrix(nrow = p, ncol = p, data = 0)
 	theta[lower.tri(theta)] <- pi/2
 
-	for (icol in 1:(p - 1)) {
-		for (irow in (icol + 1):p) {
-			if (L[irow, icol] != 0) {
-				theta[irow, icol] <- .rsin(n = 1, k = p - icol, method = method)
-				L[irow, icol] <- cos(theta[irow, icol])
+	for (j in 1:(p - 1)) {
+		for (i in (j + 1):p) {
+			if (L[i, j] != 0) {
+				theta[i, j] <- .rsin(n = 1, k = p - j, method = method)
+				L[i, j] <- cos(theta[i, j])
 			} 
 		}
-		if (icol >= 2) {
-			for (j in 1:(icol - 1)) {
-				L[icol:p, icol] <- L[icol:p, icol] * sin(theta[icol:p, j])
+		if (j >= 2) {
+			for (k in 1:(j - 1)) {
+				L[j:p, j] <- L[j:p, j] * sin(theta[j:p, k])
 			}
 		}
 	}

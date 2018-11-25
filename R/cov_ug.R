@@ -102,6 +102,7 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
 #' diagdom(d = 0.5)
 #'
 #' # Generate a matrix complying with the predefined zero pattern
+#' igraph::print.igraph(ug)
 #' diagdom(ug = ug)
 #'
 #' @export

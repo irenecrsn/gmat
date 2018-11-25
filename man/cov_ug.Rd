@@ -71,6 +71,7 @@ diagdom()
 diagdom(d = 0.5)
 
 # Generate a matrix complying with the predefined zero pattern
+igraph::print.igraph(ug)
 diagdom(ug = ug)
 
 }

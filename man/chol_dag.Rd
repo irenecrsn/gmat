@@ -94,8 +94,8 @@ igraph::print.igraph(dag)
 chol_polar(dag = dag)
 
 # Performance comparison of numeric vs recursive integral (full matrix)
-system.time(chol_polar())
-system.time(chol_polar(comp = 'recursive'))
+system.time(chol_polar(N = 10, p = 5))
+system.time(chol_polar(N = 10, p = 5, comp = 'recursive'))
 }
 \references{
 Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
