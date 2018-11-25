@@ -92,6 +92,10 @@ igraph::print.igraph(dag)
 
 # Generate a matrix complying with the predefined zero pattern
 chol_polar(dag = dag)
+
+# Performance comparison of numeric vs recursive integral (full matrix)
+system.time(chol_polar())
+system.time(chol_polar(comp = 'recursive'))
 }
 \references{
 Córdoba I., Varando G., Bielza C., Larrañaga P. A fast

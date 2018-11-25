@@ -157,6 +157,10 @@ chol_iid <- function(N = 1,
 #'
 #' # Generate a matrix complying with the predefined zero pattern
 #' chol_polar(dag = dag)
+#'
+#' # Performance comparison of numeric vs recursive integral (full matrix)
+#' system.time(chol_polar())
+#' system.time(chol_polar(comp = 'recursive'))
 #' @export
 chol_polar <- function(N = 1,				 p = 3,
 					   d = 1,
@@ -227,9 +231,10 @@ chol_polar <- function(N = 1,				 p = 3,
 	if (method == "numeric") {
 		const <- stats::integrate(.sin_k, lower = 0, upper = pi, k = k)$value
 		return(stats::integrate(.sin_k, lower = 0, upper = x, k = k)$value / const)
+	} else {
+		const <- .sin_int(pi, k)
+		return(.sin_int(x, k) / const)
 	}
-	const <- .sin_int(pi, k)
-	return(.sin_int(x, k) / const)
 }
 
 .sin_int <- function(x, k = 1){
