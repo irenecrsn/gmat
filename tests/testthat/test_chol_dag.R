@@ -4,12 +4,15 @@ test_that("the size of the sample is correct", {
 	N <- 10; p <- 5; d <- 0.25;
 
 	check_sample_size <- function(N, ...) {
+		args <- list(...)
 		sample <- chol_mh(N = N, ...)
 		expect_equal(dim(sample)[3], N)
 		sample <- chol_iid(N = N, ...)
 		expect_equal(dim(sample)[3], N)
-		sample <- chol_polar(N = N, ...)
-		expect_equal(dim(sample)[3], N)
+		if ("p" %in% names(args)) { # until polar accepts dag
+			sample <- chol_polar(N = N, ...)
+			expect_equal(dim(sample)[3], N)
+		}
 	}
 
 	# no zeros
@@ -27,15 +30,18 @@ test_that("matrix dimension is correct", {
 	N <- 10; p <- 5; d <- 0.25;
 
 	check_matrix_dim <- function(N, p_exp, ...) {
+		args <- list(...)
 		sample <- chol_mh(N = N, ...)
 		expect_equal(dim(sample)[1], dim(sample)[2])
 		expect_equal(dim(sample)[1], p_exp)
 		sample <- chol_iid(N = N, ...)
 		expect_equal(dim(sample)[1], dim(sample)[2])
 		expect_equal(dim(sample)[1], p_exp)
-		sample <- chol_polar(N = N, ...)
-		expect_equal(dim(sample)[1], dim(sample)[2])
-		expect_equal(dim(sample)[1], p_exp)
+		if ("p" %in% names(args)) { # until polar accepts dag
+			sample <- chol_polar(N = N, ...)
+			expect_equal(dim(sample)[1], dim(sample)[2])
+			expect_equal(dim(sample)[1], p_exp)
+		}
 	}
 	
 	# no zeros
@@ -54,6 +60,7 @@ test_that("matrices are symmetric positive definite", {
 	p <- 5; d <- 0.25;
 
 	check_spd <- function(...) {
+		args <- list(...)
 		sample <- chol_mh(...) 
 		expect_equal(sample[, , 1], t(sample[, , 1]))
 		expect_gt(min(eigen(sample[, , 1])$values), 0)
@@ -62,9 +69,11 @@ test_that("matrices are symmetric positive definite", {
 		expect_equal(sample[, , 1], t(sample[, , 1]))
 		expect_gt(min(eigen(sample[, , 1])$values), 0)
 		
-		sample <- chol_polar(...)
-		expect_equal(sample[, , 1], t(sample[, , 1]))
-		expect_gt(min(eigen(sample[, , 1])$values), 0)
+		if ("p" %in% names(args)) { # until polar accepts dag
+			sample <- chol_polar(...)
+			expect_equal(sample[, , 1], t(sample[, , 1]))
+			expect_gt(min(eigen(sample[, , 1])$values), 0)
+		}
 	}
 
 	# no zeros
@@ -82,6 +91,7 @@ test_that("matrices are of correlation", {
 	p <- 5; d <- 0.25;
 
 	check_cor <- function(...) {
+		args <- list(...)
 		check_cor_sample <- function(sample) {
 			p <- dim(sample)[1]
 			expect_equal(sum(diag(sample[, , 1])), p)
@@ -97,8 +107,10 @@ test_that("matrices are of correlation", {
 		check_cor_sample(sample)
 		sample <- chol_iid(...)
 		check_cor_sample(sample)
-		sample <- chol_polar(...)
-		check_cor_sample(sample)
+		if ("p" %in% names(args)) { # until polar accepts dag
+			sample <- chol_polar(...)
+			check_cor_sample(sample)
+		}
 	}
 
 	# no zeros

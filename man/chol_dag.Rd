@@ -20,9 +20,14 @@ chol_polar(N = 1, p = 3, d = 1, dag = NULL, comp = "numeric")
 \item{p}{Matrix dimension. Ignored if \code{dag} is provided.}
 
 \item{d}{Number in \code{[0,1]}, the proportion of non-zero
-entries in the Cholesky factor of the sampled matrices. Ignored if \code{dag} is provided.}
+entries in the Cholesky factor of the sampled matrices.
+Ignored if \code{dag} is provided. Ignored by \code{\link[=chol_polar]{chol_polar()}}}
 
-\item{dag}{An \href{https://CRAN.R-project.org/package=igraph}{igraph} acyclic digraph specifying the zero pattern in the Cholesky factor of the sampled matrices.}
+\item{dag}{An
+\href{https://CRAN.R-project.org/package=igraph}{igraph} acyclic
+digraph specifying the zero pattern in the upper Cholesky
+factor of the sampled matrices. Nodes must be in ancestral
+order, with the first one having no parents. Ignored by \code{\link[=chol_polar]{chol_polar()}}}
 
 \item{add_no_chordal}{Logical, if TRUE when the dag provided is not chordal,
 a fill-in is computed, in order to ensure uniform distribution. Ignored if
@@ -49,7 +54,10 @@ The entries in the upper Cholesky factor are sampled i.i.d. by
 function \code{\link[=chol_iid]{chol_iid()}}, following Kalisch and Buhlmann (2007).
 
 Function \code{\link[=chol_polar]{chol_polar()}} reparametrizes the Cholesky factor following
-the approach by Pourahmadi and Wang (2015).
+the approach by Pourahmadi and Wang (2015). In the future, this function will
+also accept a predefined zero pattern via a \code{dag} argument or a proportion of zeros
+via a \code{d} argument, just as \code{\link[=chol_mh]{chol_mh()}} and \code{\link[=chol_iid]{chol_iid()}}. For now these arguments
+are ignored in this function.
 }
 \examples{
 ## Cholesky sampling via Metropolis-Hastings 
@@ -60,7 +68,7 @@ chol_mh()
 chol_mh(d = 0.5)
 
 # Generate a random acyclic digraph structure
-dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
 igraph::print.igraph(dag)
 
 # Generate a matrix complying with the predefined zero pattern
@@ -74,25 +82,15 @@ chol_iid()
 chol_iid(d = 0.5)
 
 # Generate a random acyclic digraph structure
-dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
 igraph::print.igraph(dag)
 
 # Generate a matrix complying with the predefined zero pattern
 chol_iid(dag = dag)
-## Cholesky sampling via polar parametrization of the Cholesky factor 
+## Cholesky sampling via polar parametrization of the lower Cholesky factor 
 # Generate a full matrix (default behaviour)
 chol_polar()
  
-# Generate a matrix with a percentage of zeros
-chol_polar(d = 0.5)
-
-# Generate a random acyclic digraph structure
-dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
-igraph::print.igraph(dag)
-
-# Generate a matrix complying with the predefined zero pattern
-chol_polar(dag = dag)
-
 # Performance comparison of numeric vs recursive integral (full matrix)
 system.time(chol_polar(N = 10, p = 5))
 system.time(chol_polar(N = 10, p = 5, comp = 'recursive'))
