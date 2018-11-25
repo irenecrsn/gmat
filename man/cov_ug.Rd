@@ -6,10 +6,9 @@
 \alias{diagdom}
 \title{Simulation of covariance matrices.}
 \usage{
-port(N = 1, p = 5, d = 1, ug = NULL, rentries = runif,
-  zapzeros = TRUE)
+port(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE)
 
-diagdom(N = 1, p = 5, d = 1, ug = NULL, rentries = runif)
+diagdom(N = 1, p = 3, d = 1, ug = NULL)
 }
 \arguments{
 \item{N}{Number of samples.}
@@ -20,10 +19,6 @@ diagdom(N = 1, p = 5, d = 1, ug = NULL, rentries = runif)
 entries in the sampled matrices. Ignored if \code{ug} is provided.}
 
 \item{ug}{An \href{https://CRAN.R-project.org/package=igraph}{igraph} undirected graph specifying the zero pattern in the sampled matrices.}
-
-\item{rentries}{Function, the random number generator for
-the
-non-zero entries (defaults to \code{runif})}
 
 \item{zapzeros}{Boolean, convert to zero extremely low entries? Defaults to \code{TRUE}.}
 }
@@ -52,17 +47,32 @@ typically suffer from small off-diagonal entries, which can compromise model
 validation in Gaussian graphical models. This is avoided by \code{port}.
 }
 \examples{
+## Partial orthogonalization
+# Generate a full matrix (default behaviour)
+port()
+ 
+# Generate a matrix with a percentage of zeros
+port(d = 0.5)
+port(d = 0.5, zapzeros = FALSE) # no zero zap
 
 # Generate a random undirected graph structure
-ug <- rgraph(p = 3, d = 0.25)
+ug <- rgraph(p = 3, d = 0.5)
+igraph::print.igraph(ug)
 
-# Generate 2 matrices complying with such random structure via 
-# partial orthogonalization
-port(N = 2, ug = ug)
+# Generate a matrix complying with the predefined zero pattern
+port(ug = ug)
+port(ug = ug, zapzeros = FALSE) # no zero zap
 
-# Generate 2 matrices complying with such random structure via 
-# diagonal dominance 
-diagdom(N = 2, ug = ug)
+## Diagonal dominance 
+# Generate a full matrix (default behaviour)
+diagdom()
+ 
+# Generate a matrix with a percentage of zeros
+diagdom(d = 0.5)
+
+# Generate a matrix complying with the predefined zero pattern
+igraph::print.igraph(ug)
+diagdom(ug = ug)
 
 }
 \references{

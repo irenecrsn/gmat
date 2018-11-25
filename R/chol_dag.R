@@ -10,8 +10,13 @@
 #' @param N Number of samples.
 #' @param p Matrix dimension. Ignored if `dag` is provided.
 #' @param d Number in `[0,1]`, the proportion of non-zero
-#' entries in the Cholesky factor of the sampled matrices. Ignored if `dag` is provided.
-#' @param dag An [igraph](https://CRAN.R-project.org/package=igraph) acyclic digraph specifying the zero pattern in the Cholesky factor of the sampled matrices. 
+#' entries in the Cholesky factor of the sampled matrices.
+#' Ignored if `dag` is provided. Ignored by [chol_polar()]
+#' @param dag An
+#' [igraph](https://CRAN.R-project.org/package=igraph) acyclic
+#' digraph specifying the zero pattern in the upper Cholesky
+#' factor of the sampled matrices. Nodes must be in ancestral
+#' order, with the first one having no parents. Ignored by [chol_polar()]
 #' @param add_no_chordal Logical, if TRUE when the dag provided is not chordal,
 #' a fill-in is computed, in order to ensure uniform distribution. Ignored if
 #' `dag` or `d` are not provided. Defaults to FALSE.
@@ -28,16 +33,23 @@
 #' Computer Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018. 
 #' 
 #' @examples
+#' ## Cholesky sampling via Metropolis-Hastings 
+#' # Generate a full matrix (default behaviour)
+#' chol_mh()
+#'  
+#' # Generate a matrix with a percentage of zeros
+#' chol_mh(d = 0.5)
 #'
 #' # Generate a random acyclic digraph structure
-#' dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+#' dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
+#' igraph::print.igraph(dag)
 #'
-#' # Generate 2 matrices via Cholesky decomposition
-#' chol_mh(N = 2, dag = dag)
+#' # Generate a matrix complying with the predefined zero pattern
+#' chol_mh(dag = dag)
 #'
 #' @export
 chol_mh <- function(N = 1,
-                  p = 10,
+                  p = 3,
 				  d = 1,
 				  dag = NULL,
 				  add_no_chordal = FALSE,
@@ -77,12 +89,22 @@ chol_mh <- function(N = 1,
 #' 8:613-636, 2007.
 #'
 #' @examples
-#' # Generate 2 matrices with i.i.d. entries in the Cholesky factor
-#' chol_iid(N = 2, dag = dag)
+#' ## Cholesky sampling via i.i.d. Cholesky factor 
+#' # Generate a full matrix (default behaviour)
+#' chol_iid()
+#'  
+#' # Generate a matrix with a percentage of zeros
+#' chol_iid(d = 0.5)
 #'
+#' # Generate a random acyclic digraph structure
+#' dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
+#' igraph::print.igraph(dag)
+#'
+#' # Generate a matrix complying with the predefined zero pattern
+#' chol_iid(dag = dag)
 #' @export
 chol_iid <- function(N = 1,
-				 p = 10,
+				 p = 3,
 				 d = 1,
 				 dag = NULL) 
 {  	
@@ -120,61 +142,66 @@ chol_iid <- function(N = 1,
 #' computational method to use for sampling the angles for "unifconc" method
 #' 
 #' @details Function [chol_polar()] reparametrizes the Cholesky factor following
-#' the approach by Pourahmadi and Wang (2015).
+#' the approach by Pourahmadi and Wang (2015). In the future, this function will 
+#' also accept a predefined zero pattern via a `dag` argument or a proportion of zeros
+#' via a `d` argument, just as [chol_mh()] and [chol_iid()]. For now these arguments
+#' are ignored in this function.
 #' 
 #' @references Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
 #' Hyperspherical parameterization of the Cholesky factor, _Statistics &
 #' Probability Letters_, 106:5-12, 2015.
 #'
 #' @examples
-#' # Generate 2 matrices using the polar parametrization of the Cholesky factor
-#' chol_polar(N = 2, dag = dag)
-#'
+#' ## Cholesky sampling via polar parametrization of the lower Cholesky factor 
+#' # Generate a full matrix (default behaviour)
+#' chol_polar()
+#'  
+#' # Performance comparison of numeric vs recursive integral (full matrix)
+#' system.time(chol_polar(N = 10, p = 5))
+#' system.time(chol_polar(N = 10, p = 5, comp = 'recursive'))
 #' @export
-chol_polar <- function(N = 1,				 p = 10,
+chol_polar <- function(N = 1,				 p = 3,
 					   d = 1,
 				 dag = NULL,
                  comp = 'numeric') 
 {  	
 	# We generate the dag if a zero pattern is requested
-	if (is.null(dag) == TRUE & d != 1) {
-		dag <- rgraph(p = p, d = d, dag = TRUE)
-	}
-	if (is.null(dag) == FALSE) {
-		p <- length(igraph::V(dag))
-		L_init <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
-	} else {
+	#if (is.null(dag) == TRUE & d != 1) {
+	#	dag <- rgraph(p = p, d = d, dag = TRUE)
+	#}
+	#if (is.null(dag) == FALSE) {
+	#	p <- length(igraph::V(dag))
+	#	L_init <- t(igraph::as_adjacency_matrix(dag, sparse = FALSE))
+	#} else {
 		L_init <- matrix(nrow = p, ncol = p, data = 0)
-		L_init[upper.tri(L_init)] <- 1
-	}
+		L_init[lower.tri(L_init)] <- 1
+	#}
 	diag(L_init) <- 1
 	R <- array(dim = c(p, p, N))
 
 	for (n in 1:N) {
-		U <- .rcoef_polar(p = p, method = comp, L = L_init)
-		R[, , n] <- tcrossprod(U)
+		L <- .rcoef_polar(p = p, method = comp, L = L_init)
+		R[, , n] <- tcrossprod(L)
 	}
 
    	return(R)
 }
 
-.rcoef_polar <- function(p = 100,
-                         method = 'numeric',
-						 L) 
+.rcoef_polar <- function(p, method, L) 
 {	
 	theta <- matrix(nrow = p, ncol = p, data = 0)
 	theta[lower.tri(theta)] <- pi/2
 
-	for (icol in 1:(p - 1)) {
-		for (irow in (icol + 1):p) {
-			if (L[irow, icol] != 0) {
-				theta[irow, icol] <- .rsin(n = 1, k = p - icol, method = method)
-				L[irow, icol] <- cos(theta[irow, icol])
-			} 
+	for (j in 1:(p - 1)) {
+		for (i in (j + 1):p) {
+			#if (L[i, j] != 0) {
+				theta[i, j] <- .rsin(n = 1, k = p - j, method = method)
+				L[i, j] <- cos(theta[i, j])
+			#} 
 		}
-		if (icol >= 2) {
-			for (j in 1:(icol - 1)) {
-				L[icol:p, icol] <- L[icol:p, icol] * sin(theta[icol:p, j])
+		if (j >= 2) {
+			for (k in 1:(j - 1)) {
+				L[j:p, j] <- L[j:p, j] * sin(theta[j:p, k])
 			}
 		}
 	}
@@ -200,9 +227,10 @@ chol_polar <- function(N = 1,				 p = 10,
 	if (method == "numeric") {
 		const <- stats::integrate(.sin_k, lower = 0, upper = pi, k = k)$value
 		return(stats::integrate(.sin_k, lower = 0, upper = x, k = k)$value / const)
+	} else {
+		const <- .sin_int(pi, k)
+		return(.sin_int(x, k) / const)
 	}
-	const <- .sin_int(pi, k)
-	return(.sin_int(x, k) / const)
 }
 
 .sin_int <- function(x, k = 1){
@@ -250,7 +278,7 @@ chol_polar <- function(N = 1,				 p = 10,
 #'
 #' @export
 mh_full <- function(N = 1,
-                    p = 10,
+                    p = 3,
 					dag = NULL,
                     h = 100,
                     eps = 0.1) {
