@@ -5,7 +5,7 @@
 \title{Full Metropolis-Hastings algorithm for correlation matrices/
 Gaussian Bayesian networks}
 \usage{
-mh_full(N = 1, p = 10, dag = NULL, h = 100, eps = 0.1)
+mh_full(N = 1, p = 3, dag = NULL, h = 100, eps = 0.1)
 }
 \arguments{
 \item{N}{Number of samples}

@@ -28,16 +28,23 @@
 #' Computer Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018. 
 #' 
 #' @examples
+#' ## Cholesky sampling via Metropolis-Hastings 
+#' # Generate a full matrix (default behaviour)
+#' chol_mh()
+#'  
+#' # Generate a matrix with a percentage of zeros
+#' chol_mh(d = 0.5)
 #'
 #' # Generate a random acyclic digraph structure
 #' dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+#' igraph::print.igraph(dag)
 #'
-#' # Generate 2 matrices via Cholesky decomposition
-#' chol_mh(N = 2, dag = dag)
+#' # Generate a matrix complying with the predefined zero pattern
+#' chol_mh(dag = dag)
 #'
 #' @export
 chol_mh <- function(N = 1,
-                  p = 10,
+                  p = 3,
 				  d = 1,
 				  dag = NULL,
 				  add_no_chordal = FALSE,
@@ -77,12 +84,22 @@ chol_mh <- function(N = 1,
 #' 8:613-636, 2007.
 #'
 #' @examples
-#' # Generate 2 matrices with i.i.d. entries in the Cholesky factor
-#' chol_iid(N = 2, dag = dag)
+#' ## Cholesky sampling via i.i.d. Cholesky factor 
+#' # Generate a full matrix (default behaviour)
+#' chol_iid()
+#'  
+#' # Generate a matrix with a percentage of zeros
+#' chol_iid(d = 0.5)
 #'
+#' # Generate a random acyclic digraph structure
+#' dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+#' igraph::print.igraph(dag)
+#'
+#' # Generate a matrix complying with the predefined zero pattern
+#' chol_iid(dag = dag)
 #' @export
 chol_iid <- function(N = 1,
-				 p = 10,
+				 p = 3,
 				 d = 1,
 				 dag = NULL) 
 {  	
@@ -127,11 +144,21 @@ chol_iid <- function(N = 1,
 #' Probability Letters_, 106:5-12, 2015.
 #'
 #' @examples
-#' # Generate 2 matrices using the polar parametrization of the Cholesky factor
-#' chol_polar(N = 2, dag = dag)
+#' ## Cholesky sampling via polar parametrization of the Cholesky factor 
+#' # Generate a full matrix (default behaviour)
+#' chol_polar()
+#'  
+#' # Generate a matrix with a percentage of zeros
+#' chol_polar(d = 0.5)
 #'
+#' # Generate a random acyclic digraph structure
+#' dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+#' igraph::print.igraph(dag)
+#'
+#' # Generate a matrix complying with the predefined zero pattern
+#' chol_polar(dag = dag)
 #' @export
-chol_polar <- function(N = 1,				 p = 10,
+chol_polar <- function(N = 1,				 p = 3,
 					   d = 1,
 				 dag = NULL,
                  comp = 'numeric') 
@@ -158,7 +185,7 @@ chol_polar <- function(N = 1,				 p = 10,
    	return(R)
 }
 
-.rcoef_polar <- function(p = 100,
+.rcoef_polar <- function(p = 30,
                          method = 'numeric',
 						 L) 
 {	
@@ -250,7 +277,7 @@ chol_polar <- function(N = 1,				 p = 10,
 #'
 #' @export
 mh_full <- function(N = 1,
-                    p = 10,
+                    p = 3,
 					dag = NULL,
                     h = 100,
                     eps = 0.1) {

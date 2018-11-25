@@ -7,12 +7,12 @@
 \alias{chol_polar}
 \title{Simulation of correlation matrices}
 \usage{
-chol_mh(N = 1, p = 10, d = 1, dag = NULL, add_no_chordal = FALSE,
+chol_mh(N = 1, p = 3, d = 1, dag = NULL, add_no_chordal = FALSE,
   ...)
 
-chol_iid(N = 1, p = 10, d = 1, dag = NULL)
+chol_iid(N = 1, p = 3, d = 1, dag = NULL)
 
-chol_polar(N = 1, p = 10, d = 1, dag = NULL, comp = "numeric")
+chol_polar(N = 1, p = 3, d = 1, dag = NULL, comp = "numeric")
 }
 \arguments{
 \item{N}{Number of samples.}
@@ -52,19 +52,46 @@ Function \code{\link[=chol_polar]{chol_polar()}} reparametrizes the Cholesky fac
 the approach by Pourahmadi and Wang (2015).
 }
 \examples{
+## Cholesky sampling via Metropolis-Hastings 
+# Generate a full matrix (default behaviour)
+chol_mh()
+ 
+# Generate a matrix with a percentage of zeros
+chol_mh(d = 0.5)
 
 # Generate a random acyclic digraph structure
 dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+igraph::print.igraph(dag)
 
-# Generate 2 matrices via Cholesky decomposition
-chol_mh(N = 2, dag = dag)
+# Generate a matrix complying with the predefined zero pattern
+chol_mh(dag = dag)
 
-# Generate 2 matrices with i.i.d. entries in the Cholesky factor
-chol_iid(N = 2, dag = dag)
+## Cholesky sampling via i.i.d. Cholesky factor 
+# Generate a full matrix (default behaviour)
+chol_iid()
+ 
+# Generate a matrix with a percentage of zeros
+chol_iid(d = 0.5)
 
-# Generate 2 matrices using the polar parametrization of the Cholesky factor
-chol_polar(N = 2, dag = dag)
+# Generate a random acyclic digraph structure
+dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+igraph::print.igraph(dag)
 
+# Generate a matrix complying with the predefined zero pattern
+chol_iid(dag = dag)
+## Cholesky sampling via polar parametrization of the Cholesky factor 
+# Generate a full matrix (default behaviour)
+chol_polar()
+ 
+# Generate a matrix with a percentage of zeros
+chol_polar(d = 0.5)
+
+# Generate a random acyclic digraph structure
+dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+igraph::print.igraph(dag)
+
+# Generate a matrix complying with the predefined zero pattern
+chol_polar(dag = dag)
 }
 \references{
 Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
