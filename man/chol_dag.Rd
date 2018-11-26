@@ -5,24 +5,29 @@
 \alias{chol_mh}
 \alias{chol_iid}
 \alias{chol_polar}
-\title{Sample random correlation matrices}
+\title{Simulation of correlation matrices}
 \usage{
-chol_mh(N = 1, p = 10, d = 1, dag = NULL, add_no_chordal = FALSE,
+chol_mh(N = 1, p = 3, d = 1, dag = NULL, add_no_chordal = FALSE,
   ...)
 
-chol_iid(N = 1, p = 10, d = 1, dag = NULL)
+chol_iid(N = 1, p = 3, d = 1, dag = NULL)
 
-chol_polar(N = 1, p = 10, d = 1, dag = NULL, comp = "numeric")
+chol_polar(N = 1, p = 3, d = 1, dag = NULL, comp = "numeric")
 }
 \arguments{
 \item{N}{Number of samples.}
 
-\item{p}{Matrix dimension. Ignored if \code{ug} is provided.}
+\item{p}{Matrix dimension. Ignored if \code{dag} is provided.}
 
 \item{d}{Number in \code{[0,1]}, the proportion of non-zero
-entries in the Cholesky factor of the sampled matrices. Ignored if \code{ug} is provided.}
+entries in the Cholesky factor of the sampled matrices.
+Ignored if \code{dag} is provided. Ignored by \code{\link[=chol_polar]{chol_polar()}}}
 
-\item{dag}{A directed acyclic graph specifying the zero pattern in the Cholesky factor of the sampled matrices.}
+\item{dag}{An
+\href{https://CRAN.R-project.org/package=igraph}{igraph} acyclic
+digraph specifying the zero pattern in the upper Cholesky
+factor of the sampled matrices. Nodes must be in ancestral
+order, with the first one having no parents. Ignored by \code{\link[=chol_polar]{chol_polar()}}}
 
 \item{add_no_chordal}{Logical, if TRUE when the dag provided is not chordal,
 a fill-in is computed, in order to ensure uniform distribution. Ignored if
@@ -37,46 +42,69 @@ computational method to use for sampling the angles for "unifconc" method}
 A three-dimensional array of length \code{p x p x N}
 }
 \description{
-Sample correlation matrices, possibly with a zero pattern constrained by an
-acyclic digraph.
+Sample correlation matrices, possibly with a zero pattern in its Cholesky
+decomposition constrained by an acyclic digraph.
 }
 \details{
-Function \code{rgbn_chol} uses the method described in Córdoba et al.
+Function \code{\link[=chol_mh]{chol_mh()}} uses the method described in Córdoba et al.
 (2018), based on a Metropolis-Hastings algorithm over the upper Cholesky
 factorization.
 
 The entries in the upper Cholesky factor are sampled i.i.d. by
-function \code{rgbn_iid}, following Kalisch and Buhlmann (2007).
+function \code{\link[=chol_iid]{chol_iid()}}, following Kalisch and Buhlmann (2007).
 
-Function \code{rgbn_polar} reparametrizes the Cholesky factor following
-the approach by Pourahmadi and Wang (2015).
+Function \code{\link[=chol_polar]{chol_polar()}} reparametrizes the Cholesky factor following
+the approach by Pourahmadi and Wang (2015). In the future, this function will
+also accept a predefined zero pattern via a \code{dag} argument or a proportion of zeros
+via a \code{d} argument, just as \code{\link[=chol_mh]{chol_mh()}} and \code{\link[=chol_iid]{chol_iid()}}. For now these arguments
+are ignored in this function.
 }
 \examples{
+## Cholesky sampling via Metropolis-Hastings 
+# Generate a full matrix (default behaviour)
+chol_mh()
+ 
+# Generate a matrix with a percentage of zeros
+chol_mh(d = 0.5)
 
 # Generate a random acyclic digraph structure
-dag <- rgraph(p = 3, d = 0.25, dag = TRUE)
+dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
+igraph::print.igraph(dag)
 
-# Generate 2 matrices via Cholesky decomposition
-chol_mh(N = 2, dag = dag)
+# Generate a matrix complying with the predefined zero pattern
+chol_mh(dag = dag)
 
-# Generate 2 matrices with i.i.d. entries in the Cholesky factor
-chol_iid(N = 2, dag = dag)
+## Cholesky sampling via i.i.d. Cholesky factor 
+# Generate a full matrix (default behaviour)
+chol_iid()
+ 
+# Generate a matrix with a percentage of zeros
+chol_iid(d = 0.5)
 
-# Generate 2 matrices using the polar parametrization of the Cholesky factor
-chol_polar(N = 2, dag = dag)
+# Generate a random acyclic digraph structure
+dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
+igraph::print.igraph(dag)
 
+# Generate a matrix complying with the predefined zero pattern
+chol_iid(dag = dag)
+## Cholesky sampling via polar parametrization of the lower Cholesky factor 
+# Generate a full matrix (default behaviour)
+chol_polar()
+ 
+# Performance comparison of numeric vs recursive integral (full matrix)
+system.time(chol_polar(N = 10, p = 5))
+system.time(chol_polar(N = 10, p = 5, comp = 'recursive'))
 }
 \references{
 Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
-Metropolis-Hastings method for generating random correlation matrices. Intelligent Data
-Engineering and Automated Learning – IDEAL 2018. Lecture Notes in
-Computer Science, vol 11314, pp. 117-124, 2018.
+Metropolis-Hastings method for generating random correlation matrices. \emph{Lecture Notes in
+Computer Science} (IDEAL 2018), vol 11314, pp. 117-124, 2018.
 
 Kalisch, M., Buhlmann, P. Estimating high-dimensional directed
-acyclic graphs with the PC-algorithm, Journal of Machine Learning Research,
+acyclic graphs with the PC-algorithm, \emph{Journal of Machine Learning Research},
 8:613-636, 2007.
 
 Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
-Hyperspherical parameterization of the Cholesky factor, Statistics &
-Probability Letters, 106:5-12, 2015.
+Hyperspherical parameterization of the Cholesky factor, \emph{Statistics &
+Probability Letters}, 106:5-12, 2015.
 }

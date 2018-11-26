@@ -4,13 +4,11 @@
 \alias{ug-constrained covariance matrices}
 \alias{port}
 \alias{diagdom}
-\title{Sample random covariance matrices.}
+\title{Simulation of covariance matrices.}
 \usage{
-port(N = 1, p = 5, d = 1, ug = NULL, rentries = runif,
-  zapzeros = TRUE)
+port(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE)
 
-diagdom(N = 1, p = 5, d = 1, ug = NULL, rentries = runif,
-  k = NULL)
+diagdom(N = 1, p = 3, d = 1, ug = NULL)
 }
 \arguments{
 \item{N}{Number of samples.}
@@ -20,26 +18,19 @@ diagdom(N = 1, p = 5, d = 1, ug = NULL, rentries = runif,
 \item{d}{Number in \code{[0,1]}, the proportion of non-zero
 entries in the sampled matrices. Ignored if \code{ug} is provided.}
 
-\item{ug}{An undirected graph specifying the zero pattern in the sampled matrices.}
-
-\item{rentries}{Function, the random number generator for
-the
-non-zero entries (defaults to \code{runif})}
+\item{ug}{An \href{https://CRAN.R-project.org/package=igraph}{igraph} undirected graph specifying the zero pattern in the sampled matrices.}
 
 \item{zapzeros}{Boolean, convert to zero extremely low entries? Defaults to \code{TRUE}.}
-
-\item{k}{real number greater than \code{1}, the desired condition
-number of the matrices in the resulting sample}
 }
 \value{
 A three-dimensional array of length \code{p x p x N}
 }
 \description{
-Samples covariance matrices, possibly with a zero pattern constrained by an
+Sample covariance matrices, possibly with a zero pattern constrained by an
 undirected graph.
 }
 \details{
-Function \code{port} uses the method described in
+Function \code{\link[=port]{port()}} uses the method described in
 Córdoba et al. (2018). In summary, it consists on generating a random
 matrix \code{Q} and performing row-wise orthogonalization such that if \code{i} and \code{j}
 are not adjacent in \code{ug}, then the rows corresponding to such indices are
@@ -48,7 +39,7 @@ introducing unwanted independences. The resulting matrix after the process
 has finished is the cross product of \code{Q}.
 
 We also provide an implementation of the most commonly used in the
-literature \code{diagdom}. By contrast, this method produces a random matrix \code{M}
+literature \code{\link[=diagdom]{diagdom()}}. By contrast, this method produces a random matrix \code{M}
 with zeros corresponding to missing edges in \code{ug}, and then enforces a
 dominant diagonal to ensure positive definiteness. Matrices produced by
 \code{diagdom} usually are better conditioned than those by \code{port}; however, they
@@ -56,17 +47,32 @@ typically suffer from small off-diagonal entries, which can compromise model
 validation in Gaussian graphical models. This is avoided by \code{port}.
 }
 \examples{
+## Partial orthogonalization
+# Generate a full matrix (default behaviour)
+port()
+ 
+# Generate a matrix with a percentage of zeros
+port(d = 0.5)
+port(d = 0.5, zapzeros = FALSE) # no zero zap
 
 # Generate a random undirected graph structure
-ug <- rgraph(p = 3, d = 0.25)
+ug <- rgraph(p = 3, d = 0.5)
+igraph::print.igraph(ug)
 
-# Generate 2 matrices complying with such random structure via 
-# partial orthogonalization
-port(N = 2, ug = ug)
+# Generate a matrix complying with the predefined zero pattern
+port(ug = ug)
+port(ug = ug, zapzeros = FALSE) # no zero zap
 
-# Generate 2 matrices complying with such random structure via 
-# diagonal dominance 
-diagdom(N = 2, ug = ug)
+## Diagonal dominance 
+# Generate a full matrix (default behaviour)
+diagdom()
+ 
+# Generate a matrix with a percentage of zeros
+diagdom(d = 0.5)
+
+# Generate a matrix complying with the predefined zero pattern
+igraph::print.igraph(ug)
+diagdom(ug = ug)
 
 }
 \references{

@@ -15,3 +15,6 @@ A \code{p*(p - 1)/2 x N} matrix containing the vectorized sample
 \description{
 Vectorize a sample of covariance/correlation matrices
 }
+\details{
+Note that if the sample is of covariance matrices, as returned by \code{\link[=port]{port()}} and \code{\link[=diagdom]{diagdom()}}, the diagonal is omitted from the vectorization process.
+}

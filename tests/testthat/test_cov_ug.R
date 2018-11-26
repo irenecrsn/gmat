@@ -3,68 +3,71 @@ context("SPD matrices, possibly with a zero pattern")
 test_that("the size of the sample is correct", {
 	N <- 10; p <- 5; d <- 0.25;
 
+	check_sample_size <- function(N, ...) {
+		sample <- port(N = N, ...)
+		expect_equal(dim(sample)[3], N)
+		sample <- diagdom(N = N, ...)
+		expect_equal(dim(sample)[3], N)
+	}
+
 	# no zeros
-	sample <- port(N = N, p = p)
-	expect_equal(dim(sample)[3], N)
-	sample <- diagdom(N = N, p = p)
-	expect_equal(dim(sample)[3], N)
+	check_sample_size(N = N, p = p)
 
 	# with a percentage of zeros
-	sample <- port(N = N, p = p, d = d)
-	expect_equal(dim(sample)[3], N)
-	sample <- diagdom(N = N, p = p, d = d)
-	expect_equal(dim(sample)[3], N)
+	check_sample_size(N = N, p = p, d = d)
 
 	# with a predefined pattern of zeros
 	ug <- rgraph(p = p, d = d)
-	sample <- port(N = N, ug = ug)
-	expect_equal(dim(sample)[3], N)
-	sample <- diagdom(N = N, ug = ug)
-	expect_equal(dim(sample)[3], N)
+	check_sample_size(N = N, ug = ug)
 })
 
-test_that("matrices are symmetric positive definite", {
+test_that("matrix dimension is correct", {
 	N <- 10; p <- 5; d <- 0.25;
+
+	check_matrix_dim <- function(N, p_exp, ...) {
+		sample <- port(N = N, ...)
+		expect_equal(dim(sample)[1], dim(sample)[2])
+		expect_equal(dim(sample)[1], p_exp)
+		sample <- diagdom(N = N, ...)
+		expect_equal(dim(sample)[1], dim(sample)[2])
+		expect_equal(dim(sample)[1], p_exp)
+	}
 	
 	# no zeros
-	sample <- port(N = N, p = p) 
-	for (n in 1:N) {
-		expect_equal(sample[, , n], t(sample[, , n]))
-		# here we do not test positive definiteness since 
-		# sometimes condition numbers are very high
-	}
-	sample <- diagdom(N = N, p = p)
-	for (n in 1:N) {
-		expect_equal(sample[, , n], t(sample[, , n]))
-		expect_gt(min(eigen(sample[, , n])$values), 0)
-	}
+	check_matrix_dim(N = N, p_exp = p, p = p)
 
 	# with a percentage of zeros
-	sample <- port(N = N, p = p, d = d) 
-	for (n in 1:N) {
-		expect_equal(sample[, , n], t(sample[, , n]))
+	check_matrix_dim(N = N, p_exp = p, p = p, d = d)
+
+	# with a predefined pattern of zeros
+	ug <- rgraph(p = p, d = d)
+	check_matrix_dim(N = N, p_exp = p, ug = ug)
+})
+
+
+test_that("matrices are symmetric positive definite", {
+	p <- 5; d <- 0.25;
+
+	check_spd <- function(...) {
+
+		sample <- port(...) 
+		expect_equal(sample[, , 1], t(sample[, , 1]))
 		# here we do not test positive definiteness since 
 		# sometimes condition numbers are very high
+		sample <- diagdom(...)
+		expect_equal(sample[, , 1], t(sample[, , 1]))
+		expect_gt(min(eigen(sample[, , 1])$values), 0)
 	}
-	sample <- diagdom(N = N, p = p, d = d)
-	for (n in 1:N) {
-		expect_equal(sample[, , n], t(sample[, , n]))
-		expect_gt(min(eigen(sample[, , n])$values), 0)
-	}
+
+	# no zeros
+	check_spd(p = p)
+
+	# with a percentage of zeros
+	check_spd(p = p, d = d)
 	
 	# with a predefined zero pattern 
 	ug <- rgraph(p = p, d = d)
-	sample <- port(N = N, ug = ug) 
-	for (n in 1:N) {
-		expect_equal(sample[, , n], t(sample[, , n]))
-		# here we do not test positive definiteness since 
-		# sometimes condition numbers are very high
-	}
-	sample <- diagdom(N = N, ug = ug)
-	for (n in 1:N) {
-		expect_equal(sample[, , n], t(sample[, , n]))
-		expect_gt(min(eigen(sample[, , n])$values), 0)
-	}
+	check_spd(ug = ug)
 })
 
 test_that("selective gram schmidt actually selects", {
@@ -91,7 +94,7 @@ test_that("selective gram schmidt actually selects", {
 })
 
 test_that("the graph structure is preserved", {
-	N <- 10; p <- 5; d <- 0.25;
+	p <- 5; d <- 0.25;
 
 	expect_equal_ug <- function(m, ug) {
 		madj <- igraph::as_adjacency_matrix(ug, sparse = FALSE)
@@ -102,38 +105,11 @@ test_that("the graph structure is preserved", {
 
 	ug <- rgraph(p = p, d = d)
 
-	sample <- port(N = N, ug = ug)
-	for (n in 1:N) {
-		expect_equal_ug(m = sample[, , n], ug = ug)
-	}
+	sample <- port(ug = ug)
+	expect_equal_ug(m = sample[, , 1], ug = ug)
 
-	sample <- diagdom(N = N, ug = ug)
-	for (n in 1:N) {
-		expect_equal_ug(m = sample[, , n], ug = ug)
-	}
+	sample <- diagdom(ug = ug)
+	expect_equal_ug(m = sample[, , 1], ug = ug)
 })
-
-test_that("the condition number is controlled", {
-	N <- 10; p <- 5; d <- 0.25; k <- 5;
-
-	# no zeros
-	sample <- diagdom(N = N, p = p, k = k)
-	for (n in 1:N) {
-		expect_equal(kappa(sample[, , n], exact = TRUE), k)
-	}
-	# with a percentage of zeros
-	sample <- diagdom(N = N, p = p, d = d, k = k)
-	for (n in 1:N) {
-		expect_equal(kappa(sample[, , n], exact = TRUE), k)
-	}
-	# with a predefined zero pattern 
-	ug <- rgraph(p = p, d = d)
-	sample <- diagdom(N = N, ug = ug, k = k)
-	for (n in 1:N) {
-		expect_equal(kappa(sample[, , n], exact = TRUE), k)
-	}
-})
-
-
 
 
