@@ -59,7 +59,7 @@ chol_mh <- function(N = 1,
 		if (d != 1) {
 			dag <- rgraph(p = p, d = d, dag = TRUE)
 		} else {
-			sU <- mh_full(N = N, p = p, ...)
+			sU <- .rcoef_mh(N = N, p = p, ...)
 		}
 	} 
 	if (is.null(dag) == FALSE) {
@@ -71,7 +71,7 @@ chol_mh <- function(N = 1,
     			dag <- igraph::add_edges(dag, edges = isCh$fillin)
    			}
 		}
-  		sU <- mh_full(N = N, dag = dag, ...)
+  		sU <- .rcoef_mh(N = N, dag = dag, ...)
 	}
   vsC <- apply(sU, MARGIN = 3, tcrossprod)
   sC <- array(data = vsC, dim = dim(sU))
@@ -267,17 +267,7 @@ chol_polar <- function(N = 1,				 p = 3,
 }
 
 
-#' Full Metropolis-Hastings algorithm for correlation matrices/
-#' Gaussian Bayesian networks
-#'
-#' @param N Number of samples
-#' @param p Number of variables in the saturated model. This parameter is ignored if `dag` is provided
-#' @param dag Acyclic digraph of the GBN to sample
-#' @param h Burn-in phase
-#' @param eps Perturbation variance
-#'
-#' @export
-mh_full <- function(N = 1,
+.rcoef_mh <- function(N = 1,
                     p = 3,
 					dag = NULL,
                     h = 100,
@@ -296,7 +286,7 @@ mh_full <- function(N = 1,
 
 	if (is.null(dag) == TRUE) {
   		for (i in 1:(p - 1)) {
-    		su <- mh_row(N = N,	p = p - i + 1, i = i, h = h, eps = eps)
+    		su <- mh_sphere(N = N,	p = p - i + 1, i = i, h = h, eps = eps)
     		U[i, i:p, 1:N] <- t(su)
   		}
 	} else {
@@ -304,7 +294,7 @@ mh_full <- function(N = 1,
   		ch <- igraph::degree(dag, mode = "out")
   		pa <- igraph::degree(dag, mode = "in")
   		for (j in 1:(p-1)) {
-    		su <- mh_row(N = N, p = ch[j] + 1, i = pa[j] + 1, h = h, eps=eps)
+    		su <- mh_sphere(N = N, p = ch[j] + 1, i = pa[j] + 1, h = h, eps=eps)
     		U[j, U[j, , 1] > 0, 1:N] <- t(su)
   		}
 	}
@@ -312,24 +302,33 @@ mh_full <- function(N = 1,
 }
 
 
-#' sampling on sphere proportionally to a power of the first coordinate
+#' Sampling on sphere proportionally to a power of the first coordinate
+#'  
+#' Metropolis-Hasting algorithm to sample in the
+#' `p`-dimensional hemisphere.
 #' 
-#' @param N sample size
-#' @param p dimension
-#' @param i exponent of the density
-#' @param eps Perturbation variance
-#' @param returnAll Include in the output samples from the heat-in phase
-#' @param h heating phase size
+#' @param N Number of samples.
+#' @param p Dimension of the hemisphere.
+#' @param i Integer, power of the first coordinate in the density.
+#' @param eps Perturbation variance.
+#' @param h Heating phase size
+#'
+#' @author Gherardo Varando \email{gherardo.varando@math.ku.dk}
 #' 
-#'  Metropolis-Hasting algorithm to sample in the n dimensional semi-sphere (x_1>0)  
+#' @details The details of the algorithm can be found in the paper Córdoba et al. (2018), including a discussion on theoretical convergence and numerical experiments for choosing its hyper parameters.
+#' 
+#' @references Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
+#' Metropolis-Hastings method for generating random correlation matrices. _Lecture Notes in
+#' Computer Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018. 
+#' @examples
+#' mh_sphere(N = 4, p = 3, i = 2)
 #' @export
-mh_row <-
+mh_sphere <-
   function(N = 1,
            p,
            i = 1,
            h = 100,
-           eps = 0.01,
-           returnAll = FALSE) {
+           eps = 0.01) {
     Tot <- h + N #total number of iteration of MH
     Sample <- matrix(nrow = Tot, ncol = p) #obj initialization
     Sample[1, ] <- rnorm(n = p, mean = 0, sd = 1) #first point
@@ -348,9 +347,7 @@ mh_row <-
         Sample[j, ] <- Sample[j - 1 ,]
       }
     }
-    if (returnAll == FALSE) {
-      Sample <- Sample[(h + 1):Tot, ]
-    }
+   Sample <- Sample[(h + 1):Tot, ]
     
     return(Sample)
   }
