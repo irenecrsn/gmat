@@ -6,14 +6,29 @@ cache: packages
 branches:
     only:
         - master
-os:
-    - linux
-      #    - osx
-r:
-    - oldrel
-    - release
-    - devel
-install:
-  - if [ $TRAVIS_OS_NAME = osx ]; then brew install libgit2; fi
-before_script:
-  - Rscript -e 'install.packages(c("igraph", "testthat"))'
+        - dev
+matrix:
+    include:
+        - os: linux
+          r: release
+          before_deploy: Rscript -e 'install.packages("pkgdown")'
+          deploy:
+            provider: script
+            script: Rscript -e 'pkgdown::deploy_site_github(verbose = TRUE)'
+            skip_cleanup: true
+            on: 
+                all_branches: true
+        - os: linux
+          r: oldrel 
+        - os: linux
+          r: devel
+        - os: osx
+          r: release
+        - os: osx
+          r: oldrel
+r_packages:
+    - covr
+    - igraph
+    - testthat
+after_success:
+    - Rscript -e 'covr::codecov()'

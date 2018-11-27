@@ -1,3 +1,5 @@
-README.html
 *.Rproj
 .Rproj.user
+.Rhistory
+src/*.so
+src/*.o

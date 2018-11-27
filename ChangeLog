@@ -1,3 +1,27 @@
 2018-09-18 Irene Córdoba <irene.cordoba@upm.es>
 
-* functions.R: doc fixes.
+* functions.R: Doc fixes.
+* rgmat.Rd: Regenerated.
+
+2018-11-07 Gherardo Varando <gherardo.varando@gmail.com> 
+
+* README.md: Update citation, link and installation instructions.
+
+2018-11-07 Irene Córdoba <irene.cordoba@upm.es>
+
+* functions.R: Explicit use of :: for igraph functions.
+* gmat.R: Removed import of igraph package.
+* NAMESPACE: Regenerated.
+
+* functions.R: Doc descriptive update.
+* rgmat.Rd: Regenerated.
+
+2018-11-14 Irene Córdoba <irene.cordoba@upm.es>
+
+* README.md: Update installation instructions.
+
+* DESCRIPTION: Incorporated acyclic digraphs to description.
+
+2018-11-16 Irene Córdoba <irene.cordoba@upm.es>
+* README.md: Removed references already in the doc and updated description. 
+
