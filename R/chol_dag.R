@@ -73,7 +73,7 @@ chol_mh <- function(N = 1,
 		}
   		sU <- .rcoef_mh(N = N, dag = dag, ...)
 	}
-  vsC <- apply(sU, MARGIN = 3, tcrossprod)
+  vsC <- apply(sU, MARGIN = 3, crossprod)
   sC <- array(data = vsC, dim = dim(sU))
   
   return(sC)
@@ -129,7 +129,7 @@ chol_iid <- function(N = 1,
 		L[L != 0] <- - runif(n = n_edges, min = 0.1, max = 1)
 		diag(L) <- 1
 		D <- diag(x = runif(p, 0.1, 1))
-		Omega <- t(L) %*% solve(D) %*% L 
+		Omega <- (L) %*% solve(D) %*% t(L) 
 		R[, , n] <- stats::cov2cor(Omega) 
 	}
 
@@ -166,16 +166,19 @@ chol_polar <- function(N = 1,				 p = 3,
                  comp = 'numeric') 
 {  	
 	# We generate the dag if a zero pattern is requested
-	#if (is.null(dag) == TRUE & d != 1) {
-	#	dag <- rgraph(p = p, d = d, dag = TRUE)
-	#}
-	#if (is.null(dag) == FALSE) {
-	#	p <- length(igraph::V(dag))
-	#	L_init <- t(igraph::as_adjacency_matrix(dag, sparse = FALSE))
-	#} else {
-		L_init <- matrix(nrow = p, ncol = p, data = 0)
-		L_init[lower.tri(L_init)] <- 1
-	#}
+  if (is.null(dag) == TRUE &
+      d != 1) {
+    dag <- rgraph(p = p, d = d, dag = TRUE)
+  }
+  if (is.null(dag) == FALSE) {
+    p <- length(igraph::V(dag))
+    L_init <- t(igraph::as_adjacency_matrix(dag, sparse = FALSE))
+  } else {
+    L_init <- matrix(nrow = p,
+                     ncol = p,
+                     data = 0)
+    L_init[lower.tri(L_init)] <- 1
+  }
 	diag(L_init) <- 1
 	R <- array(dim = c(p, p, N))
 
@@ -188,16 +191,16 @@ chol_polar <- function(N = 1,				 p = 3,
 }
 
 .rcoef_polar <- function(p, method, L) 
-{	
+{
 	theta <- matrix(nrow = p, ncol = p, data = 0)
 	theta[lower.tri(theta)] <- pi/2
 
 	for (j in 1:(p - 1)) {
 		for (i in (j + 1):p) {
-			#if (L[i, j] != 0) {
+			if (L[i, j] != 0) {
 				theta[i, j] <- .rsin(n = 1, k = p - j, method = method)
 				L[i, j] <- cos(theta[i, j])
-			#} 
+			} 
 		}
 		if (j >= 2) {
 			for (k in 1:(j - 1)) {

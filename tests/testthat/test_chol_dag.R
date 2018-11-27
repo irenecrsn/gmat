@@ -128,8 +128,9 @@ test_that("the dag structure is preserved", {
 	p <- 10; d <- 0.25;
 
 	expect_equal_dag <- function(m, dag) {
-		L <- t(chol(anti_t(m)))
-		U <- t(anti_t(L))
+		#L <- t(chol(anti_t(m)))
+		#U <- t(anti_t(L))
+		U <- chol(m)
 		madj <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
 		madj_learned <- zapsmall(U) != 0
 		diag(madj_learned) <- FALSE
@@ -145,7 +146,7 @@ test_that("the dag structure is preserved", {
 	expect_equal_dag(m = sample[, , 1], dag = dag)
 	
 	## Not working for now
-	#sample <- chol_polar(dag = dag)
-	#expect_equal_dag(m = sample[, , 1], dag = dag)
+	sample <- chol_polar(dag = dag)
+	expect_equal_dag(m = sample[, , 1], dag = dag)
 })
 
