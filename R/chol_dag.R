@@ -164,11 +164,11 @@ chol_polar <- function(N = 1,				 p = 3,
 {  	
 	# We generate the dag if a zero pattern is requested
 	if (is.null(dag) == TRUE & d != 1) {
-	dag <- rgraph(p = p, d = d, dag = TRUE)
+	  dag <- rgraph(p = p, d = d, dag = TRUE)
 	}
 	if (is.null(dag) == FALSE) {
-	p <- length(igraph::V(dag))
-	L_init <- t(igraph::as_adjacency_matrix(dag, sparse = FALSE))
+	  p <- length(igraph::V(dag))
+	  L_init <- t(igraph::as_adjacency_matrix(dag, sparse = FALSE))
 	} else {
 		L_init <- matrix(nrow = p, ncol = p, data = 0)
 		L_init[lower.tri(L_init)] <- 1

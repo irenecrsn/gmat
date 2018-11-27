@@ -9,10 +9,8 @@ test_that("the size of the sample is correct", {
 		expect_equal(dim(sample)[3], N)
 		sample <- chol_iid(N = N, ...)
 		expect_equal(dim(sample)[3], N)
-		if ("p" %in% names(args)) { # until polar accepts dag
-			sample <- chol_polar(N = N, ...)
-			expect_equal(dim(sample)[3], N)
-		}
+		sample <- chol_polar(N = N, ...)
+		expect_equal(dim(sample)[3], N)
 	}
 
 	# no zeros
@@ -37,11 +35,9 @@ test_that("matrix dimension is correct", {
 		sample <- chol_iid(N = N, ...)
 		expect_equal(dim(sample)[1], dim(sample)[2])
 		expect_equal(dim(sample)[1], p_exp)
-		if ("p" %in% names(args)) { # until polar accepts dag
-			sample <- chol_polar(N = N, ...)
-			expect_equal(dim(sample)[1], dim(sample)[2])
-			expect_equal(dim(sample)[1], p_exp)
-		}
+		sample <- chol_polar(N = N, ...)
+		expect_equal(dim(sample)[1], dim(sample)[2])
+		expect_equal(dim(sample)[1], p_exp)
 	}
 	
 	# no zeros
@@ -69,11 +65,9 @@ test_that("matrices are symmetric positive definite", {
 		expect_equal(sample[, , 1], t(sample[, , 1]))
 		expect_gt(min(eigen(sample[, , 1])$values), 0)
 		
-		if ("p" %in% names(args)) { # until polar accepts dag
-			sample <- chol_polar(...)
-			expect_equal(sample[, , 1], t(sample[, , 1]))
-			expect_gt(min(eigen(sample[, , 1])$values), 0)
-		}
+		sample <- chol_polar(...)
+		expect_equal(sample[, , 1], t(sample[, , 1]))
+		expect_gt(min(eigen(sample[, , 1])$values), 0)
 	}
 
 	# no zeros
@@ -107,10 +101,8 @@ test_that("matrices are of correlation", {
 		check_cor_sample(sample)
 		sample <- chol_iid(...)
 		check_cor_sample(sample)
-		if ("p" %in% names(args)) { # until polar accepts dag
-			sample <- chol_polar(...)
-			check_cor_sample(sample)
-		}
+		sample <- chol_polar(...)
+		check_cor_sample(sample)
 	}
 
 	# no zeros
@@ -144,7 +136,6 @@ test_that("the dag structure is preserved", {
 	sample <- chol_iid(dag = dag)
 	expect_equal_dag(m = sample[, , 1], dag = dag)
 	
-	## Not working for now
 	sample <- chol_polar(dag = dag)
 	expect_equal_dag(m = sample[, , 1], dag = dag)
 })
