@@ -35,6 +35,9 @@ provided.
   percentage of zeros in their upper Cholesky factor, which can be also
   predefined by a given acyclic digraph. See more details at their
   documentation.
+* Function `mh_sphere()`, used by `chol_mh()`, allows to sample vectors on a
+  sphere from a density proportional to a power of the first coordinate. More
+  information on its documentation.
 * Added utility function `rgraph()`, which is a simple wrapper of some
   functionality in package [igraph](https://CRAN.R-project.org/package=igrap)
   for random graph generation.
