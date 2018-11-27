@@ -16,7 +16,7 @@
 #' [igraph](https://CRAN.R-project.org/package=igraph) acyclic
 #' digraph specifying the zero pattern in the upper Cholesky
 #' factor of the sampled matrices. Nodes must be in ancestral
-#' order, with the first one having no parents. Ignored by [chol_polar()]
+#' order, with the first one having no parents. 
 #' @param add_no_chordal Logical, if TRUE when the dag provided is not chordal,
 #' a fill-in is computed, in order to ensure uniform distribution. Ignored if
 #' `dag` or `d` are not provided. Defaults to FALSE.
@@ -26,7 +26,9 @@
 #' (2018), based on a Metropolis-Hastings algorithm over the upper Cholesky
 #' factorization. 
 #'
-#' @return A three-dimensional array of length `p x p x N`
+#' @return A three-dimensional array of length `p x p x N` such that the 
+#' `N` matrices `p x p` have Cholesky factor with the same pattern of zeros 
+#' compatible with a directed acyclic graph. 
 #'
 #' @references Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
 #' Metropolis-Hastings method for generating random correlation matrices. _Lecture Notes in
@@ -142,10 +144,9 @@ chol_iid <- function(N = 1,
 #' computational method to use for sampling the angles for "unifconc" method
 #' 
 #' @details Function [chol_polar()] reparametrizes the Cholesky factor following
-#' the approach by Pourahmadi and Wang (2015). In the future, this function will 
-#' also accept a predefined zero pattern via a `dag` argument or a proportion of zeros
-#' via a `d` argument, just as [chol_mh()] and [chol_iid()]. For now these arguments
-#' are ignored in this function.
+#' the approach by Pourahmadi and Wang (2015). The function  
+#'  accept a predefined zero pattern via a `dag` argument or a proportion of zeros
+#' via a `d` argument, just as [chol_mh()] and [chol_iid()]. 
 #' 
 #' @references Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
 #' Hyperspherical parameterization of the Cholesky factor, _Statistics &
