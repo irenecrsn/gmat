@@ -96,11 +96,8 @@ chol_mh <- function(N = 1,
 #' # Generate a matrix with a percentage of zeros
 #' chol_iid(d = 0.5)
 #'
-#' # Generate a random acyclic digraph structure
-#' dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
-#' igraph::print.igraph(dag)
-#'
 #' # Generate a matrix complying with the predefined zero pattern
+#' igraph::print.igraph(dag)
 #' chol_iid(dag = dag)
 #' @export
 chol_iid <- function(N = 1,
@@ -155,6 +152,13 @@ chol_iid <- function(N = 1,
 #' ## Cholesky sampling via polar parametrization of the lower Cholesky factor 
 #' # Generate a full matrix (default behaviour)
 #' chol_polar()
+#'
+#' # Generate a matrix with a percentage of zeros
+#' chol_polar(d = 0.5)
+#'
+#' # Generate a matrix complying with the predefined zero pattern
+#' igraph::print.igraph(dag)
+#' chol_polar(dag = dag)
 #'  
 #' # Performance comparison of numeric vs recursive integral (full matrix)
 #' system.time(chol_polar(N = 10, p = 5))
