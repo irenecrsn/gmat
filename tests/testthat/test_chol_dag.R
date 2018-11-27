@@ -145,7 +145,7 @@ test_that("the dag structure is preserved", {
 	expect_equal_dag(m = sample[, , 1], dag = dag)
 	
 	## Not working for now
-	#sample <- chol_polar(dag = dag)
-	#expect_equal_dag(m = sample[, , 1], dag = dag)
+	sample <- chol_polar(dag = dag)
+	expect_equal_dag(m = sample[, , 1], dag = dag)
 })
 
