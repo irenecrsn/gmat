@@ -5,7 +5,7 @@
 #' 
 #' @name dag-constrained correlation matrices
 #'
-#' @rdname chol_dag 
+#' @rdname cor_dag 
 #'
 #' @param N Number of samples.
 #' @param p Matrix dimension. Ignored if `dag` is provided.
@@ -79,7 +79,7 @@ chol_mh <- function(N = 1,
   return(sC)
 }
 
-#' @rdname chol_dag
+#' @rdname cor_dag
 #'
 #' @details The entries in the upper Cholesky factor are sampled i.i.d. by
 #' function [chol_iid()], following Kalisch and Buhlmann (2007). 
@@ -133,7 +133,7 @@ chol_iid <- function(N = 1,
     return(R)
 }
 
-#' @rdname chol_dag
+#' @rdname cor_dag
 #'
 #' @param comp String one of "numeric" or "recursive", indicating the
 #' computational method to use for sampling the angles for "unifconc" method
