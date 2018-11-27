@@ -3,7 +3,7 @@
 ## New features
 
 ## Breaking changes
-Arguments for `port` and `diagdom` have been refactored in order to unify the
+Arguments for `port()` and `diagdom()` have been refactored in order to unify the
 approaches for undirected graphs and the new functions for acyclic digraphs.
 This has had some consequences in terms of the behaviour of the two functions.
 
@@ -17,12 +17,13 @@ This has had some consequences in terms of the behaviour of the two functions.
 * The argument `rentries` has been removed for both functions. In the future maybe this
   argument is reintroduced with a more complete checking of its validity
   depending on the properties of the function.
-* The argument `k` has been removed from `diagdom`, and its functionality is now
+* The argument `k` has been removed from `diagdom()`, and its functionality is now
   implemented by the utility function `set_cond_number()`.
 
 ## Minor improvements
-* Updated documentation and examples for `port` and `diagdom`.
-* Now `igraph` package is not imported into the `NAMESPACE`, but instead
-  explicitly called throughout the package using `::`.
+* Updated documentation and examples for `port()` and `diagdom()`.
+* Now [igraph](https://CRAN.R-project.org/package=igrap)h package is not
+  imported into the `NAMESPACE`, but instead explicitly called throughout the
+  package using `::`.
 * Removed a seemingly unnecessary package registration.
 
