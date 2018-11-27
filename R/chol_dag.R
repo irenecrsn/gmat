@@ -16,7 +16,7 @@
 #' [igraph](https://CRAN.R-project.org/package=igraph) acyclic
 #' digraph specifying the zero pattern in the upper Cholesky
 #' factor of the sampled matrices. Nodes must be in ancestral
-#' order, with the first one having no parents. Ignored by [chol_polar()]
+#' order, with the first one having no parents.
 #' @param add_no_chordal Logical, if TRUE when the dag provided is not chordal,
 #' a fill-in is computed, in order to ensure uniform distribution. Ignored if
 #' `dag` or `d` are not provided. Defaults to FALSE.
@@ -142,10 +142,7 @@ chol_iid <- function(N = 1,
 #' computational method to use for sampling the angles for "unifconc" method
 #' 
 #' @details Function [chol_polar()] reparametrizes the Cholesky factor following
-#' the approach by Pourahmadi and Wang (2015). In the future, this function will 
-#' also accept a predefined zero pattern via a `dag` argument or a proportion of zeros
-#' via a `d` argument, just as [chol_mh()] and [chol_iid()]. For now these arguments
-#' are ignored in this function.
+#' the approach by Pourahmadi and Wang (2015).
 #' 
 #' @references Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
 #' Hyperspherical parameterization of the Cholesky factor, _Statistics &
@@ -166,22 +163,22 @@ chol_polar <- function(N = 1,				 p = 3,
                  comp = 'numeric') 
 {  	
 	# We generate the dag if a zero pattern is requested
-	#if (is.null(dag) == TRUE & d != 1) {
-	#	dag <- rgraph(p = p, d = d, dag = TRUE)
-	#}
-	#if (is.null(dag) == FALSE) {
-	#	p <- length(igraph::V(dag))
-	#	L_init <- t(igraph::as_adjacency_matrix(dag, sparse = FALSE))
-	#} else {
+	if (is.null(dag) == TRUE & d != 1) {
+	  dag <- rgraph(p = p, d = d, dag = TRUE)
+	}
+	if (is.null(dag) == FALSE) {
+	  p <- length(igraph::V(dag))
+	  L_init <- t(igraph::as_adjacency_matrix(dag, sparse = FALSE))
+	} else {
 		L_init <- matrix(nrow = p, ncol = p, data = 0)
 		L_init[lower.tri(L_init)] <- 1
-	#}
+	}
 	diag(L_init) <- 1
 	R <- array(dim = c(p, p, N))
 
 	for (n in 1:N) {
 		L <- .rcoef_polar(p = p, method = comp, L = L_init)
-		R[, , n] <- tcrossprod(L)
+		R[, , n] <- crossprod(L)
 	}
 
    	return(R)
@@ -194,10 +191,10 @@ chol_polar <- function(N = 1,				 p = 3,
 
 	for (j in 1:(p - 1)) {
 		for (i in (j + 1):p) {
-			#if (L[i, j] != 0) {
+			if (L[i, j] != 0) {
 				theta[i, j] <- .rsin(n = 1, k = p - j, method = method)
 				L[i, j] <- cos(theta[i, j])
-			#} 
+			} 
 		}
 		if (j >= 2) {
 			for (k in 1:(j - 1)) {
