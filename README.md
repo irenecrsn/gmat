@@ -15,8 +15,6 @@ The package is available on `CRAN`, to get the latest stable version use:
 install.packages("gmat")
 ```
 
-The current version on `CRAN` only includes the methods for undirected graph models.
-
 Alternatively, using the R package `devtools` one may install the development version:
 
 ``` r
@@ -29,32 +27,73 @@ The only R package required for `gmat` is `igraph`, which can also be installed 
 An example of use
 -----------------
 
-First, we generate a random graph with `3` nodes and density `0.25`, using the `igraph` package. Then we generate, using our `gmat::port` function, `3` matrices consistent with such random graphical structure.
+First, we generate a random undirected graph with `3` nodes and density `0.5`. Then we generate, using our `gmat::port` function, `2` matrices consistent with such random graphical structure.
 
 ``` r
-ug <- igraph::sample_gnp(n = 3, p = 0.25)
-matrices <- gmat::port(N = 3, ug = ug)
-matrices
+ug <- gmat::rgraph(p = 3, d = 0.5)
+igraph::print.igraph(ug)
+#> IGRAPH 986892c U--- 3 2 -- Erdos renyi (gnp) graph
+#> + attr: name (g/c), type (g/c), loops (g/l), p (g/n)
+#> + edges from 986892c:
+#> [1] 1--3 2--3
+gmat::port(N = 2, ug = ug)
 #> , , 1
 #> 
-#>           [,1]      [,2]      [,3]
-#> [1,] 0.5346747 0.0000000 0.0000000
-#> [2,] 0.0000000 0.5572111 0.0000000
-#> [3,] 0.0000000 0.0000000 0.5455936
+#>          [,1]      [,2]      [,3]
+#> [1,] 1.038434 0.0000000 1.1385855
+#> [2,] 0.000000 0.6603003 0.5554253
+#> [3,] 1.138586 0.5554253 1.8361219
 #> 
 #> , , 2
 #> 
 #>           [,1]      [,2]      [,3]
-#> [1,] 0.8960595 0.0000000 0.0000000
-#> [2,] 0.0000000 0.1647816 0.0000000
-#> [3,] 0.0000000 0.0000000 0.7255057
-#> 
-#> , , 3
-#> 
-#>          [,1]      [,2]      [,3]
-#> [1,] 0.730354 0.0000000 0.0000000
-#> [2,] 0.000000 0.3280893 0.0000000
-#> [3,] 0.000000 0.0000000 0.2511559
+#> [1,] 0.9460005 0.0000000 0.6489812
+#> [2,] 0.0000000 0.2444352 0.0845033
+#> [3,] 0.6489812 0.0845033 0.9609724
 ```
 
-We apprieciate how the zero pattern is shared by all of the simulated matrices. The return value is an array, and so the individual matrices can be accessed as `matrices[, , n]`, where `n` is the index of the matrix we want to retrieve from the sample, ranging from `1` to `N`.
+We appreciate how the zero pattern is shared by all of the simulated matrices. The return value is an array, and so the individual matrices can be accessed as `matrices[, , n]`, where `n` is the index of the matrix we want to retrieve from the sample, ranging from `1` to `N`.
+
+We may also sample correlation matrices using i.i.d. coefficients in their upper Cholesky factor `U`.
+
+``` r
+gmat::chol_iid(N = 2)
+#> , , 1
+#> 
+#>            [,1]       [,2]       [,3]
+#> [1,]  1.0000000 -0.1366272 -0.6421917
+#> [2,] -0.1366272  1.0000000 -0.5668612
+#> [3,] -0.6421917 -0.5668612  1.0000000
+#> 
+#> , , 2
+#> 
+#>            [,1]        [,2]        [,3]
+#> [1,]  1.0000000 -0.45790243 -0.44317638
+#> [2,] -0.4579024  1.00000000 -0.09992628
+#> [3,] -0.4431764 -0.09992628  1.00000000
+```
+
+A specific zero pattern can be enforced in `U` using an acyclic digraph.
+
+``` r
+dag <- gmat::rgraph(p = 3, d = 0.5, dag = TRUE)
+m <- gmat::chol_iid(dag = dag)[, , 1]
+L <- t(chol(anti_t(m)))
+U <- t(anti_t(L))
+igraph::print.igraph(dag)
+#> IGRAPH 4023763 D--- 3 1 -- 
+#> + edge from 4023763:
+#> [1] 1->3
+print(U)
+#>           [,1] [,2]       [,3]
+#> [1,] 0.9130232    0 -0.4079076
+#> [2,] 0.0000000    1  0.0000000
+#> [3,] 0.0000000    0  1.0000000
+print(m)
+#>            [,1] [,2]       [,3]
+#> [1,]  1.0000000    0 -0.4079076
+#> [2,]  0.0000000    1  0.0000000
+#> [3,] -0.4079076    0  1.0000000
+```
+
+See more examples and paper references at [the documentation website](https://irenecrsn.github.io/gmat/) for the package.
