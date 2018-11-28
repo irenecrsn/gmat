@@ -2,10 +2,7 @@
 % Please edit documentation in R/cor_dag.R
 \name{mh_sphere}
 \alias{mh_sphere}
-\title{Sampling on sphere proportionally to a power of the first coordinate
-
-Metropolis-Hasting algorithm to sample in the
-\code{p}-dimensional hemisphere.}
+\title{Sampling on sphere proportionally to a power of the first coordinate}
 \usage{
 mh_sphere(N = 1, p, i = 1, h = 100, eps = 0.01)
 }
@@ -21,8 +18,6 @@ mh_sphere(N = 1, p, i = 1, h = 100, eps = 0.01)
 \item{eps}{Perturbation variance.}
 }
 \description{
-Sampling on sphere proportionally to a power of the first coordinate
-
 Metropolis-Hasting algorithm to sample in the
 \code{p}-dimensional hemisphere.
 }

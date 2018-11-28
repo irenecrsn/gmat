@@ -57,10 +57,10 @@ Function \code{\link[=chol_polar]{chol_polar()}} reparametrizes the Cholesky fac
 the approach by Pourahmadi and Wang (2015).
 }
 \examples{
-## Cholesky sampling via Metropolis-Hastings 
+## Cholesky sampling via Metropolis-Hastings
 # Generate a full matrix (default behaviour)
 chol_mh()
- 
+
 # Generate a matrix with a percentage of zeros
 chol_mh(d = 0.5)
 
@@ -70,18 +70,17 @@ igraph::print.igraph(dag)
 
 # Generate a matrix complying with the predefined zero pattern
 chol_mh(dag = dag)
-
-## Cholesky sampling via i.i.d. Cholesky factor 
+## Cholesky sampling via i.i.d. Cholesky factor
 # Generate a full matrix (default behaviour)
 chol_iid()
- 
+
 # Generate a matrix with a percentage of zeros
 chol_iid(d = 0.5)
 
 # Generate a matrix complying with the predefined zero pattern
 igraph::print.igraph(dag)
 chol_iid(dag = dag)
-## Cholesky sampling via polar parametrization of the lower Cholesky factor 
+## Cholesky sampling via polar parametrization of the lower Cholesky factor
 # Generate a full matrix (default behaviour)
 chol_polar()
 
@@ -91,10 +90,10 @@ chol_polar(d = 0.5)
 # Generate a matrix complying with the predefined zero pattern
 igraph::print.igraph(dag)
 chol_polar(dag = dag)
- 
+
 # Performance comparison of numeric vs recursive integral (full matrix)
 system.time(chol_polar(N = 10, p = 5))
-system.time(chol_polar(N = 10, p = 5, comp = 'recursive'))
+system.time(chol_polar(N = 10, p = 5, comp = "recursive"))
 }
 \references{
 Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
