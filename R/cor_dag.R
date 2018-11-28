@@ -211,6 +211,7 @@ chol_polar <- function(N = 1, p = 3,
   return(sin(x)^k)
 }
 
+#' @importFrom stats integrate
 .sin_k_cum <- function(x, k, method = "numeric") {
   if (x <= 0) {
     return(0)
@@ -221,8 +222,8 @@ chol_polar <- function(N = 1, p = 3,
   }
 
   if (method == "numeric") {
-    const <- stats::integrate(.sin_k, lower = 0, upper = pi, k = k)$value
-    return(stats::integrate(.sin_k, lower = 0, upper = x, k = k)$value / const)
+    const <- integrate(.sin_k, lower = 0, upper = pi, k = k)$value
+    return(integrate(.sin_k, lower = 0, upper = x, k = k)$value / const)
   } else {
     const <- .sin_int(pi, k)
     return(.sin_int(x, k) / const)
