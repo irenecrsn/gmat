@@ -211,7 +211,6 @@ chol_polar <- function(N = 1, p = 3,
   return(sin(x)^k)
 }
 
-#' @importFrom stats integrate
 .sin_k_cum <- function(x, k, method = "numeric") {
   if (x <= 0) {
     return(0)
