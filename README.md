@@ -78,22 +78,22 @@ A specific zero pattern can be enforced in `U` using an acyclic digraph.
 ``` r
 dag <- gmat::rgraph(p = 3, d = 0.5, dag = TRUE)
 m <- gmat::chol_iid(dag = dag)[, , 1]
-L <- t(chol(anti_t(m)))
-U <- t(anti_t(L))
+L <- t(chol(gmat::anti_t(m)))
+U <- t(gmat::anti_t(L))
 igraph::print.igraph(dag)
-#> IGRAPH 4023763 D--- 3 1 -- 
-#> + edge from 4023763:
-#> [1] 1->3
+#> IGRAPH 3cbf8e0 D--- 3 1 -- 
+#> + edge from 3cbf8e0:
+#> [1] 1->2
 print(U)
-#>           [,1] [,2]       [,3]
-#> [1,] 0.9130232    0 -0.4079076
-#> [2,] 0.0000000    1  0.0000000
-#> [3,] 0.0000000    0  1.0000000
+#>           [,1]      [,2] [,3]
+#> [1,] 0.8979351 -0.440128    0
+#> [2,] 0.0000000  1.000000    0
+#> [3,] 0.0000000  0.000000    1
 print(m)
-#>            [,1] [,2]       [,3]
-#> [1,]  1.0000000    0 -0.4079076
-#> [2,]  0.0000000    1  0.0000000
-#> [3,] -0.4079076    0  1.0000000
+#>           [,1]      [,2] [,3]
+#> [1,]  1.000000 -0.440128    0
+#> [2,] -0.440128  1.000000    0
+#> [3,]  0.000000  0.000000    1
 ```
 
 See more examples and paper references at [the documentation website](https://irenecrsn.github.io/gmat/) for the package.

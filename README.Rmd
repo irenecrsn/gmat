@@ -71,8 +71,8 @@ acyclic digraph.
 ```{r}
 dag <- gmat::rgraph(p = 3, d = 0.5, dag = TRUE)
 m <- gmat::chol_iid(dag = dag)[, , 1]
-L <- t(chol(anti_t(m)))
-U <- t(anti_t(L))
+L <- t(chol(gmat::anti_t(m)))
+U <- t(gmat::anti_t(L))
 igraph::print.igraph(dag)
 print(U)
 print(m)
