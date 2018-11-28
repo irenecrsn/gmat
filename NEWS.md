@@ -1,4 +1,4 @@
-# gmat 0.1.0.9000
+# gmat 0.2.0
 
 In this version the functionality of `gmat` has been significantly extended.
 In addition to the functionality already available for sampling covariance
