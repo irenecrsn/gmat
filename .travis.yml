@@ -28,7 +28,6 @@ matrix:
           r: oldrel
 r_packages:
     - covr
-    - igraph
     - testthat
 after_success:
     - Rscript -e 'covr::codecov()'
