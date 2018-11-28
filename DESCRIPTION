@@ -20,7 +20,9 @@ RoxygenNote: 6.1.1
 ByteCompile: true
 URL: https://github.com/irenecrsn/gmat
 BugReports: https://github.com/irenecrsn/gmat/issues
-Suggests: testthat
+Suggests: 
+	testthat,
+	covr
 Imports:
 	igraph,
 	stats
