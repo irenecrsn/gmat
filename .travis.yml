@@ -11,7 +11,7 @@ matrix:
     include:
         - os: linux
           r: release
-          before_deploy: Rscript -e 'install.packages("pkgdown")'
+          after_success: Rscript -e 'covr::codecov()'
           deploy:
             provider: script
             script: Rscript -e 'pkgdown::deploy_site_github(verbose = TRUE)'
@@ -26,5 +26,4 @@ matrix:
           r: release
         - os: osx
           r: oldrel
-after_success:
-    - Rscript -e 'covr::codecov()'
+
