@@ -4,7 +4,6 @@ test_that("the size of the sample is correct", {
 	N <- 10; p <- 5; d <- 0.25;
 
 	check_sample_size <- function(N, ...) {
-		args <- list(...)
 		sample <- chol_mh(N = N, ...)
 		expect_equal(dim(sample)[3], N)
 		sample <- chol_iid(N = N, ...)
@@ -28,7 +27,6 @@ test_that("matrix dimension is correct", {
 	N <- 10; p <- 5; d <- 0.25;
 
 	check_matrix_dim <- function(N, p_exp, ...) {
-		args <- list(...)
 		sample <- chol_mh(N = N, ...)
 		expect_equal(dim(sample)[1], dim(sample)[2])
 		expect_equal(dim(sample)[1], p_exp)
@@ -56,7 +54,6 @@ test_that("matrices are symmetric positive definite", {
 	p <- 5; d <- 0.25;
 
 	check_spd <- function(...) {
-		args <- list(...)
 		sample <- chol_mh(...) 
 		expect_equal(sample[, , 1], t(sample[, , 1]))
 		expect_gt(min(eigen(sample[, , 1])$values), 0)
@@ -85,7 +82,6 @@ test_that("matrices are of correlation", {
 	p <- 5; d <- 0.25;
 
 	check_cor <- function(...) {
-		args <- list(...)
 		check_cor_sample <- function(sample) {
 			p <- dim(sample)[1]
 			expect_equal(sum(diag(sample[, , 1])), p)
