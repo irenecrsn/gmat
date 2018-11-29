@@ -90,8 +90,8 @@ test_that("matrices are of correlation", {
   check_cor <- function(...) {
     check_cor_sample <- function(sample) {
       p <- dim(sample)[1]
-      expect_equal(sum(diag(sample[, , 1])), p)
       for (i in 1:(p - 1)) {
+		expect_equal(sample[i, i, 1], 1)
         for (j in (i + 1):p) {
           expect_gt(sample[i, j, 1], -1)
           expect_lt(sample[i, j, 1], 1)
