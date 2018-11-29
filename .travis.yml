@@ -3,8 +3,8 @@
 language: R
 cache: packages
 
-env:
-    _R_CHECK_CRAN_INCOMING_=true
+before_install:
+  export _R_CHECK_CRAN_INCOMING_=true
 
 branches:
     only:
