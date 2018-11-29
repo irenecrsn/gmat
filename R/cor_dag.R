@@ -178,8 +178,8 @@ chol_polar <- function(N = 1, p = 3,
   R <- array(dim = c(p, p, N))
 
   for (n in 1:N) {
-    L <- .rcoef_polar(p = p, method = comp, L = L_init)
-    R[, , n] <- crossprod(L)
+    L <- .rcoef_polar(p = p, method = comp, L = (anti_t(L_init)))
+    R[, , n] <- anti_t(tcrossprod(L))
   }
 
   return(R)
