@@ -43,14 +43,16 @@ from CRAN.
 ## An example of use 
 
 First, we generate a random undirected graph with `3` nodes
-and density `0.5`. Then we generate, using our `gmat::port`
+and density `0.5`. Then we generate, using our `port()`
 function, `2` matrices consistent with such random graphical
 structure.
 
 ```{r}
-ug <- gmat::rgraph(p = 3, d = 0.5)
+library(gmat)
+
+ug <- rgraph(p = 3, d = 0.5)
 igraph::print.igraph(ug)
-gmat::port(N = 2, ug = ug)
+port(N = 2, ug = ug)
 ```
 
 We appreciate how the zero pattern is shared by all of the
@@ -64,15 +66,15 @@ We may also sample correlation matrices using i.i.d.
 coefficients in their upper
 Cholesky factor `U`.
 ```{r}
-gmat::chol_iid(N = 2)
+chol_iid(N = 2)
 ```
 A specific zero pattern can be enforced in `U` using an
 acyclic digraph.
 ```{r}
-dag <- gmat::rgraph(p = 3, d = 0.5, dag = TRUE)
-m <- gmat::chol_iid(dag = dag)[, , 1]
-L <- t(chol(gmat::anti_t(m)))
-U <- t(gmat::anti_t(L))
+dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
+m <- chol_iid(dag = dag)[, , 1]
+L <- t(chol(anti_t(m)))
+U <- t(anti_t(L))
 igraph::print.igraph(dag)
 print(U)
 print(m)
