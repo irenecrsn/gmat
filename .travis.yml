@@ -6,7 +6,6 @@ cache: packages
 branches:
     only:
         - master
-        - dev
 matrix:
     include:
         - os: linux
