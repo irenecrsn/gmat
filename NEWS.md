@@ -39,7 +39,7 @@ provided.
   sphere from a density proportional to a power of the first coordinate. More
   information on its documentation.
 * Added utility function `rgraph()`, which is a simple wrapper of some
-  functionality in package [igraph](https://CRAN.R-project.org/package=igrap)
+  functionality in package [igraph](https://CRAN.R-project.org/package=igraph)
   for random graph generation.
 * New function `anti_t()` computes the anti transpose of a matrix. This is
   mainly useful for testing, since it is involved in the acyclic digraph
@@ -50,7 +50,7 @@ provided.
 
 ## Minor improvements
 * Updated documentation and examples for `port()` and `diagdom()`.
-* Now [igraph](https://CRAN.R-project.org/package=igrap) package is not
+* Now [igraph](https://CRAN.R-project.org/package=igraph) package is not
   imported into the `NAMESPACE`, but instead explicitly called throughout the
   package using `::`.
 * Removed a seemingly unnecessary package registration.
