@@ -28,7 +28,7 @@ digraph specifying the zero pattern in the upper Cholesky
 factor of the sampled matrices. Nodes must be in ancestral
 order, with the first one having no parents.}
 
-\item{...}{additional parameters}
+\item{...}{Additional parameters for \code{\link[=mh_u]{mh_u()}}.}
 
 \item{comp}{String one of "numeric" or "recursive", indicating the
 computational method to use for sampling the angles for "unifconc" method}

@@ -17,7 +17,7 @@
 #' digraph specifying the zero pattern in the upper Cholesky
 #' factor of the sampled matrices. Nodes must be in ancestral
 #' order, with the first one having no parents.
-#' @param ... additional parameters
+#' @param ... Additional parameters for [mh_u()].
 #'
 #' @details Function [chol_mh()] uses the method described in
 #' Córdoba et al.  (2018) and implemented in [mh_u()], based
