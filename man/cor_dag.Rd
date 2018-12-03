@@ -7,8 +7,7 @@
 \alias{chol_polar}
 \title{Simulation of correlation matrices}
 \usage{
-chol_mh(N = 1, p = 3, d = 1, dag = NULL, add_no_chordal = FALSE,
-  ...)
+chol_mh(N = 1, p = 3, d = 1, dag = NULL, ...)
 
 chol_iid(N = 1, p = 3, d = 1, dag = NULL)
 
@@ -29,11 +28,7 @@ digraph specifying the zero pattern in the upper Cholesky
 factor of the sampled matrices. Nodes must be in ancestral
 order, with the first one having no parents.}
 
-\item{add_no_chordal}{Logical, if TRUE when the dag provided is not chordal,
-a fill-in is computed, in order to ensure uniform distribution. Ignored if
-\code{dag} or \code{d} are not provided. Defaults to FALSE.}
-
-\item{...}{additional parameters}
+\item{...}{Additional parameters for \code{\link[=mh_u]{mh_u()}}.}
 
 \item{comp}{String one of "numeric" or "recursive", indicating the
 computational method to use for sampling the angles for "unifconc" method}
@@ -46,15 +41,17 @@ Sample correlation matrices, possibly with a zero pattern in its Cholesky
 decomposition constrained by an acyclic digraph.
 }
 \details{
-Function \code{\link[=chol_mh]{chol_mh()}} uses the method described in Córdoba et al.
-(2018), based on a Metropolis-Hastings algorithm over the upper Cholesky
+Function \code{\link[=chol_mh]{chol_mh()}} uses the method described in
+Córdoba et al.  (2018) and implemented in \code{\link[=mh_u]{mh_u()}}, based
+on a Metropolis-Hastings algorithm over the upper Cholesky
 factorization.
 
 The entries in the upper Cholesky factor are sampled i.i.d. by
 function \code{\link[=chol_iid]{chol_iid()}}, following Kalisch and Buhlmann (2007).
 
 Function \code{\link[=chol_polar]{chol_polar()}} reparametrizes the Cholesky factor following
-the approach by Pourahmadi and Wang (2015).
+the approach by Pourahmadi and Wang (2015), adapted to sample the upper Cholesky
+factor instead of the lower one.
 }
 \examples{
 ## Cholesky sampling via Metropolis-Hastings
@@ -80,7 +77,7 @@ chol_iid(d = 0.5)
 # Generate a matrix complying with the predefined zero pattern
 igraph::print.igraph(dag)
 chol_iid(dag = dag)
-## Cholesky sampling via polar parametrization of the lower Cholesky factor
+## Cholesky sampling via polar parametrization of the upper Cholesky factor
 # Generate a full matrix (default behaviour)
 chol_polar()
 

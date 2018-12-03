@@ -17,20 +17,18 @@
 #' digraph specifying the zero pattern in the upper Cholesky
 #' factor of the sampled matrices. Nodes must be in ancestral
 #' order, with the first one having no parents.
-#' @param add_no_chordal Logical, if TRUE when the dag provided is not chordal,
-#' a fill-in is computed, in order to ensure uniform distribution. Ignored if
-#' `dag` or `d` are not provided. Defaults to FALSE.
-#' @param ... additional parameters
+#' @param ... Additional parameters for [mh_u()].
 #'
-#' @details Function [chol_mh()] uses the method described in Córdoba et al.
-#' (2018), based on a Metropolis-Hastings algorithm over the upper Cholesky
+#' @details Function [chol_mh()] uses the method described in
+#' Córdoba et al.  (2018) and implemented in [mh_u()], based
+#' on a Metropolis-Hastings algorithm over the upper Cholesky
 #' factorization.
 #'
 #' @return A three-dimensional array of length `p x p x N`
 #'
 #' @references Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
 #' Metropolis-Hastings method for generating random correlation matrices. _Lecture Notes in
-#' Computer Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018.
+#' Computer Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018. 
 #'
 #' @examples
 #' ## Cholesky sampling via Metropolis-Hastings
@@ -51,31 +49,20 @@ chol_mh <- function(N = 1,
                     p = 3,
                     d = 1,
                     dag = NULL,
-                    add_no_chordal = FALSE,
                     ...) {
-  if (is.null(dag) == TRUE) {
+  if (is.null(dag) == TRUE & d != 1) {
     # We generate the dag if a zero pattern is requested
-    if (d != 1) {
       dag <- rgraph(p = p, d = d, dag = TRUE)
-    } else {
-      sU <- .rcoef_mh(N = N, p = p, ...)
-    }
   }
   if (is.null(dag) == FALSE) {
-    # Uniform sampling of chordal DAG
-    if (add_no_chordal == TRUE) {
-      isCh <- igraph::is_chordal(dag, fillin = TRUE)
-
-      if (isCh$chordal == FALSE) {
-        dag <- igraph::add_edges(dag, edges = isCh$fillin)
-      }
-    }
-    sU <- .rcoef_mh(N = N, dag = dag, ...)
+    U <- mh_u(N = N, dag = dag, ...)
+  } else {
+    U <- mh_u(N = N, p = p, ...)
   }
-  vsC <- apply(sU, MARGIN = 3, tcrossprod)
-  sC <- array(data = vsC, dim = dim(sU))
+  vC <- apply(U, MARGIN = 3, tcrossprod)
+  C <- array(data = vC, dim = dim(U))
 
-  return(sC)
+  return(C)
 }
 
 #' @rdname cor_dag
@@ -137,14 +124,15 @@ chol_iid <- function(N = 1,
 #' computational method to use for sampling the angles for "unifconc" method
 #'
 #' @details Function [chol_polar()] reparametrizes the Cholesky factor following
-#' the approach by Pourahmadi and Wang (2015).
+#' the approach by Pourahmadi and Wang (2015), adapted to sample the upper Cholesky
+#' factor instead of the lower one.
 #'
 #' @references Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
 #' Hyperspherical parameterization of the Cholesky factor, _Statistics &
 #' Probability Letters_, 106:5-12, 2015.
 #'
 #' @examples
-#' ## Cholesky sampling via polar parametrization of the lower Cholesky factor
+#' ## Cholesky sampling via polar parametrization of the upper Cholesky factor
 #' # Generate a full matrix (default behaviour)
 #' chol_polar()
 #' 
@@ -265,7 +253,45 @@ chol_polar <- function(N = 1, p = 3,
 }
 
 
-.rcoef_mh <- function(N = 1,
+#' Upper Cholesky factor sampling using Metropolis-Hastings 
+#' 
+#' Metropolis-Hasting algorithms to sample the upper Cholesky factor, using
+#' positive hemispheres of different dimensions. A zero pattern may be specified 
+#' using an acyclic digraph.
+#' 
+#' @name metropolis-hastings sampling
+#'
+#' @rdname mh 
+#'
+#' @param N Number of samples.
+#' @param p Dimension of the upper Cholesky factor.
+#' @param dag An
+#' [igraph](https://CRAN.R-project.org/package=igraph) acyclic
+#' digraph specifying the zero pattern in the upper Cholesky
+#' factor of the sampled matrices. Nodes must be in ancestral
+#' order, with the first one having no parents.
+#' @param h Heating phase size for [mh_sphere()].
+#' @param eps Perturbation variance for [mh_sphere()].
+#'
+#' @author Gherardo Varando \email{gherardo.varando@math.ku.dk}
+#'
+#' @details Function [mh_u()] returns a sample of `N` upper Cholesky factors whose rows have
+#' been generated using [mh_sphere()]. The dimensions of the hemispheres used to sample vary
+#' depending both on the row number of the Cholesky factor, and whether there is a zero pattern
+#' specified by `dag`.
+#'
+#' @examples
+#' ## Upper Cholesky factor sampling 
+#' # Generate a random acyclic digraph 
+#' dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
+#' igraph::print.igraph(dag)
+#' 
+#' # Generate an upper Cholesky factor complying with such zero pattern
+#' mh_u(dag = dag)
+#' # We may also generate it with no zero pattern (full upper triangular)
+#' mh_u()
+#' @export
+mh_u <- function(N = 1,
                       p = 3,
                       dag = NULL,
                       h = 100,
@@ -281,7 +307,7 @@ chol_polar <- function(N = 1, p = 3,
 
   if (is.null(dag) == TRUE) {
     for (i in 1:(p - 1)) {
-      su <- mh_sphere(N = N, p = p - i + 1, i = i, h = h, eps = eps)
+      su <- mh_sphere(N = N, k = p - i + 1, i = i, h = h, eps = eps)
       U[i, i:p, 1:N] <- t(su)
     }
   } else {
@@ -289,7 +315,7 @@ chol_polar <- function(N = 1, p = 3,
     ch <- igraph::degree(dag, mode = "out")
     pa <- igraph::degree(dag, mode = "in")
     for (j in 1:(p - 1)) {
-      su <- mh_sphere(N = N, p = ch[j] + 1, i = pa[j] + 1, h = h, eps = eps)
+      su <- mh_sphere(N = N, k = ch[j] + 1, i = pa[j] + 1, h = h, eps = eps)
       U[j, U[j, , 1] > 0, 1:N] <- t(su)
     }
   }
@@ -297,43 +323,40 @@ chol_polar <- function(N = 1, p = 3,
 }
 
 
-#' Sampling on sphere proportionally to a power of the first coordinate
+#' @rdname mh 
 #'
-#' Metropolis-Hasting algorithm to sample in the
-#' `p`-dimensional hemisphere.
-#'
-#' @param N Number of samples.
-#' @param p Dimension of the hemisphere.
+#' @param k Dimension of the hemisphere from which the sample is taken.
 #' @param i Integer, power of the first coordinate in the density.
-#' @param eps Perturbation variance.
-#' @param h Heating phase size
 #'
-#' @author Gherardo Varando \email{gherardo.varando@math.ku.dk}
-#'
-#' @details The details of the algorithm can be found in the paper Córdoba et al. (2018), including a discussion on theoretical convergence and numerical experiments for choosing its hyper parameters.
+#' @details The details of the algorithm implemented by [mh_sphere()] can be found in the
+#' paper Córdoba et al. (2018), including a discussion on
+#' theoretical convergence and numerical experiments for
+#' choosing its hyper parameters `h` and `eps`.
 #'
 #' @references Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
 #' Metropolis-Hastings method for generating random correlation matrices. _Lecture Notes in
 #' Computer Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018.
 #' @examples
-#' mh_sphere(N = 4, p = 3, i = 2)
+#' ## Hemisphere sampling
+#' # 3D hemisphere from a density proportional to the square of the first coordinate
+#' mh_sphere(N = 4, k = 3, i = 2)
 #' @export
 mh_sphere <-
   function(N = 1,
-             p,
+             k,
              i = 1,
              h = 100,
              eps = 0.01) {
     Tot <- h + N # total number of iteration of MH
-    Sample <- matrix(nrow = Tot, ncol = p) # obj initialization
-    Sample[1, ] <- rnorm(n = p, mean = 0, sd = 1) # first point
+    Sample <- matrix(nrow = Tot, ncol = k) # obj initialization
+    Sample[1, ] <- rnorm(n = k, mean = 0, sd = 1) # first point
     Sample[1, 1] <-
       abs(Sample[1, 1]) # absolute value first component (has to be positive)
     Sample[1, ] <-
       Sample[1, ] / sqrt(sum(Sample[1, ]^2)) # normalization
     for (j in 2:Tot) {
       prop <-
-        Sample[j - 1, ] + rnorm(n = p, mean = 0, sd = eps) # perturbate previous sample
+        Sample[j - 1, ] + rnorm(n = k, mean = 0, sd = eps) # perturbate previous sample
       prop <- prop / sqrt(sum(prop^2)) # normalize proposed
       if ((prop[1] > 0) &&
         (log(runif(1)) <= i * log((prop[1])) - i * log(Sample[j - 1, 1]))) {

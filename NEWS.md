@@ -35,9 +35,10 @@ provided.
   percentage of zeros in their upper Cholesky factor, which can be also
   predefined by a given acyclic digraph. See more details at their
   documentation.
-* Function `mh_sphere()`, used by `chol_mh()`, allows to sample vectors on a
-  sphere from a density proportional to a power of the first coordinate. More
-  information on its documentation.
+* Functions `mh_sphere()` and `mh_u()`, used by `chol_mh()`,
+  allows to sample the upper Cholesky factor of a correlation
+  matrix by sampling vectors on hemispheres of different
+  dimensions. More information on their documentation.
 * Added utility function `rgraph()`, which is a simple wrapper of some
   functionality in package [igraph](https://CRAN.R-project.org/package=igraph)
   for random graph generation.
