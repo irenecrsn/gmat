@@ -1,7 +1,7 @@
 Package: gmat
 Type: Package
 Title: Simulation of Graphically Constrained Matrices
-Version: 0.2.0
+Version: 0.2.0.9000
 Date: 2018-11-30
 Encoding: UTF-8
 Authors@R: c(
