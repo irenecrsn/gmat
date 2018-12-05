@@ -7,3 +7,5 @@ README.html
 LICENSE
 ^.*\.Rproj$
 ^\.Rproj\.user$
+qr.R
+gram_schmidt_degree.R
