@@ -1,7 +1,7 @@
 #' gmat: Graphically constrained matrices.
 #'
-#' @importFrom stats runif rnorm
+#' @importFrom stats runif rnorm integrate
 #'
 #' @docType package
-#' @name gmat 
+#' @name gmat
 NULL

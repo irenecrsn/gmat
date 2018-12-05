@@ -1,19 +1,29 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-sudo: true 
 cache: packages
+
 branches:
     only:
         - master
-os:
-    - linux
-      #    - osx
-r:
-    - oldrel
-    - release
-    - devel
-install:
-  - if [ $TRAVIS_OS_NAME = osx ]; then brew install libgit2; fi
-before_script:
-  - Rscript -e 'install.packages(c("igraph", "testthat"))'
+matrix:
+    include:
+        - os: linux
+          r: release
+          after_success: Rscript -e 'covr::codecov()'
+          deploy:
+            provider: script
+            script: Rscript -e 'pkgdown::deploy_site_github(verbose = TRUE)'
+            skip_cleanup: true
+            on: 
+                all_branches: true
+        - os: linux
+          r: oldrel 
+        - os: linux
+          r: devel
+		  before_install: export _R_CHECK_CRAN_INCOMING_=true
+        - os: osx
+          r: release
+        - os: osx
+          r: oldrel
+
