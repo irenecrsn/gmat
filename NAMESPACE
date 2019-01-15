@@ -3,7 +3,6 @@
 export(anti_t)
 export(chol_iid)
 export(chol_mh)
-export(chol_polar)
 export(diagdom)
 export(mh_sphere)
 export(mh_u)

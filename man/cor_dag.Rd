@@ -4,14 +4,11 @@
 \alias{dag-constrained correlation matrices}
 \alias{chol_mh}
 \alias{chol_iid}
-\alias{chol_polar}
 \title{Simulation of correlation matrices}
 \usage{
 chol_mh(N = 1, p = 3, d = 1, dag = NULL, ...)
 
 chol_iid(N = 1, p = 3, d = 1, dag = NULL)
-
-chol_polar(N = 1, p = 3, d = 1, dag = NULL, comp = "numeric")
 }
 \arguments{
 \item{N}{Number of samples.}
@@ -20,7 +17,7 @@ chol_polar(N = 1, p = 3, d = 1, dag = NULL, comp = "numeric")
 
 \item{d}{Number in \code{[0,1]}, the proportion of non-zero
 entries in the Cholesky factor of the sampled matrices.
-Ignored if \code{dag} is provided. Ignored by \code{\link[=chol_polar]{chol_polar()}}}
+Ignored if \code{dag} is provided.}
 
 \item{dag}{An
 \href{https://CRAN.R-project.org/package=igraph}{igraph} acyclic
@@ -29,9 +26,6 @@ factor of the sampled matrices. Nodes must be in ancestral
 order, with the first one having no parents.}
 
 \item{...}{Additional parameters for \code{\link[=mh_u]{mh_u()}}.}
-
-\item{comp}{String one of "numeric" or "recursive", indicating the
-computational method to use for sampling the angles for "unifconc" method}
 }
 \value{
 A three-dimensional array of length \code{p x p x N}
@@ -48,10 +42,6 @@ factorization.
 
 The entries in the upper Cholesky factor are sampled i.i.d. by
 function \code{\link[=chol_iid]{chol_iid()}}, following Kalisch and Buhlmann (2007).
-
-Function \code{\link[=chol_polar]{chol_polar()}} reparametrizes the Cholesky factor following
-the approach by Pourahmadi and Wang (2015), adapted to sample the upper Cholesky
-factor instead of the lower one.
 }
 \examples{
 ## Cholesky sampling via Metropolis-Hastings
@@ -77,20 +67,6 @@ chol_iid(d = 0.5)
 # Generate a matrix complying with the predefined zero pattern
 igraph::print.igraph(dag)
 chol_iid(dag = dag)
-## Cholesky sampling via polar parametrization of the upper Cholesky factor
-# Generate a full matrix (default behaviour)
-chol_polar()
-
-# Generate a matrix with a percentage of zeros
-chol_polar(d = 0.5)
-
-# Generate a matrix complying with the predefined zero pattern
-igraph::print.igraph(dag)
-chol_polar(dag = dag)
-
-# Performance comparison of numeric vs recursive integral (full matrix)
-system.time(chol_polar(N = 10, p = 5))
-system.time(chol_polar(N = 10, p = 5, comp = "recursive"))
 }
 \references{
 Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
@@ -100,8 +76,4 @@ Computer Science} (IDEAL 2018), vol 11314, pp. 117-124, 2018.
 Kalisch, M., Buhlmann, P. Estimating high-dimensional directed
 acyclic graphs with the PC-algorithm, \emph{Journal of Machine Learning Research},
 8:613-636, 2007.
-
-Pourahmadi, M., Wang, X. Distribution of random correlation matrices:
-Hyperspherical parameterization of the Cholesky factor, \emph{Statistics &
-Probability Letters}, 106:5-12, 2015.
 }
