@@ -10,6 +10,7 @@ matrix:
     include:
         - os: linux
           r: release
+		  r_packages: pkgdown
           after_success: Rscript -e 'covr::codecov()'
           deploy:
             provider: script
