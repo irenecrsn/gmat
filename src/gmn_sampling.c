@@ -29,7 +29,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 	double *v_proj = NULL;
 	double nn = 0;
 	int degrees[dim[0]][2];
-	unsigned int i = 0, j = 0, k = 0;
+	unsigned int i = 0, j = 0, k = 0, skip = 0;
 	unsigned int n_span = 0, i_current = 0, nzeros = 0;
 	
 	if (mort == NULL || madj == NULL || mcov == NULL || dim == NULL) {
@@ -68,18 +68,20 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 		}
 	}
 	
+	/* compute the degree and store the index*/
 	for (i = 0; i < dim[0]; i++) {
 	  degrees[i][0] = 0;
 	  degrees[i][1] = i;
 	  for (j = 0; j < dim[0]; j++) {
-	    degrees[i][0] += madj[i_current + j];
+	    degrees[i][0] += madj[i * dim[0] + j];
 	  }
 	}
 	
+	/* sort the degrees */
 	qsort(degrees, dim[0], sizeof degrees[0], compare);
   
   nzeros = 0;
-  while (degrees[k][nzeros] == 0){
+  while (degrees[nzeros][0] == 0){
     nzeros++;
   }
   
@@ -90,8 +92,12 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
     n_span++;
   }
   gram_schmidt(ort_base, span_sel, &n_span, dim, 0);
+  /* and we copy them in the result */
   for (j = 0; j < nzeros; j++) {
-    memcpy(mort + degrees[j][1] * dim[0], ort_base[j], sizeof(double) * dim[0]);
+    /*memcpy(mort + degrees[j][1] * dim[0], ort_base[j], sizeof(double) * dim[0]);*/
+    for (k = 0; k < dim[0]; k++) {
+      mort[degrees[j][1] * dim[0] + k] = ort_base[j][k];
+    }
   }
   
   /* now the remaining */
@@ -100,7 +106,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 		i_current = degrees[i][1] * dim[0];
 		memcpy(mort + i_current, mcov + i_current, sizeof(double) * dim[0]);
 		n_span = nzeros;
-
+    skip = nzeros;
 		for (j = nzeros; j < i; j++) {
 			if (madj[i_current + degrees[j][1]] == 0) {
 				span_sel[n_span] = mort + degrees[j][1] * dim[0];
@@ -108,7 +114,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 			}
 		}
 
-		gram_schmidt(ort_base, span_sel, &n_span, dim, nzeros);
+		gram_schmidt(ort_base, span_sel, &n_span, dim, skip);
 		for (j = 0; j < n_span; j++) {
 			proj_ort(v_proj, mort + i_current, ort_base[j], dim);
 			for (k = 0; k < dim[0]; k++) {
