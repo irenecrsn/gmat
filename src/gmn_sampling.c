@@ -120,6 +120,7 @@ int gram_schmidt (double **span_ort, double **span,
 				span_ort[i][k] -= v_proj[k];
 			}
 		}
+		normalize(span_ort[i], dim);
 	}
 
 	free(v_proj); v_proj = NULL;
@@ -127,8 +128,28 @@ int gram_schmidt (double **span_ort, double **span,
 	return 0;
 }
 
+/*
+ * Normalize a vector u 
+ */
+int normalize (double *u, unsigned int *dim)
+{
+  unsigned int i = 0; 
+  double dot_uu = 0;
+  
+  for (i = 0; i < dim[0]; i++) {
+    dot_uu += (u[i] * u[i]);
+  }
+  
+  for (i = 0; i < dim[0]; i++) {
+    u[i] = u[i] / dot_uu;
+  }
+  
+  return 0;  
+}
+
+
 /* 
- * Orthogonal projection of two vectors v and u.
+ * Orthogonal projection of v onto u, the vector u is assumec to be normalized
  */
 int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 {
@@ -141,10 +162,9 @@ int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 	
 	for (i = 0; i < dim[0]; i++) {
 		dot_uv += (u[i] * v[i]);
-		dot_uu += (u[i] * u[i]);
 	}
 
-	lambda = dot_uv/dot_uu;
+	lambda = dot_uv;
 
 	for (i = 0; i < dim[0]; i++) {
 		v_proj_u[i] = lambda * u[i];
