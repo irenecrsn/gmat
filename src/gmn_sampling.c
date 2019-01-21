@@ -5,6 +5,16 @@
 #include "gmn_sampling.h"
 
 
+int compare ( const void *pa, const void *pb )
+{
+  const int *a = pa;
+  const int *b = pb;
+  if(a[0] == b[0])
+    return a[1] - b[1];
+  else
+    return a[0] - b[0];
+}
+
 /*
  * Selective Gram Schmidt algorithm 
  *
@@ -18,13 +28,15 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 	double **span_sel = NULL, **ort_base = NULL;
 	double *v_proj = NULL;
 	double nn = 0;
+	int degrees[dim[0]][2];
 	unsigned int i = 0, j = 0, k = 0;
-	unsigned int n_span = 0, i_current = 0;
+	unsigned int n_span = 0, i_current = 0, nzeros = 0;
 	
 	if (mort == NULL || madj == NULL || mcov == NULL || dim == NULL) {
 		return -1;
 	}
 
+	
 	if ((v_proj = calloc(dim[0], sizeof(double))) == NULL) {
 		return -1;
 	}
@@ -55,16 +67,43 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 			return -1;
 		}
 	}
-
-	for (i = 0; i < dim[0]; i++) {
 	
-		i_current = i * dim[0];
+	for (i = 0; i < dim[0]; i++) {
+	  degrees[i][0] = 0;
+	  degrees[i][1] = i;
+	  for (j = 0; j < dim[0]; j++) {
+	    degrees[i][0] += madj[i_current + j];
+	  }
+	}
+	
+	qsort(degrees, dim[0], sizeof degrees[0], compare);
+  
+  nzeros = 0;
+  while (degrees[k][nzeros] == 0){
+    nzeros++;
+  }
+  
+  /* we ortogonalize the disconnected ones */
+  n_span = 0;
+  for (j = 0; j < nzeros; j++) {
+    span_sel[n_span] = mort + degrees[j][1] * dim[0];
+    n_span++;
+  }
+  gram_schmidt(ort_base, span_sel, &n_span, dim);
+  for (j = 0; j < nzeros; j++) {
+    memcpy(mort + degrees[j][1] * dim[0], ort_base[j], sizeof(double) * dim[0]);
+  }
+  
+  /* now the remaining */
+	for (i = nzeros; i < dim[0]; i++) {
+	
+		i_current = degrees[i][1] * dim[0];
 		memcpy(mort + i_current, mcov + i_current, sizeof(double) * dim[0]);
 		n_span = 0;
 
 		for (j = 0; j < i; j++) {
-			if (madj[i_current + j] == 0) {
-				span_sel[n_span] = mort + j * dim[0];
+			if (madj[i_current + degrees[j][1]] == 0) {
+				span_sel[n_span] = mort + degrees[j][1] * dim[0];
 				n_span++;
 			}
 		}
@@ -155,7 +194,7 @@ int gram_schmidt (double **span_ort, double **span,
 int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 {
 	unsigned int i = 0;
-	double dot_uv = 0, dot_uu = 0, lambda = 0;
+	double dot_uv = 0, dot_uu = 0;
 
 	if (v_proj_u == NULL || v == NULL || u == NULL || dim == NULL) {
 		return -1;
@@ -165,10 +204,8 @@ int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 		dot_uv += (u[i] * v[i]);
 	}
 
-	lambda = dot_uv;
-
 	for (i = 0; i < dim[0]; i++) {
-		v_proj_u[i] = lambda * u[i];
+		v_proj_u[i] = dot_uv * u[i];
 	}
 
 	return 0;
