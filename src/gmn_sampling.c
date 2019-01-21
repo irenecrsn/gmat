@@ -89,7 +89,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
     span_sel[n_span] = mort + degrees[j][1] * dim[0];
     n_span++;
   }
-  gram_schmidt(ort_base, span_sel, &n_span, dim);
+  gram_schmidt(ort_base, span_sel, &n_span, dim, 0);
   for (j = 0; j < nzeros; j++) {
     memcpy(mort + degrees[j][1] * dim[0], ort_base[j], sizeof(double) * dim[0]);
   }
@@ -99,16 +99,16 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 	
 		i_current = degrees[i][1] * dim[0];
 		memcpy(mort + i_current, mcov + i_current, sizeof(double) * dim[0]);
-		n_span = 0;
+		n_span = nzeros;
 
-		for (j = 0; j < i; j++) {
+		for (j = nzeros; j < i; j++) {
 			if (madj[i_current + degrees[j][1]] == 0) {
 				span_sel[n_span] = mort + degrees[j][1] * dim[0];
 				n_span++;
 			}
 		}
 
-		gram_schmidt(ort_base, span_sel, &n_span, dim);
+		gram_schmidt(ort_base, span_sel, &n_span, dim, nzeros);
 		for (j = 0; j < n_span; j++) {
 			proj_ort(v_proj, mort + i_current, ort_base[j], dim);
 			for (k = 0; k < dim[0]; k++) {
@@ -143,9 +143,10 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
  * @param span Matrix with rows containing the vectors to orthogonalize
  * @param nvec Number of vectors to orthogonalize (rows of span)
  * @param dim Dimension of vectors (columns of span)
+ * @param skip skip the first skip vector of span (already orthogonal)
  */
 int gram_schmidt (double **span_ort, double **span, 
-		unsigned int *nvec, unsigned int *dim) 
+		unsigned int *nvec, unsigned int *dim, unsigned int skip) 
 {
 	double *v_proj = NULL;
 	unsigned int i = 0, j = 0, k = 0;
@@ -164,7 +165,7 @@ int gram_schmidt (double **span_ort, double **span,
 	}
 	
 
-	for (i = 1; i < nvec[0]; i++) {
+	for (i = skip; i < nvec[0]; i++) {
 		for (j = 0; j < i; j++) {
 			proj_ort(v_proj, span_ort[i], span_ort[j], dim);
 			for (k = 0; k < dim[0]; k++) {
