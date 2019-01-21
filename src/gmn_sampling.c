@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "gmn_sampling.h"
 
@@ -16,6 +17,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 		unsigned int *dim) {
 	double **span_sel = NULL, **ort_base = NULL;
 	double *v_proj = NULL;
+	double nn = 0;
 	unsigned int i = 0, j = 0, k = 0;
 	unsigned int n_span = 0, i_current = 0;
 	
@@ -74,6 +76,14 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 				mort[i_current + k] -= v_proj[k];
 			}
 		}
+		nn = 0;
+		for (k = 0; k < dim[0]; k++) {
+		  nn += mort[i_current + k] * mort[i_current + k] ;
+		}
+		nn = 1 / sqrt(nn);
+		for (k = 0; k < dim[0]; k++) {
+		  mort[i_current + k] = mort[i_current + k] * nn ;
+		}
 	}
 	
 	free(v_proj); v_proj = NULL;
@@ -100,7 +110,8 @@ int gram_schmidt (double **span_ort, double **span,
 {
 	double *v_proj = NULL;
 	unsigned int i = 0, j = 0, k = 0;
-
+  double nn = 0;
+  
 	if (span_ort == NULL || span == NULL || nvec == NULL || dim == NULL) {
 		return -1;
 	}
@@ -112,6 +123,7 @@ int gram_schmidt (double **span_ort, double **span,
 	if ((v_proj = calloc(dim[0], sizeof(double))) == NULL) {
 		return -1;
 	}
+	
 
 	for (i = 1; i < nvec[0]; i++) {
 		for (j = 0; j < i; j++) {
@@ -120,7 +132,14 @@ int gram_schmidt (double **span_ort, double **span,
 				span_ort[i][k] -= v_proj[k];
 			}
 		}
-		normalize(span_ort[i], dim);
+		nn = 0;
+		for (k = 0; k < dim[0]; k++) {
+		  nn += span_ort[i][k] * span_ort[i][k] ;
+		}
+		nn = 1 / sqrt(nn);
+		for (k = 0; k < dim[0]; k++) {
+		   span_ort[i][k] = span_ort[i][k] * nn ;
+		}
 	}
 
 	free(v_proj); v_proj = NULL;
@@ -128,24 +147,6 @@ int gram_schmidt (double **span_ort, double **span,
 	return 0;
 }
 
-/*
- * Normalize a vector u 
- */
-int normalize (double *u, unsigned int *dim)
-{
-  unsigned int i = 0; 
-  double dot_uu = 0;
-  
-  for (i = 0; i < dim[0]; i++) {
-    dot_uu += (u[i] * u[i]);
-  }
-  
-  for (i = 0; i < dim[0]; i++) {
-    u[i] = u[i] / dot_uu;
-  }
-  
-  return 0;  
-}
 
 
 /* 
