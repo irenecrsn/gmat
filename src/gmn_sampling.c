@@ -99,6 +99,10 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
     }
   }
   
+  /* from now on in the first nzeros components of ort_base there
+   * are orthogonal vectors for the disconnected nodes
+   */
+  
   /* now the remaining */
 	for (i = nzeros; i < dim[0]; i++) {
 		i_current = degrees[i][1] * dim[0];
@@ -111,7 +115,6 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 				n_span++;
 			}
 		}
-
 		gram_schmidt(ort_base, span_sel, &n_span, dim, skip);
 		for (j = 0; j < n_span; j++) {
 			proj_ort(v_proj, mort + i_current, ort_base[j], dim);
@@ -160,7 +163,7 @@ int gram_schmidt (double **span_ort, double **span,
 		return -1;
 	}
 
-	for (i = 0; i < nvec[0]; i++) {
+	for (i = skip; i < nvec[0]; i++) {
 		memcpy(span_ort[i], span[i], sizeof(double) * dim[0]);
 	}
 
