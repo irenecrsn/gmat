@@ -88,13 +88,12 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
   /* we ortogonalize the disconnected ones */
   n_span = 0;
   for (j = 0; j < nzeros; j++) {
-    span_sel[n_span] = mort + degrees[j][1] * dim[0];
+    span_sel[n_span] = mcov + degrees[j][1] * dim[0];
     n_span++;
   }
   gram_schmidt(ort_base, span_sel, &n_span, dim, 0);
   /* and we copy them in the result */
   for (j = 0; j < nzeros; j++) {
-    /*memcpy(mort + degrees[j][1] * dim[0], ort_base[j], sizeof(double) * dim[0]);*/
     for (k = 0; k < dim[0]; k++) {
       mort[degrees[j][1] * dim[0] + k] = ort_base[j][k];
     }
@@ -102,7 +101,6 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
   
   /* now the remaining */
 	for (i = nzeros; i < dim[0]; i++) {
-	
 		i_current = degrees[i][1] * dim[0];
 		memcpy(mort + i_current, mcov + i_current, sizeof(double) * dim[0]);
 		n_span = nzeros;
