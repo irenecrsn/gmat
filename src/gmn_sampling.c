@@ -28,7 +28,8 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 	double **span_sel = NULL, **ort_base = NULL;
 	double *v_proj = NULL;
 	double nn = 0;
-	int degrees[dim[0]][2];
+	int allright = 0;
+	int degrees[dim[0]][2], ix[dim[0]];
 	unsigned int i = 0, j = 0, k = 0, skip = 0;
 	unsigned int n_span = 0, i_current = 0, nzeros = 0;
 	
@@ -109,8 +110,15 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 		memcpy(mort + i_current, mcov + i_current, sizeof(double) * dim[0]);
 		n_span = nzeros;
     skip = nzeros;
+    allright = 1;
 		for (j = nzeros; j < i; j++) {
 			if (madj[i_current + degrees[j][1]] == 0) {
+			  if (ix[j - nzeros] ==  degrees[j][1] & allright == 1){
+			    skip++;
+			  }else{
+			    ix[j - nzeros] = i_current + degrees[j][1];
+			    allright = 0;
+			  }
 				span_sel[n_span] = mort + degrees[j][1] * dim[0];
 				n_span++;
 			}
