@@ -52,7 +52,6 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
   }
   if (is.null(ug) == FALSE) {
     p <- length(igraph::V(ug))
-
     sam <- array(dim = c(p, p, N), data = 0)
     madj <- igraph::as_adjacency_matrix(ug,
       type = "both",
@@ -70,19 +69,14 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
       ncol = p,
       byrow = TRUE
       )
+      
       sam[, , n] <- tcrossprod(sam[, , n])
 
       if (zapzeros == TRUE) {
         sam[, , n] <- zapsmall(sam[, , n])
       }
     }
-  } else {
-    sam <- array(dim = c(p, p, N), data = runif(p * p * N))
-    for (n in 1:N) {
-      sam[, , n] <- tcrossprod(sam[, , n])
-    }
   }
-
   return(sam)
 }
 

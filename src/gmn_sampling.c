@@ -9,40 +9,48 @@ int compare ( const void *pa, const void *pb )
 {
   const int *a = pa;
   const int *b = pb;
-  if(a[0] == b[0])
-    if (a[1] > b[1]){
-      return 1;
-    }else if (a[1] < b[1]){
+  if(a[0] < b[0]){
+    return -1;
+  }else if (a[0] > b[0]){
+    return 1;
+  }else{
+    if(a[1] < b[1]){
       return -1;
-    }else{
-      return 0;
-    }
-  else{
-    if (a[0] > b[0]){
+    }else if (a[1] > b[1]){
       return 1;
-    }else if (a[0] < b[0]){
-      return -1;
     }else{
-      return 0;
-    }
+      if(a[2] < b[2]){
+        return -1;
+      }else if (a[2] > b[2]){
+        return 1;
+      }else{
+        if(a[3] < b[3]){
+          return -1;
+        }else if (a[3] > b[3]){
+          return 1;
+        }else{
+          return 0; 
+        }
+      }
+    } 
   }
 }
 
 /*
-* Selective Gram Schmidt algorithm 
-*
-* @param span_ort Matrix with rows containing the orthogonal vectors
-* @param span Matrix with rows containing the vectors to orthogonalize
-* @param nvec Number of vectors to orthogonalize (rows of span)
-* @param dim Dimension of vectors (columns of span)
-*/
+ * Selective Gram Schmidt algorithm 
+ *
+ * @param span_ort Matrix with rows containing the orthogonal vectors
+ * @param span Matrix with rows containing the vectors to orthogonalize
+ * @param nvec Number of vectors to orthogonalize (rows of span)
+ * @param dim Dimension of vectors (columns of span)
+ */
 int gram_schmidt_sel (double *mort, int *madj, double *mcov, 
                       unsigned int *dim) {
   double **span_sel = NULL, **ort_base = NULL;
   double *v_proj = NULL;
   double nn = 0;
   int allright = 0;
-  int degrees[dim[0]][2], ix[dim[0] + 1];
+  int maps[dim[0]][4], ix[dim[0] + 1], cc[dim[0]];
   unsigned int i = 0, j = 0, k = 0, skip = 0;
   unsigned int n_span = 0, i_current = 0, nzeros = 0;
   ix[0] = -1;
@@ -83,61 +91,79 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
     }
   }
   
-  /* compute the degree and store the index*/
-  for (i = 0; i < dim[0]; i++) {
-    degrees[i][0] = 0;
-    degrees[i][1] = i;
-    for (j = 0; j < dim[0]; j++) {
-      degrees[i][0] += madj[i * dim[0] + j];
-    }
+  for (i = 0; i < dim[0]; i++){
+    maps[i][1] = -1;
   }
   
-  /* sort the degrees */
-  qsort(degrees, dim[0], sizeof degrees[0], compare);
+  k = 0;
+  /* compute degrees, connected components and size of cc and store the index*/
+  for (i = 0; i < dim[0]; i++) {
+    if (maps[i][1] < 0){ /*new connected components*/
+      k++; /* increment the connected components*/
+      maps[i][1] = k; 
+    } 
+    cc[maps[i][1]]++;
+    maps[i][2] = 0;
+    maps[i][3] = i; /* store the index*/
+  for (j = 0; j < dim[0]; j++) {
+    if ( (madj[i * dim[0] + j] > 0) && (j != i) ){
+      maps[i][2]++;  /* increase count of degree*/             
+      maps[j][1] = maps[i][1];  /*propagate the index of the conn comp */
+    }
+  }
+  }
+  /*copy size of con comps*/
+  for (i = 0; i < dim[0]; i++){ 
+    maps[i][0] = cc[maps[i][1]];
+  }
+
+
+  /* sort the maps */
+  qsort(maps, dim[0], sizeof(int) * 4, compare);
   
   nzeros = 0;
-  while (degrees[nzeros][0] == 0){
+  while (maps[nzeros][2] == 0){
     nzeros++;
   }
   
   /* we ortogonalize the disconnected ones */
   n_span = 0;
   for (j = 0; j < nzeros; j++) {
-    span_sel[n_span] = mcov + degrees[j][1] * dim[0];
+    span_sel[n_span] = mcov + maps[j][3] * dim[0];
     n_span++;
   }
   gram_schmidt(ort_base, span_sel, &n_span, dim, 0);
   /* and we copy them in the result */
   for (j = 0; j < nzeros; j++) {
     for (k = 0; k < dim[0]; k++) {
-      mort[degrees[j][1] * dim[0] + k] = ort_base[j][k];
+      mort[maps[j][3] * dim[0] + k] = ort_base[j][k];
     }
   }
   
   /* from now on in the first nzeros components of ort_base there
-  * are orthogonal vectors for the disconnected nodes
-  */
+   * are orthogonal vectors for the disconnected nodes
+   */
   
   /* now the remaining */
   for (i = nzeros; i < dim[0]; i++) {
-    i_current = degrees[i][1] * dim[0];
+    i_current = maps[i][3] * dim[0];
     memcpy(mort + i_current, mcov + i_current, sizeof(double) * dim[0]);
     n_span = nzeros;
     skip = nzeros;
     allright = 1;
     for (j = nzeros; j < i; j++) {
-      if (madj[i_current + degrees[j][1]] == 0) {
-        if ( (ix[n_span - nzeros] ==  degrees[j][1]) && (allright == 1) ){
-           skip++;
+      if (madj[i_current + maps[j][3]] == 0) {
+        if ( (ix[n_span - nzeros] ==  maps[j][3]) && (allright == 1) ){
+          skip++;
         }else{
-          ix[n_span - nzeros] = degrees[j][1];
+          ix[n_span - nzeros] = maps[j][3];
           allright = 0;
         }
-        span_sel[n_span] = mort + degrees[j][1] * dim[0];
+        span_sel[n_span] = mort + maps[j][3] * dim[0];
         n_span++;
       }
     }
-    ix[n_span - nzeros] = degrees[i][1];
+    ix[n_span - nzeros] = maps[i][3];
     ix[n_span - nzeros + 1] = -1;
     span_sel[n_span] = mort + i_current;
     n_span++;
@@ -159,14 +185,14 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 
 
 /*
-* Gram Schmidt algorithm 
-*
-* @param span_ort Matrix with rows containing the orthogonal vectors
-* @param span Matrix with rows containing the vectors to orthogonalize
-* @param nvec Number of vectors to orthogonalize (rows of span)
-* @param dim Dimension of vectors (columns of span)
-* @param skip skip the first skip vector of span (already orthogonal)
-*/
+ * Gram Schmidt algorithm 
+ *
+ * @param span_ort Matrix with rows containing the orthogonal vectors
+ * @param span Matrix with rows containing the vectors to orthogonalize
+ * @param nvec Number of vectors to orthogonalize (rows of span)
+ * @param dim Dimension of vectors (columns of span)
+ * @param skip skip the first skip vector of span (already orthogonal)
+ */
 int gram_schmidt (double **span_ort, double **span, 
                   unsigned int *nvec, unsigned int *dim, unsigned int skip) 
 {
@@ -212,8 +238,8 @@ int gram_schmidt (double **span_ort, double **span,
 
 
 /* 
-* Orthogonal projection of v onto u, the vector u is assumed to be normalized
-*/
+ * Orthogonal projection of v onto u, the vector u is assumed to be normalized
+ */
 int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 {
   unsigned int i = 0;
