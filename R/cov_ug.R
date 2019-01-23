@@ -47,7 +47,7 @@
 #' @useDynLib gmat
 #' @export
 port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
-  if (is.null(ug) == TRUE & d != 1) {
+  if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
   if (is.null(ug) == FALSE) {
