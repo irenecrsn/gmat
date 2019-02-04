@@ -4,7 +4,7 @@
 
 #include "gmn_sampling.h"
 
-
+/* lexycographic order over vectors of length 4*/
 int compare ( const void *pa, const void *pb )
 {
   const int *a = pa;
@@ -48,13 +48,11 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
                       unsigned int *dim) {
   double **span_sel = NULL, **ort_base = NULL;
   double *v_proj = NULL;
-  double nn = 0;
-  int allright = 0;
   int maps[dim[0]][4], ix[dim[0] + 1], cc[dim[0]];
-  unsigned int i = 0, j = 0, k = 0, skip = 0;
+  unsigned int i = 0, j = 0, k = 0, skip = 0, allright = 0;
   unsigned int n_span = 0, i_current = 0, nzeros = 0;
   ix[0] = -1;
-  
+
   if (mort == NULL || madj == NULL || mcov == NULL || dim == NULL) {
     return -1;
   }
@@ -79,6 +77,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
     ort_base[i] = NULL;
   }
   
+  mort[dim[0] * dim[0]] = 0;
   for (i = 0; i < dim[0]; i++) {
     if ((ort_base[i] = calloc(dim[0], sizeof(double))) == NULL) {
       for (j = 0; j < i; j++) {
@@ -99,8 +98,8 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
   /* compute degrees, connected components and size of cc and store the index*/
   for (i = 0; i < dim[0]; i++) {
     if (maps[i][1] < 0){ /*new connected components*/
-      k++; /* increment the connected components*/
       maps[i][1] = k; 
+      k++; /* increment the connected components*/
     } 
     cc[maps[i][1]]++;
     maps[i][2] = 0;
@@ -164,14 +163,16 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
       }
     }
     ix[n_span - nzeros] = maps[i][3];
-    ix[n_span - nzeros + 1] = -1;
+    ix[n_span - nzeros + 1] = -1; /*security block (could be removed??)*/
     span_sel[n_span] = mort + i_current;
     n_span++;
+    mort[dim[0] * dim[0]] += skip; 
     gram_schmidt(ort_base, span_sel, &n_span, dim, skip);
     for (k = 0; k < dim[0]; k++) {
       mort[i_current + k] = ort_base[n_span - 1][k];
     }
   }
+  
   
   free(v_proj); v_proj = NULL;
   free(span_sel); span_sel = NULL;

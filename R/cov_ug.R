@@ -59,17 +59,18 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
     )
     for (n in 1:N) {
       sam[, , n] <- matrix(nrow = p, ncol = p, data = runif(p^2))
-      sam[, , n] <- matrix(.C(
+      temp <- .C(
         "gram_schmidt_sel",
-        double(p * p),
+        double(p * p + 1),
         as.logical(madj),
         as.double(t(sam[, , n])),
         as.integer(p)
-      )[[1]],
+      )[[1]]
+      sam[, , n] <- matrix(temp[- (p*p+1)],
       ncol = p,
       byrow = TRUE
       )
-      
+      cat("skipped: ", temp[p * p + 1], "\n")
       sam[, , n] <- tcrossprod(sam[, , n])
 
       if (zapzeros == TRUE) {
