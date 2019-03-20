@@ -77,7 +77,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
     ort_base[i] = NULL;
   }
   
-  mort[dim[0] * dim[0]] = 0;
+  
   for (i = 0; i < dim[0]; i++) {
     if ((ort_base[i] = calloc(dim[0], sizeof(double))) == NULL) {
       for (j = 0; j < i; j++) {
@@ -143,6 +143,8 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
    * are orthogonal vectors for the disconnected nodes
    */
   
+  
+  /*mort[dim[0] * dim[0]] = 0;*/
   /* now the remaining */
   for (i = nzeros; i < dim[0]; i++) {
     i_current = maps[i][3] * dim[0];
@@ -166,7 +168,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
     ix[n_span - nzeros + 1] = -1; /*security block (could be removed??)*/
     span_sel[n_span] = mort + i_current;
     n_span++;
-    mort[dim[0] * dim[0]] += skip; 
+    /*mort[dim[0] * dim[0]] += skip; */
     gram_schmidt(ort_base, span_sel, &n_span, dim, skip);
     for (k = 0; k < dim[0]; k++) {
       mort[i_current + k] = ort_base[n_span - 1][k];
