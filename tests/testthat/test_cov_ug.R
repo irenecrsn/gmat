@@ -102,8 +102,8 @@ test_that("selective gram schmidt actually selects", {
 })
 
 test_that("the graph structure is preserved", {
-  p <- 5
-  d <- 0.25
+  p <- 50
+  d <- 0.2
 
   expect_equal_ug <- function(m, ug) {
     madj <- igraph::as_adjacency_matrix(ug, sparse = FALSE)

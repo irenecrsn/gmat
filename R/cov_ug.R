@@ -47,12 +47,11 @@
 #' @useDynLib gmat
 #' @export
 port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
-  if (is.null(ug) == TRUE & d != 1) {
+  if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
   if (is.null(ug) == FALSE) {
     p <- length(igraph::V(ug))
-
     sam <- array(dim = c(p, p, N), data = 0)
     madj <- igraph::as_adjacency_matrix(ug,
       type = "both",
@@ -60,13 +59,14 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
     )
     for (n in 1:N) {
       sam[, , n] <- matrix(nrow = p, ncol = p, data = runif(p^2))
-      sam[, , n] <- matrix(.C(
+      temp <- .C(
         "gram_schmidt_sel",
         double(p * p),
         as.logical(madj),
         as.double(t(sam[, , n])),
         as.integer(p)
-      )[[1]],
+      )[[1]]
+      sam[, , n] <- matrix(temp[- (p*p+1)],
       ncol = p,
       byrow = TRUE
       )
@@ -76,13 +76,7 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
         sam[, , n] <- zapsmall(sam[, , n])
       }
     }
-  } else {
-    sam <- array(dim = c(p, p, N), data = runif(p * p * N))
-    for (n in 1:N) {
-      sam[, , n] <- tcrossprod(sam[, , n])
-    }
   }
-
   return(sam)
 }
 
