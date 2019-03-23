@@ -46,7 +46,8 @@
 #' port(ug = ug, zapzeros = FALSE) # no zero zap
 #' @useDynLib gmat
 #' @export
-port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
+port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, 
+                 rfun = rnorm, ...) {
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
@@ -58,7 +59,8 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
       sparse = FALSE
     )
     for (n in 1:N) {
-      sam[, , n] <- matrix(nrow = p, ncol = p, data = runif(p^2))
+      sam[, , n] <- matrix(nrow = p, ncol = p, 
+                           data = rfun(p^2, ...))
       temp <- .C(
         "gram_schmidt_sel",
         double(p * p),
@@ -102,7 +104,7 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
 #' igraph::print.igraph(ug)
 #' diagdom(ug = ug)
 #' @export
-diagdom <- function(N = 1, p = 3, d = 1, ug = NULL) {
+diagdom <- function(N = 1, p = 3, d = 1, ug = NULL, rfun = rnorm, ...) {
 
   # We generated the ug if a zero pattern is requested
   if (is.null(ug) == TRUE & d != 1) {
@@ -120,7 +122,7 @@ diagdom <- function(N = 1, p = 3, d = 1, ug = NULL) {
           edges[i, 2],
           edges[i, 1],
         ] <-
-          runif(N)
+          rfun(N, ...)
       }
     }
   } else {
@@ -128,13 +130,13 @@ diagdom <- function(N = 1, p = 3, d = 1, ug = NULL) {
     sam <- array(dim = c(p, p, N))
     for (i in 1:p) {
       for (j in 1:p) {
-        sam[i, j, ] <- sam[j, i, ] <- runif(N)
+        sam[i, j, ] <- sam[j, i, ] <- rfun(N, ...)
       }
     }
   }
 
   for (i in 1:p) {
-    sam[i, i, ] <- abs(runif(N))
+    sam[i, i, ] <- abs(rfun(N, ...))
   }
   mdiag <- apply(sam,
     MARGIN = c(1, 3),
