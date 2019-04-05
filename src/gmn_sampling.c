@@ -43,13 +43,15 @@ int compare ( const void *pa, const void *pb )
  * @param span Matrix with rows containing the vectors to orthogonalize
  * @param nvec Number of vectors to orthogonalize (rows of span)
  * @param dim Dimension of vectors (columns of span)
+ * @param int Method
  */
 int gram_schmidt_sel (double *mort, int *madj, double *mcov, 
-                      unsigned int *dim) {
+                      unsigned int *dim, unsigned int method) {
   double **span_sel = NULL, **ort_base = NULL;
   double *v_proj = NULL;
+  double *temp = NULL;
   int maps[dim[0]][4], ix[dim[0] + 1], cc[dim[0]];
-  unsigned int i = 0, j = 0, k = 0, skip = 0, allright = 0;
+  unsigned int i = 0, j = 0, k = 0, skip = 0, allright = 0, jj = 0;
   unsigned int n_span = 0, i_current = 0, nzeros = 0;
   ix[0] = -1;
 
@@ -73,9 +75,11 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
     return -1;
   }
   
+  
   for (i = 0; i < dim[0]; i++) {
     ort_base[i] = NULL;
   }
+  
   
   
   for (i = 0; i < dim[0]; i++) {
@@ -129,6 +133,13 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
   n_span = 0;
   for (j = 0; j < nzeros; j++) {
     span_sel[n_span] = mcov + maps[j][3] * dim[0];
+    if (method == 0){
+      temp = span_sel[n_span];
+      for (jj = 0; jj < j; jj++){
+         *temp = 0;
+         temp++;
+      }
+    }
     n_span++;
   }
   gram_schmidt(ort_base, span_sel, &n_span, dim, 0);
@@ -147,6 +158,13 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
   /*mort[dim[0] * dim[0]] = 0;*/
   /* now the remaining */
   for (i = nzeros; i < dim[0]; i++) {
+    if (method == 0){
+      temp = mcov + maps[i][3] * dim[0];
+      for (jj = 0; jj < i; jj++){
+        *temp = 0;
+        temp++;
+      }
+    }
     i_current = maps[i][3] * dim[0];
     memcpy(mort + i_current, mcov + i_current, sizeof(double) * dim[0]);
     n_span = nzeros;
@@ -196,7 +214,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
  * @param dim Dimension of vectors (columns of span)
  * @param skip skip the first skip vector of span (already orthogonal)
  */
-int gram_schmidt (double **span_ort, double **span, 
+int gram_schmidt (double **span_ort, double **span,
                   unsigned int *nvec, unsigned int *dim, unsigned int skip) 
 {
   double *v_proj = NULL;
@@ -241,7 +259,8 @@ int gram_schmidt (double **span_ort, double **span,
 
 
 /* 
- * Orthogonal projection of v onto u, the vector u is assumed to be normalized
+ * Orthogonal projection of v onto direction u, 
+ * the vector u is assumed to be normalized
  */
 int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 {

@@ -1,5 +1,5 @@
 int gram_schmidt_sel (double *mort, int *madj, double *mcov, 
-		unsigned int *dim); 
+		unsigned int *dim, unsigned int method); 
 
 int gram_schmidt (double **span_ort, double **span, 
 		unsigned int *nvec, unsigned int *dim, unsigned int skip); 

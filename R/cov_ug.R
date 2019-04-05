@@ -12,7 +12,7 @@
 #' entries in the sampled matrices. Ignored if `ug` is provided.
 #' @param ug An [igraph](https://CRAN.R-project.org/package=igraph) undirected graph specifying the zero pattern in the sampled matrices.
 #' @param zapzeros Boolean, convert to zero extremely low entries? Defaults to `TRUE`.
-#'
+#' @param method  \code{0} or \code{1}
 #' @details Function [port()] uses the method described in
 #' Córdoba et al. (2018). In summary, it consists on generating a random
 #' matrix `Q` and performing row-wise orthogonalization such that if `i` and `j`
@@ -47,7 +47,7 @@
 #' @useDynLib gmat
 #' @export
 port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, 
-                 rfun = rnorm, ...) {
+                 rfun = rnorm, method = 1, ...) {
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
@@ -66,7 +66,7 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
         double(p * p),
         as.logical(madj),
         as.double(t(sam[, , n])),
-        as.integer(p)
+        as.integer(p), as.integer(method)
       )[[1]]
       sam[, , n] <- matrix(temp[- (p*p+1)],
       ncol = p,

@@ -89,7 +89,7 @@ test_that("selective gram schmidt actually selects", {
     double(p * p),
     as.logical(madj),
     as.double(t(span)),
-    as.integer(p)
+    as.integer(p), as.integer(1)
   )[[1]],
   ncol = p,
   byrow = TRUE
