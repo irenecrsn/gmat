@@ -74,12 +74,10 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
     return -1;
   }
   
-  
+
   for (i = 0; i < dim[0]; i++) {
     ort_base[i] = NULL;
   }
-  
-  
   
   for (i = 0; i < dim[0]; i++) {
     if ((ort_base[i] = calloc(dim[0], sizeof(double))) == NULL) {
@@ -122,7 +120,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 
   /* sort the maps */
   //qsort(maps, dim[0], sizeof(int) * 4, compare);
-  
+ 
   nzeros = 0;
   while (maps[nzeros][2] == 0){
     nzeros++;
@@ -199,7 +197,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
  * @param dim Dimension of vectors (columns of span)
  * @param skip skip the first skip vector of span (already orthogonal)
  */
-int gram_schmidt (double **span_ort, double **span,
+int gram_schmidt (double **span_ort, double **span, 
                   unsigned int *nvec, unsigned int *dim, unsigned int skip) 
 {
   double *v_proj = NULL;
