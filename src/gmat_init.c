@@ -6,10 +6,10 @@
 */
 
 /* .C calls */
-extern void gram_schmidt_sel(void *, void *, void *, void *, void *);
+extern void gram_schmidt_sel(void *, void *, void *, void *);
 
 static const R_CMethodDef CEntries[] = {
-    {"gram_schmidt_sel", (DL_FUNC) &gram_schmidt_sel, 5},
+    {"gram_schmidt_sel", (DL_FUNC) &gram_schmidt_sel, 4},
     {NULL, NULL, 0}
 };
 

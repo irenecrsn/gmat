@@ -43,10 +43,9 @@ int compare ( const void *pa, const void *pb )
  * @param span Matrix with rows containing the vectors to orthogonalize
  * @param nvec Number of vectors to orthogonalize (rows of span)
  * @param dim Dimension of vectors (columns of span)
- * @param int Method
  */
 int gram_schmidt_sel (double *mort, int *madj, double *mcov, 
-                      unsigned int *dim, unsigned int method) {
+                      unsigned int *dim) {
   double **span_sel = NULL, **ort_base = NULL;
   double *v_proj = NULL;
   double *temp = NULL;
@@ -122,7 +121,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 
 
   /* sort the maps */
-  qsort(maps, dim[0], sizeof(int) * 4, compare);
+  //qsort(maps, dim[0], sizeof(int) * 4, compare);
   
   nzeros = 0;
   while (maps[nzeros][2] == 0){
@@ -133,13 +132,6 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
   n_span = 0;
   for (j = 0; j < nzeros; j++) {
     span_sel[n_span] = mcov + maps[j][3] * dim[0];
-    if (method == 0){
-      temp = span_sel[n_span];
-      for (jj = 0; jj < j; jj++){
-         *temp = 0;
-         temp++;
-      }
-    }
     n_span++;
   }
   gram_schmidt(ort_base, span_sel, &n_span, dim, 0);
@@ -158,13 +150,6 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
   /*mort[dim[0] * dim[0]] = 0;*/
   /* now the remaining */
   for (i = nzeros; i < dim[0]; i++) {
-    if (method == 0){
-      temp = mcov + maps[i][3] * dim[0];
-      for (jj = 0; jj < i; jj++){
-        *temp = 0;
-        temp++;
-      }
-    }
     i_current = maps[i][3] * dim[0];
     memcpy(mort + i_current, mcov + i_current, sizeof(double) * dim[0]);
     n_span = nzeros;

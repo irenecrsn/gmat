@@ -89,7 +89,7 @@ test_that("selective gram schmidt actually selects", {
     double(p * p),
     as.logical(madj),
     as.double(t(span)),
-    as.integer(p), as.integer(1)
+    as.integer(p)
   )[[1]],
   ncol = p,
   byrow = TRUE
@@ -118,5 +118,8 @@ test_that("the graph structure is preserved", {
   expect_equal_ug(m = sample[, , 1], ug = ug)
 
   sample <- diagdom(ug = ug)
+  expect_equal_ug(m = sample[, , 1], ug = ug)
+  
+  sample <- port_chol(ug = ug)
   expect_equal_ug(m = sample[, , 1], ug = ug)
 })

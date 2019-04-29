@@ -12,7 +12,8 @@
 #' entries in the sampled matrices. Ignored if `ug` is provided.
 #' @param ug An [igraph](https://CRAN.R-project.org/package=igraph) undirected graph specifying the zero pattern in the sampled matrices.
 #' @param zapzeros Boolean, convert to zero extremely low entries? Defaults to `TRUE`.
-#' @param method  \code{0} or \code{1}
+#' @param ... additional parameters to be passed to \code{rfun} or to 
+#'             \code{mh_u}
 #' @details Function [port()] uses the method described in
 #' Córdoba et al. (2018). In summary, it consists on generating a random
 #' matrix `Q` and performing row-wise orthogonalization such that if `i` and `j`
@@ -47,26 +48,24 @@
 #' @useDynLib gmat
 #' @export
 port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, 
-                 rfun = rnorm, method = 1, ...) {
+                 rfun = rnorm, ...) {
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
   if (is.null(ug) == FALSE) {
     p <- length(igraph::V(ug))
-    sam <- array(dim = c(p, p, N), data = 0)
     madj <- igraph::as_adjacency_matrix(ug,
       type = "both",
       sparse = FALSE
     )
+    sam <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
     for (n in 1:N) {
-      sam[, , n] <- matrix(nrow = p, ncol = p, 
-                           data = rfun(p^2, ...))
       temp <- .C(
         "gram_schmidt_sel",
         double(p * p),
         as.logical(madj),
         as.double(t(sam[, , n])),
-        as.integer(p), as.integer(method)
+        as.integer(p)
       )[[1]]
       sam[, , n] <- matrix(temp[- (p*p+1)],
       ncol = p,
@@ -81,6 +80,50 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
   }
   return(sam)
 }
+
+
+#' @rdname cov_ug
+#' @useDynLib gmat
+#' @importFrom gRbase moralize
+#' @importFrom igraph as_adjacency_matrix
+#' @export
+port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, 
+                  ...) {
+  if (is.null(ug) == TRUE) {
+    ug <- rgraph(p = p, d = d)
+  }
+  if (is.null(ug) == FALSE) {
+    p <- length(igraph::V(ug))
+    madj <- igraph::as_adjacency_matrix(ug,
+                                        type = "both",
+                                        sparse = FALSE
+    )
+    madjD <- ugTwodag(madj)
+    dag <- igraph::graph_from_adjacency_matrix(madjD, "directed")
+    sam <- mh_u(N, p = p, dag = dag, ...)
+    for (n in 1:N) {
+      temp <- .C(
+        "gram_schmidt_sel",
+        double(p * p),
+        as.logical(madj),
+        as.double(t(sam[, , n])),
+        as.integer(p)
+      )[[1]]
+      sam[, , n] <- matrix(temp[- (p*p+1)],
+                           ncol = p,
+                           byrow = TRUE
+      )
+      sam[, , n] <- tcrossprod(sam[, , n])
+      
+      if (zapzeros == TRUE) {
+        sam[, , n] <- zapsmall(sam[, , n])
+      }
+    }
+  }
+  return(sam)
+}
+
+
 
 #' @rdname cov_ug
 #'
