@@ -79,3 +79,38 @@ set_cond_number <- function(sample, k) {
 
   return(sample)
 }
+
+
+#' Minimal DAG from UG
+#' 
+#' find the DAG with same skeleton as the UG and 
+#' with the minimum number of v-structures added. 
+#' 
+#' @param x igraph graph or adjacency matrix
+#' @return adjacency matrix for directed graph
+#' @importFrom gRbase rip
+#' @importFrom gRbase triangulateMAT
+#' @importFrom Matrix invPerm
+#' @importFrom igraph is.igraph
+#' @export
+ugTwodag <- function(x){
+  if (igraph::is.igraph(x)){
+    x <- as_adjacency_matrix(x, sparse = FALSE)
+  }
+  colnames(x) <- 1:ncol(x)
+  rownames(x) <- 1:nrow(x)
+  x <- gRbase::triangulateMAT(x)
+  jt <- gRbase::rip(x)
+  order <- jt$cliques[[1]]
+  for (i in 2:length(jt$cliques)){
+    tmp <- jt$cliques[[i]]
+    order <- c(order, tmp[! (tmp %in% order)])
+  }
+  order <- as.numeric(order)
+  inv <- Matrix::invPerm(order)
+  x <- x[order, order]
+  x[lower.tri(x)] <- 0
+  colnames(x) <- NULL
+  rownames(x) <- NULL
+  return(x[inv, inv])
+}

@@ -25,4 +25,6 @@ Suggests:
 	covr
 Imports:
 	igraph,
-	stats
+	stats,
+	gRbase,
+	Matrix

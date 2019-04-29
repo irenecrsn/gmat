@@ -48,8 +48,9 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
                       unsigned int *dim) {
   double **span_sel = NULL, **ort_base = NULL;
   double *v_proj = NULL;
+  double *temp = NULL;
   int maps[dim[0]][4], ix[dim[0] + 1], cc[dim[0]];
-  unsigned int i = 0, j = 0, k = 0, skip = 0, allright = 0;
+  unsigned int i = 0, j = 0, k = 0, skip = 0, allright = 0, jj = 0;
   unsigned int n_span = 0, i_current = 0, nzeros = 0;
   ix[0] = -1;
 
@@ -73,10 +74,10 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
     return -1;
   }
   
+
   for (i = 0; i < dim[0]; i++) {
     ort_base[i] = NULL;
   }
-  
   
   for (i = 0; i < dim[0]; i++) {
     if ((ort_base[i] = calloc(dim[0], sizeof(double))) == NULL) {
@@ -118,8 +119,8 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 
 
   /* sort the maps */
-  qsort(maps, dim[0], sizeof(int) * 4, compare);
-  
+  //qsort(maps, dim[0], sizeof(int) * 4, compare);
+ 
   nzeros = 0;
   while (maps[nzeros][2] == 0){
     nzeros++;
@@ -241,7 +242,8 @@ int gram_schmidt (double **span_ort, double **span,
 
 
 /* 
- * Orthogonal projection of v onto u, the vector u is assumed to be normalized
+ * Orthogonal projection of v onto direction u, 
+ * the vector u is assumed to be normalized
  */
 int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 {
