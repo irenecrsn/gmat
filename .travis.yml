@@ -2,7 +2,7 @@
 
 language: R
 cache: packages
-bioc_packages: RBGL, graph
+
 
 branches:
     only:
@@ -12,6 +12,7 @@ matrix:
         - os: linux
           r: release
           r_packages: pkgdown
+          bioc_packages: RBGL, graph
           after_success: Rscript -e 'covr::codecov()'
           deploy:
             provider: script
@@ -21,12 +22,16 @@ matrix:
                 all_branches: true
         - os: linux
           r: oldrel 
+          bioc_packages: RBGL, graph
         - os: linux
           r: devel
+          bioc_packages: RBGL, graph
           before_install: export _R_CHECK_CRAN_INCOMING_=true
         - os: osx
           r: release
+          bioc_packages: RBGL, graph
         - os: osx
           brew_packages: libgit2
+          bioc_packages: RBGL, graph
           r: oldrel
 
