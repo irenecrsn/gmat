@@ -59,8 +59,9 @@ chol_mh <- function(N = 1,
   } else {
     U <- mh_u(N = N, p = p, ...)
   }
-  vC <- apply(U, MARGIN = 3, tcrossprod)  
+  vC <- apply(U, MARGIN = 3, tcrossprod)
   C <- array(data = vC, dim = dim(U))
+
   return(C)
 }
 

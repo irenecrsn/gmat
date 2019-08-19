@@ -12,8 +12,10 @@
 #' entries in the sampled matrices. Ignored if `ug` is provided.
 #' @param ug An [igraph](https://CRAN.R-project.org/package=igraph) undirected graph specifying the zero pattern in the sampled matrices.
 #' @param zapzeros Boolean, convert to zero extremely low entries? Defaults to `TRUE`.
+#' @param rfun Function that generates the random entries in the initial matrix
 #' @param ... additional parameters to be passed to \code{rfun} or to 
 #'             \code{mh_u}
+#'
 #' @details Function [port()] uses the method described in
 #' Córdoba et al. (2018). In summary, it consists on generating a random
 #' matrix `Q` and performing row-wise orthogonalization such that if `i` and `j`
@@ -125,8 +127,6 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 
 #' @rdname cov_ug
 #' 
-#' @param rfun Function that generates the random entries in the initial matrix
-#'
 #' @details We also provide an implementation of the most commonly used in the
 #' literature [diagdom()]. By contrast, this method produces a random matrix `M`
 #' with zeros corresponding to missing edges in `ug`, and then enforces a
