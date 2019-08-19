@@ -84,8 +84,6 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 
 #' @rdname cov_ug
 #' @useDynLib gmat
-#' @importFrom gRbase moralize
-#' @importFrom igraph as_adjacency_matrix
 #' @export
 port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, 
                   ...) {
@@ -126,6 +124,8 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 
 
 #' @rdname cov_ug
+#' 
+#' @param rfun Function that generates the random entries in the initial matrix
 #'
 #' @details We also provide an implementation of the most commonly used in the
 #' literature [diagdom()]. By contrast, this method produces a random matrix `M`

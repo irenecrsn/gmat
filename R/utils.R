@@ -88,14 +88,10 @@ set_cond_number <- function(sample, k) {
 #' 
 #' @param x igraph graph or adjacency matrix
 #' @return adjacency matrix for directed graph
-#' @importFrom gRbase rip
-#' @importFrom gRbase triangulateMAT
-#' @importFrom Matrix invPerm
-#' @importFrom igraph is.igraph
 #' @export
 ugTwodag <- function(x){
   if (igraph::is.igraph(x)){
-    x <- as_adjacency_matrix(x, sparse = FALSE)
+    x <- igraph::as_adjacency_matrix(x, sparse = FALSE)
   }
   colnames(x) <- 1:ncol(x)
   rownames(x) <- 1:nrow(x)

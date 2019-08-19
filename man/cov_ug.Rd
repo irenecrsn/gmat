@@ -26,6 +26,8 @@ entries in the sampled matrices. Ignored if \code{ug} is provided.}
 
 \item{zapzeros}{Boolean, convert to zero extremely low entries? Defaults to \code{TRUE}.}
 
+\item{rfun}{Function that generates the random entries in the initial matrix}
+
 \item{...}{additional parameters to be passed to \code{rfun} or to
 \code{mh_u}}
 }

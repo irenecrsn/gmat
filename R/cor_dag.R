@@ -154,7 +154,6 @@ chol_iid <- function(N = 1,
 #' mh_u(dag = dag)
 #' # We may also generate it with no zero pattern (full upper triangular)
 #' mh_u()
-#' @importFrom Matrix invPerm
 #' @export
 mh_u <- function(N = 1,
                       p = 3,
