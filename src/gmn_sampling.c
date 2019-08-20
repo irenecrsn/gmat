@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "gmn_sampling.h"
 
@@ -100,6 +101,7 @@ int gram_schmidt (double **span_ort, double **span,
 {
 	double *v_proj = NULL;
 	unsigned int i = 0, j = 0, k = 0;
+	double norm = 0;
 
 	if (span_ort == NULL || span == NULL || nvec == NULL || dim == NULL) {
 		return -1;
@@ -120,6 +122,15 @@ int gram_schmidt (double **span_ort, double **span,
 				span_ort[i][k] -= v_proj[k];
 			}
 		}
+		/* we normalize the resulting vector */
+    	norm = 0;
+    	for (k = 0; k < dim[0]; k++) {
+      		norm += span_ort[i][k] * span_ort[i][k];
+    	}
+    	norm = 1 / sqrt(norm);
+    	for (k = 0; k < dim[0]; k++) {
+      		span_ort[i][k] = span_ort[i][k] * norm;
+    	}
 	}
 
 	free(v_proj); v_proj = NULL;
@@ -128,12 +139,13 @@ int gram_schmidt (double **span_ort, double **span,
 }
 
 /* 
- * Orthogonal projection of two vectors v and u.
+ * Orthogonal projection of v onto direction u.
+ * Vector u is assumed to already be normalized.
  */
 int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 {
 	unsigned int i = 0;
-	double dot_uv = 0, dot_uu = 0, lambda = 0;
+	double dot_uv = 0, dot_uu = 0;
 
 	if (v_proj_u == NULL || v == NULL || u == NULL || dim == NULL) {
 		return -1;
@@ -141,13 +153,10 @@ int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 	
 	for (i = 0; i < dim[0]; i++) {
 		dot_uv += (u[i] * v[i]);
-		dot_uu += (u[i] * u[i]);
 	}
 
-	lambda = dot_uv/dot_uu;
-
 	for (i = 0; i < dim[0]; i++) {
-		v_proj_u[i] = lambda * u[i];
+		v_proj_u[i] = dot_uv * u[i];
 	}
 
 	return 0;
