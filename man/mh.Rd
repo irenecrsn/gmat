@@ -46,8 +46,8 @@ theoretical convergence and numerical experiments for
 choosing its hyper parameters \code{h} and \code{eps}.
 }
 \examples{
-## Upper Cholesky factor sampling 
-# Generate a random acyclic digraph 
+## Upper Cholesky factor sampling
+# Generate a random acyclic digraph
 dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
 igraph::print.igraph(dag)
 
