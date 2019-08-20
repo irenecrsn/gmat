@@ -3,12 +3,16 @@
 \name{ug-constrained covariance matrices}
 \alias{ug-constrained covariance matrices}
 \alias{port}
+\alias{port_chol}
 \alias{diagdom}
 \title{Simulation of covariance matrices.}
 \usage{
-port(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE)
+port(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
+  rfun = rnorm, ...)
 
-diagdom(N = 1, p = 3, d = 1, ug = NULL)
+port_chol(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, ...)
+
+diagdom(N = 1, p = 3, d = 1, ug = NULL, rfun = rnorm, ...)
 }
 \arguments{
 \item{N}{Number of samples.}
@@ -21,6 +25,11 @@ entries in the sampled matrices. Ignored if \code{ug} is provided.}
 \item{ug}{An \href{https://CRAN.R-project.org/package=igraph}{igraph} undirected graph specifying the zero pattern in the sampled matrices.}
 
 \item{zapzeros}{Boolean, convert to zero extremely low entries? Defaults to \code{TRUE}.}
+
+\item{rfun}{Function that generates the random entries in the initial matrix}
+
+\item{...}{additional parameters to be passed to \code{rfun} or to
+\code{mh_u}}
 }
 \value{
 A three-dimensional array of length \code{p x p x N}

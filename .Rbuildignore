@@ -7,3 +7,5 @@ README.html
 LICENSE
 ^.*\.Rproj$
 ^\.Rproj\.user$
+qr.R
+gmn_sampling_degree.c

@@ -163,7 +163,9 @@ mh_u <- function(N = 1,
                       eps = 0.1) {
   if (is.null(dag) == FALSE) {
     p <- length(igraph::V(dag))
-    u <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
+    order <- as.numeric(igraph::topological.sort(dag))
+    inv <- Matrix::invPerm(order)
+    u <- igraph::as_adjacency_matrix(dag, sparse = FALSE)[order, order]
     diag(u) <- 1
   }
 
@@ -177,12 +179,13 @@ mh_u <- function(N = 1,
     }
   } else {
     U[, , 1] <- u
-    ch <- igraph::degree(dag, mode = "out")
-    pa <- igraph::degree(dag, mode = "in")
+    ch <- igraph::degree(dag, mode = "out")[order]
+    pa <- igraph::degree(dag, mode = "in")[order]
     for (j in 1:(p - 1)) {
       su <- mh_sphere(N = N, k = ch[j] + 1, i = pa[j] + 1, h = h, eps = eps)
       U[j, U[j, , 1] > 0, 1:N] <- t(su)
     }
+    U <- array(data = U[inv, inv, ], dim = dim(U))
   }
   return(U)
 }

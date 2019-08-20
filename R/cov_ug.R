@@ -12,6 +12,9 @@
 #' entries in the sampled matrices. Ignored if `ug` is provided.
 #' @param ug An [igraph](https://CRAN.R-project.org/package=igraph) undirected graph specifying the zero pattern in the sampled matrices.
 #' @param zapzeros Boolean, convert to zero extremely low entries? Defaults to `TRUE`.
+#' @param rfun Function that generates the random entries in the initial matrix
+#' @param ... additional parameters to be passed to \code{rfun} or to 
+#'             \code{mh_u}
 #'
 #' @details Function [port()] uses the method described in
 #' Córdoba et al. (2018). In summary, it consists on generating a random
@@ -46,20 +49,19 @@
 #' port(ug = ug, zapzeros = FALSE) # no zero zap
 #' @useDynLib gmat
 #' @export
-port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
-  if (is.null(ug) == TRUE & d != 1) {
+port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, 
+                 rfun = rnorm, ...) {
+  if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
   if (is.null(ug) == FALSE) {
     p <- length(igraph::V(ug))
-
-    sam <- array(dim = c(p, p, N), data = 0)
     madj <- igraph::as_adjacency_matrix(ug,
       type = "both",
       sparse = FALSE
     )
+    sam <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
     for (n in 1:N) {
-      sam[, , n] <- matrix(nrow = p, ncol = p, data = runif(p^2))
       sam[, , n] <- matrix(.C(
         "gram_schmidt_sel",
         double(p * p),
@@ -76,18 +78,54 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
         sam[, , n] <- zapsmall(sam[, , n])
       }
     }
-  } else {
-    sam <- array(dim = c(p, p, N), data = runif(p * p * N))
-    for (n in 1:N) {
-      sam[, , n] <- tcrossprod(sam[, , n])
-    }
   }
-
   return(sam)
 }
 
+
 #' @rdname cov_ug
-#'
+#' @useDynLib gmat
+#' @export
+port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, 
+                  ...) {
+  if (is.null(ug) == TRUE) {
+    ug <- rgraph(p = p, d = d)
+  }
+  if (is.null(ug) == FALSE) {
+    p <- length(igraph::V(ug))
+    madj <- igraph::as_adjacency_matrix(ug,
+                                        type = "both",
+                                        sparse = FALSE
+    )
+    madjD <- ugTwodag(madj)
+    dag <- igraph::graph_from_adjacency_matrix(madjD, "directed")
+    sam <- mh_u(N, p = p, dag = dag, ...)
+    for (n in 1:N) {
+      temp <- .C(
+        "gram_schmidt_sel",
+        double(p * p),
+        as.logical(madj),
+        as.double(t(sam[, , n])),
+        as.integer(p)
+      )[[1]]
+      sam[, , n] <- matrix(temp[- (p*p+1)],
+                           ncol = p,
+                           byrow = TRUE
+      )
+      sam[, , n] <- tcrossprod(sam[, , n])
+      
+      if (zapzeros == TRUE) {
+        sam[, , n] <- zapsmall(sam[, , n])
+      }
+    }
+  }
+  return(sam)
+}
+
+
+
+#' @rdname cov_ug
+#' 
 #' @details We also provide an implementation of the most commonly used in the
 #' literature [diagdom()]. By contrast, this method produces a random matrix `M`
 #' with zeros corresponding to missing edges in `ug`, and then enforces a
@@ -108,7 +146,7 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE) {
 #' igraph::print.igraph(ug)
 #' diagdom(ug = ug)
 #' @export
-diagdom <- function(N = 1, p = 3, d = 1, ug = NULL) {
+diagdom <- function(N = 1, p = 3, d = 1, ug = NULL, rfun = rnorm, ...) {
 
   # We generated the ug if a zero pattern is requested
   if (is.null(ug) == TRUE & d != 1) {
@@ -126,7 +164,7 @@ diagdom <- function(N = 1, p = 3, d = 1, ug = NULL) {
           edges[i, 2],
           edges[i, 1],
         ] <-
-          runif(N)
+          rfun(N, ...)
       }
     }
   } else {
@@ -134,13 +172,13 @@ diagdom <- function(N = 1, p = 3, d = 1, ug = NULL) {
     sam <- array(dim = c(p, p, N))
     for (i in 1:p) {
       for (j in 1:p) {
-        sam[i, j, ] <- sam[j, i, ] <- runif(N)
+        sam[i, j, ] <- sam[j, i, ] <- rfun(N, ...)
       }
     }
   }
 
   for (i in 1:p) {
-    sam[i, i, ] <- abs(runif(N))
+    sam[i, i, ] <- abs(rfun(N, ...))
   }
   mdiag <- apply(sam,
     MARGIN = c(1, 3),

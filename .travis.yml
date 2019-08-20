@@ -3,6 +3,10 @@
 language: R
 cache: packages
 
+bioc_packages:
+    - RBGL
+    - graph
+
 branches:
     only:
         - master
