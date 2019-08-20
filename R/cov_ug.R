@@ -62,14 +62,13 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
     )
     sam <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
     for (n in 1:N) {
-      temp <- .C(
+      sam[, , n] <- matrix(.C(
         "gram_schmidt_sel",
         double(p * p),
         as.logical(madj),
         as.double(t(sam[, , n])),
         as.integer(p)
-      )[[1]]
-      sam[, , n] <- matrix(temp[- (p*p+1)],
+      )[[1]],
       ncol = p,
       byrow = TRUE
       )
