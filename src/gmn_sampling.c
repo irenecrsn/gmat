@@ -115,7 +115,7 @@ int gram_schmidt (double **span_ort, double **span,
 		return -1;
 	}
 
-	for (i = 1; i < nvec[0]; i++) {
+	for (i = 0; i < nvec[0]; i++) {
 		for (j = 0; j < i; j++) {
 			proj_ort(v_proj, span_ort[i], span_ort[j], dim);
 			for (k = 0; k < dim[0]; k++) {
