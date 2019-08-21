@@ -6,7 +6,7 @@ An R package for simulating positive definite matrices constrained by
 acyclic directed and undirected graphs.
 
 [![Build
-Status](https://travis-ci.org/irenecrsn/gmat.svg?branch=master)](https://travis-ci.org/irenecrsn/gmat)
+Status](https://travis-ci.com/irenecrsn/gmat.svg?branch=master)](https://travis-ci.com/irenecrsn/gmat)
 [![codecov](https://codecov.io/gh/irenecrsn/gmat/branch/dev/graph/badge.svg)](https://codecov.io/gh/irenecrsn/gmat)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
@@ -46,23 +46,24 @@ library(gmat)
 
 ug <- rgraph(p = 3, d = 0.5)
 igraph::print.igraph(ug)
-#> IGRAPH 9b4c019 U--- 3 0 -- Erdos renyi (gnp) graph
+#> IGRAPH f4e129f U--- 3 1 -- Erdos renyi (gnp) graph
 #> + attr: name (g/c), type (g/c), loops (g/l), p (g/n)
-#> + edges from 9b4c019:
+#> + edge from f4e129f:
+#> [1] 2--3
 port(N = 2, ug = ug)
 #> , , 1
 #> 
-#>           [,1]      [,2]      [,3]
-#> [1,] 0.5257357 0.0000000 0.0000000
-#> [2,] 0.0000000 0.4518123 0.0000000
-#> [3,] 0.0000000 0.0000000 0.1108733
+#>      [,1]      [,2]      [,3]
+#> [1,]    1 0.0000000 0.0000000
+#> [2,]    0 1.0000000 0.1668523
+#> [3,]    0 0.1668523 1.0000000
 #> 
 #> , , 2
 #> 
-#>          [,1]      [,2]     [,3]
-#> [1,] 1.331151 0.0000000 0.000000
-#> [2,] 0.000000 0.7458147 0.000000
-#> [3,] 0.000000 0.0000000 0.102025
+#>      [,1]      [,2]      [,3]
+#> [1,]    1 0.0000000 0.0000000
+#> [2,]    0 1.0000000 0.9987067
+#> [3,]    0 0.9987067 1.0000000
 ```
 
 We appreciate how the zero pattern is shared by all of the simulated
@@ -77,17 +78,17 @@ their upper Cholesky factor `U`.
 chol_iid(N = 2)
 #> , , 1
 #> 
-#>             [,1]        [,2]       [,3]
-#> [1,]  1.00000000 -0.09215199 -0.4302641
-#> [2,] -0.09215199  1.00000000 -0.6291266
-#> [3,] -0.43026415 -0.62912657  1.0000000
+#>            [,1]       [,2]       [,3]
+#> [1,]  1.0000000  0.3582745 -0.8077264
+#> [2,]  0.3582745  1.0000000 -0.6780165
+#> [3,] -0.8077264 -0.6780165  1.0000000
 #> 
 #> , , 2
 #> 
-#>             [,1]        [,2]       [,3]
-#> [1,]  1.00000000 -0.06982883 -0.2918272
-#> [2,] -0.06982883  1.00000000 -0.6265253
-#> [3,] -0.29182717 -0.62652533  1.0000000
+#>            [,1]        [,2]        [,3]
+#> [1,]  1.0000000 -0.77302566 -0.31058295
+#> [2,] -0.7730257  1.00000000 -0.09241877
+#> [3,] -0.3105829 -0.09241877  1.00000000
 ```
 
 A specific zero pattern can be enforced in `U` using an acyclic digraph.
@@ -98,18 +99,19 @@ m <- chol_iid(dag = dag)[, , 1]
 L <- t(chol(anti_t(m)))
 U <- t(anti_t(L))
 igraph::print.igraph(dag)
-#> IGRAPH 94d75ef D--- 3 0 -- 
-#> + edges from 94d75ef:
+#> IGRAPH 167ee94 D--- 3 1 -- 
+#> + edge from 167ee94:
+#> [1] 1->2
 print(U)
-#>      [,1] [,2] [,3]
-#> [1,]    1    0    0
-#> [2,]    0    1    0
-#> [3,]    0    0    1
+#>          [,1]       [,2] [,3]
+#> [1,] 0.764341 -0.6448122    0
+#> [2,] 0.000000  1.0000000    0
+#> [3,] 0.000000  0.0000000    1
 print(m)
-#>      [,1] [,2] [,3]
-#> [1,]    1    0    0
-#> [2,]    0    1    0
-#> [3,]    0    0    1
+#>            [,1]       [,2] [,3]
+#> [1,]  1.0000000 -0.6448122    0
+#> [2,] -0.6448122  1.0000000    0
+#> [3,]  0.0000000  0.0000000    1
 ```
 
 See more examples and paper references at [the documentation
