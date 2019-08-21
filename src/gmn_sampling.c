@@ -125,7 +125,7 @@ int gram_schmidt (double **span_ort, double **span,
 		/* we normalize the resulting vector */
 		norm = 0;
 		for (k = 0; k < dim[0]; k++) {
-      		norm += span_ort[i][k] * span_ort[i][k];
+			norm += span_ort[i][k] * span_ort[i][k];
 		}
 		norm = 1 / sqrt(norm);
 		for (k = 0; k < dim[0]; k++) {
