@@ -126,11 +126,11 @@ int gram_schmidt (double **span_ort, double **span,
 		norm = 0;
 		for (k = 0; k < dim[0]; k++) {
       		norm += span_ort[i][k] * span_ort[i][k];
-    	}
-    	norm = 1 / sqrt(norm);
-    	for (k = 0; k < dim[0]; k++) {
-      		span_ort[i][k] = span_ort[i][k] * norm;
-    	}
+		}
+		norm = 1 / sqrt(norm);
+		for (k = 0; k < dim[0]; k++) {
+			span_ort[i][k] = span_ort[i][k] * norm;
+		}
 	}
 
 	free(v_proj); v_proj = NULL;
