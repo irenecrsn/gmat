@@ -17,7 +17,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 		unsigned int *dim) {
 	double **span_sel = NULL, **ort_base = NULL;
 	double *v_proj = NULL;
-	unsigned int i = 0, j = 0, k = 0;
+	unsigned int i = 0, j = 0;
 	unsigned int n_span = 0, i_current = 0;
 	
 	if (mort == NULL || madj == NULL || mcov == NULL || dim == NULL) {
@@ -67,13 +67,13 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 				n_span++;
 			}
 		}
+		span_sel[n_span] = mort + i_current;
+		n_span++;
 
+		/* we orthonormalize the span obtained for the current row */
 		gram_schmidt(ort_base, span_sel, &n_span, dim);
-		for (j = 0; j < n_span; j++) {
-			proj_ort(v_proj, mort + i_current, ort_base[j], dim);
-			for (k = 0; k < dim[0]; k++) {
-				mort[i_current + k] -= v_proj[k];
-			}
+		for (j = 0; j < dim[0]; j++) {
+			mort[i_current + j] = ort_base[n_span - 1][j];
 		}
 	}
 	
@@ -123,8 +123,8 @@ int gram_schmidt (double **span_ort, double **span,
 			}
 		}
 		/* we normalize the resulting vector */
-    	norm = 0;
-    	for (k = 0; k < dim[0]; k++) {
+		norm = 0;
+		for (k = 0; k < dim[0]; k++) {
       		norm += span_ort[i][k] * span_ort[i][k];
     	}
     	norm = 1 / sqrt(norm);
