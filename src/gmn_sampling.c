@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "gmn_sampling.h"
 
@@ -16,7 +17,7 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 		unsigned int *dim) {
 	double **span_sel = NULL, **ort_base = NULL;
 	double *v_proj = NULL;
-	unsigned int i = 0, j = 0, k = 0;
+	unsigned int i = 0, j = 0;
 	unsigned int n_span = 0, i_current = 0;
 	
 	if (mort == NULL || madj == NULL || mcov == NULL || dim == NULL) {
@@ -66,13 +67,13 @@ int gram_schmidt_sel (double *mort, int *madj, double *mcov,
 				n_span++;
 			}
 		}
+		span_sel[n_span] = mort + i_current;
+		n_span++;
 
+		/* we orthonormalize the span obtained for the current row */
 		gram_schmidt(ort_base, span_sel, &n_span, dim);
-		for (j = 0; j < n_span; j++) {
-			proj_ort(v_proj, mort + i_current, ort_base[j], dim);
-			for (k = 0; k < dim[0]; k++) {
-				mort[i_current + k] -= v_proj[k];
-			}
+		for (j = 0; j < dim[0]; j++) {
+			mort[i_current + j] = ort_base[n_span - 1][j];
 		}
 	}
 	
@@ -100,6 +101,7 @@ int gram_schmidt (double **span_ort, double **span,
 {
 	double *v_proj = NULL;
 	unsigned int i = 0, j = 0, k = 0;
+	double norm = 0;
 
 	if (span_ort == NULL || span == NULL || nvec == NULL || dim == NULL) {
 		return -1;
@@ -113,12 +115,21 @@ int gram_schmidt (double **span_ort, double **span,
 		return -1;
 	}
 
-	for (i = 1; i < nvec[0]; i++) {
+	for (i = 0; i < nvec[0]; i++) {
 		for (j = 0; j < i; j++) {
 			proj_ort(v_proj, span_ort[i], span_ort[j], dim);
 			for (k = 0; k < dim[0]; k++) {
 				span_ort[i][k] -= v_proj[k];
 			}
+		}
+		/* we normalize the resulting vector */
+		norm = 0;
+		for (k = 0; k < dim[0]; k++) {
+			norm += span_ort[i][k] * span_ort[i][k];
+		}
+		norm = 1 / sqrt(norm);
+		for (k = 0; k < dim[0]; k++) {
+			span_ort[i][k] = span_ort[i][k] * norm;
 		}
 	}
 
@@ -128,12 +139,13 @@ int gram_schmidt (double **span_ort, double **span,
 }
 
 /* 
- * Orthogonal projection of two vectors v and u.
+ * Orthogonal projection of v onto direction u.
+ * Vector u is assumed to already be normalized.
  */
 int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 {
 	unsigned int i = 0;
-	double dot_uv = 0, dot_uu = 0, lambda = 0;
+	double dot_uv = 0, dot_uu = 0;
 
 	if (v_proj_u == NULL || v == NULL || u == NULL || dim == NULL) {
 		return -1;
@@ -141,13 +153,10 @@ int proj_ort (double *v_proj_u, double *v, double *u, unsigned int *dim)
 	
 	for (i = 0; i < dim[0]; i++) {
 		dot_uv += (u[i] * v[i]);
-		dot_uu += (u[i] * u[i]);
 	}
 
-	lambda = dot_uv/dot_uu;
-
 	for (i = 0; i < dim[0]; i++) {
-		v_proj_u[i] = lambda * u[i];
+		v_proj_u[i] = dot_uv * u[i];
 	}
 
 	return 0;
