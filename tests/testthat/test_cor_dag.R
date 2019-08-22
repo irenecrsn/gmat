@@ -112,15 +112,28 @@ test_that("the dag structure is preserved", {
   d <- 0.25
 
   expect_equal_dag <- function(m, dag) {
-    L <- t(chol(anti_t(m)))
+    topsort <- as.numeric(igraph::topo_sort(dag))
+    L <- t(chol(anti_t(m[topsort, topsort])))
     U <- t(anti_t(L))
     madj <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
     madj_learned <- zapsmall(U) != 0
+    inv <- order(topsort)
+    madj_learned <- madj_learned[inv, inv]
     diag(madj_learned) <- FALSE
     expect_equal(length(which((madj - madj_learned) != 0)), 0)
   }
 
+  # With the natural ancestral order
   dag <- rgraph(p = p, d = d, dag = TRUE)
+
+  sample <- chol_mh(dag = dag)
+  expect_equal_dag(m = sample[, , 1], dag = dag)
+
+  sample <- chol_iid(dag = dag)
+  expect_equal_dag(m = sample[, , 1], dag = dag)
+
+  # With a random ancestral order
+  dag <- rgraph(p = p, d = d, dag = TRUE, ordered = FALSE)
 
   sample <- chol_mh(dag = dag)
   expect_equal_dag(m = sample[, , 1], dag = dag)
