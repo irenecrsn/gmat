@@ -72,10 +72,15 @@ A specific zero pattern can be enforced in `U` using an
 acyclic digraph.
 ```{r}
 dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
-m <- chol_iid(dag = dag)[, , 1]
-L <- t(chol(anti_t(m)))
-U <- t(anti_t(L))
 igraph::print.igraph(dag)
+peo_sort <- rev(igraph::topo_sort(dag))
+m <- chol_iid(dag = dag)[, , 1]
+# We sort the matrix according to a Perfect Elimination Ordering (PEO)
+m_sorted <- m[peo_sort, peo_sort]
+# Transpose of Cholesky factor (lower Cholesky decomposition)
+U_chol <- chol(m_sorted) 
+# Upper Cholesky factor (upper Cholesky decomposition)
+U <- t(U_chol[3:1, 3:1])
 print(U)
 print(m)
 ```
