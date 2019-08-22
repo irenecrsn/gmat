@@ -8,41 +8,43 @@
 #' @param p Number of vertices of the sampled graph
 #' @param d Proportion of edges in the generated graph
 #' @param dag Whether the generated graph should be acyclic directed
+#' @param ordered When generating an acyclic directed graph, whether the nodes
+#'  should follow the ancestral order `1, ..., p`.
 #'
 #' @details When `dag = FALSE`, the graph is sampled from an Erdos-Renyi model.
 #' In the case where `dag = TRUE`, the upper triangle of the adjacency matrix of
 #' an Erdos-Renyi model is taken as the adjacency matrix for the acyclic
 #' digraph. This preserves the proportion of edges `d`.
 #'
-#' @return g The generated graph. If `dag = TRUE`, the nodes follow the
-#' ancestral order `1, ..., p`, where `1` has no parents.
+#' @return g The generated graph. If `dag = TRUE`, the nodes follow by default
+#' the ancestral order `1, ..., p`, where `1` has no parents.
+#'
+#' @examples
+#' ## Random undirected graph with 3 nodes and 50% density of edges
+#' rgraph(p = 3, d = 0.5)
+#'
+#' ## Random directed acyclic graphs
+#' # Following the natural ancestral order 1, ..., p
+#' dag <- rgraph(p = 6, d = 0.5, dag = TRUE)
+#' igraph::topo_sort(dag)
+#'
+#' # Following a random ancestral order
+#' dag <- rgraph(p = 6, d = 0.5, dag = TRUE, ordered = FALSE)
+#' igraph::topo_sort(dag)
 #' @export
-rgraph <- function(p, d, dag = FALSE) {
+rgraph <- function(p, d, dag = FALSE, ordered = TRUE) {
   g <- igraph::sample_gnp(n = p, p = d)
 
   if (dag == TRUE) {
     dag_am <- igraph::as_adjacency_matrix(g, type = "upper")
+	if (ordered == FALSE) {
+		random_order <- sample(seq.int(from = 1, to = p))
+		dag_am <- dag_am[random_order, random_order]
+	}
     g <- igraph::graph_from_adjacency_matrix(dag_am, mode = "directed")
   }
 
   return(g)
-}
-
-#' Compute the anti transpose of a matrix (transpose with respect to the off-diagonal)
-#'
-#' @param m square matrix to compute the anti transpose
-#'
-#' @return The anti-transpose of m
-#' @export
-anti_t <- function(m) {
-  p <- nrow(m)
-  j <- matrix(ncol = p, nrow = p, data = 0)
-
-  for (i in 1:p) {
-    j[i, p - i + 1] <- 1
-  }
-
-  return(j %*% t(m) %*% j)
 }
 
 #' Vectorize a sample of covariance/correlation matrices
@@ -97,14 +99,14 @@ ugTwodag <- function(x){
   rownames(x) <- 1:nrow(x)
   x <- gRbase::triangulateMAT(x)
   jt <- gRbase::rip(x)
-  order <- jt$cliques[[1]]
+  dag_topo_sort <- jt$cliques[[1]]
   for (i in 2:length(jt$cliques)){
     tmp <- jt$cliques[[i]]
-    order <- c(order, tmp[! (tmp %in% order)])
+    dag_topo_sort <- c(dag_topo_sort, tmp[! (tmp %in% dag_topo_sort)])
   }
-  order <- as.numeric(order)
-  inv <- Matrix::invPerm(order)
-  x <- x[order, order]
+  dag_topo_sort <- as.numeric(dag_topo_sort)
+  inv <- order(dag_topo_sort)
+  x <- x[dag_topo_sort, dag_topo_sort]
   x[lower.tri(x)] <- 0
   colnames(x) <- NULL
   rownames(x) <- NULL
