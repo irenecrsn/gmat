@@ -26,5 +26,4 @@ Suggests:
 Imports:
 	igraph,
 	stats,
-	gRbase,
-	Matrix
+	gRbase

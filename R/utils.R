@@ -116,14 +116,14 @@ ugTwodag <- function(x){
   rownames(x) <- 1:nrow(x)
   x <- gRbase::triangulateMAT(x)
   jt <- gRbase::rip(x)
-  order <- jt$cliques[[1]]
+  dag_topo_sort <- jt$cliques[[1]]
   for (i in 2:length(jt$cliques)){
     tmp <- jt$cliques[[i]]
-    order <- c(order, tmp[! (tmp %in% order)])
+    dag_topo_sort <- c(dag_topo_sort, tmp[! (tmp %in% dag_topo_sort)])
   }
-  order <- as.numeric(order)
-  inv <- Matrix::invPerm(order)
-  x <- x[order, order]
+  dag_topo_sort <- as.numeric(dag_topo_sort)
+  inv <- order(dag_topo_sort)
+  x <- x[dag_topo_sort, dag_topo_sort]
   x[lower.tri(x)] <- 0
   colnames(x) <- NULL
   rownames(x) <- NULL
