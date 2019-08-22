@@ -4,7 +4,7 @@
 \alias{rgraph}
 \title{Random generation of acyclic digraphs and undirected graphs}
 \usage{
-rgraph(p, d, dag = FALSE)
+rgraph(p, d, dag = FALSE, ordered = TRUE)
 }
 \arguments{
 \item{p}{Number of vertices of the sampled graph}
@@ -12,6 +12,9 @@ rgraph(p, d, dag = FALSE)
 \item{d}{Proportion of edges in the generated graph}
 
 \item{dag}{Whether the generated graph should be acyclic directed}
+
+\item{ordered}{When generating an acyclic directed graph, whether the nodes
+should follow the ancestral order \code{1, ..., p}.}
 }
 \value{
 g The generated graph. If \code{dag = TRUE}, the nodes follow the

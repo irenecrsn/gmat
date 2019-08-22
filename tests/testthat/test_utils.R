@@ -5,9 +5,16 @@ test_that("random dags are actually dags", {
 
   dag <- rgraph(p, 0.5, dag = TRUE)
   expect_true(igraph::is_dag(dag))
+
+  # Two random order checks
+  dag <- rgraph(p, 0.5, dag = TRUE, ordered = FALSE)
+  expect_true(igraph::is_dag(dag))
+
+  dag <- rgraph(p, 0.5, dag = TRUE, ordered = FALSE)
+  expect_true(igraph::is_dag(dag))
 })
 
-test_that("random dags follow the natural ancestral order", {
+test_that("random dags follow the natural ancestral order by default", {
   p <- 10
 
   dag <- rgraph(p, 0.5, dag = TRUE)
