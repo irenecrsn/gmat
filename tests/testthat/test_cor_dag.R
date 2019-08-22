@@ -113,8 +113,9 @@ test_that("the dag structure is preserved", {
 
   expect_equal_dag <- function(m, dag) {
     topsort <- as.numeric(igraph::topo_sort(dag))
-    L <- t(chol(anti_t(m[topsort, topsort])))
-    U <- t(anti_t(L))
+    pesort <- rev(topsort) # Perfect elimination ordering
+    U_chol <- chol(m[pesort, pesort])
+    U <- t(U_chol[p:1, p:1])
     madj <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
     madj_learned <- zapsmall(U) != 0
     inv <- order(topsort)
