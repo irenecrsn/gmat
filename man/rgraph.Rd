@@ -17,8 +17,8 @@ rgraph(p, d, dag = FALSE, ordered = TRUE)
 should follow the ancestral order \code{1, ..., p}.}
 }
 \value{
-g The generated graph. If \code{dag = TRUE}, the nodes follow the
-ancestral order \code{1, ..., p}, where \code{1} has no parents.
+g The generated graph. If \code{dag = TRUE}, the nodes follow by default
+the ancestral order \code{1, ..., p}, where \code{1} has no parents.
 }
 \description{
 Wrapper of functionality from package \code{igraph} for random generation of
@@ -29,4 +29,17 @@ When \code{dag = FALSE}, the graph is sampled from an Erdos-Renyi model.
 In the case where \code{dag = TRUE}, the upper triangle of the adjacency matrix of
 an Erdos-Renyi model is taken as the adjacency matrix for the acyclic
 digraph. This preserves the proportion of edges \code{d}.
+}
+\examples{
+## Random undirected graph with 3 nodes and 50\% density of edges
+rgraph(p = 3, d = 0.5)
+
+## Random directed acyclic graphs
+# Following the natural ancestral order 1, ..., p
+dag <- rgraph(p = 6, d = 0.5, dag = TRUE)
+igraph::topo_sort(dag)
+
+# Following a random ancestral order
+dag <- rgraph(p = 6, d = 0.5, dag = TRUE, ordered = FALSE)
+igraph::topo_sort(dag)
 }
