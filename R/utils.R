@@ -85,20 +85,20 @@ set_cond_number <- function(sample, k) {
 
 #' Minimal DAG from UG
 #' 
-#' find the DAG with same skeleton as the UG and 
+#' Find the DAG with same skeleton as the UG and
 #' with the minimum number of v-structures added. 
 #' 
-#' @param x igraph graph or adjacency matrix
-#' @return adjacency matrix for directed graph
+#' @param ug igraph graph or adjacency matrix
+#' @return acyclic directed graph orientation (igraph)
 #' @export
-ugTwodag <- function(x){
-  if (igraph::is.igraph(x)){
-    x <- igraph::as_adjacency_matrix(x, sparse = FALSE)
+ug_to_dag <- function(ug){
+  if (igraph::is.igraph(ug)){
+    ug <- igraph::as_adjacency_matrix(ug, sparse = FALSE)
   }
-  colnames(x) <- 1:ncol(x)
-  rownames(x) <- 1:nrow(x)
-  x <- gRbase::triangulateMAT(x)
-  jt <- gRbase::rip(x)
+  colnames(ug) <- 1:ncol(ug)
+  rownames(ug) <- 1:nrow(ug)
+  ug <- gRbase::triangulateMAT(ug)
+  jt <- gRbase::rip(ug)
   dag_topo_sort <- jt$cliques[[1]]
   for (i in 2:length(jt$cliques)){
     tmp <- jt$cliques[[i]]
@@ -106,9 +106,9 @@ ugTwodag <- function(x){
   }
   dag_topo_sort <- as.numeric(dag_topo_sort)
   inv <- order(dag_topo_sort)
-  x <- x[dag_topo_sort, dag_topo_sort]
-  x[lower.tri(x)] <- 0
-  colnames(x) <- NULL
-  rownames(x) <- NULL
-  return(x[inv, inv])
+  ug <- ug[dag_topo_sort, dag_topo_sort]
+  ug[lower.tri(ug)] <- 0
+  colnames(ug) <- NULL
+  rownames(ug) <- NULL
+  return(igraph::graph_from_adjacency_matrix(ug[inv, inv], mode = "directed"))
 }
