@@ -70,22 +70,27 @@ test_that("the dag orientation of an ug is actually a dag", {
 
 })
 
-test_that("the skeleton of the oriented dag is the original ug", {
+test_that("the skeleton of the oriented dag is chordal", {
 
   p <- 10
   d <- 0.5
 
-  expect_equal_ug <- function(ug1, ug2) {
-    madj1 <- igraph::as_adjacency_matrix(ug1, sparse = FALSE)
-	madj2 <- igraph::as_adjacency_matrix(ug2, sparse = FALSE)
-    diag(madj1) <- FALSE
-    diag(madj2) <- FALSE
-    expect_equal(length(which((madj1 - madj2) != 0)), 0)
-  }
-
   ug <- rgraph(p = p, d = d)
   dag <- ug_to_dag(ug = ug)
 
-  expect_equal_ug(ug, igraph::as.undirected(dag))
+  expect_true(igraph::is_chordal(igraph::as.undirected(dag))$chordal)
+
+})
+
+test_that("the skeleton of the oriented dag contains the original ug", {
+
+  p <- 10
+  d <- 0.5
+
+  ug <- rgraph(p = p, d = d)
+  dag <- ug_to_dag(ug = ug)
+  ug_cover <- igraph::as.undirected(dag)
+
+  expect_true(igraph::is_subgraph_isomorphic_to(ug, ug_cover))
 
 })

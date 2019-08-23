@@ -7,12 +7,12 @@
 ug_to_dag(ug)
 }
 \arguments{
-\item{x}{igraph graph or adjacency matrix}
+\item{ug}{igraph graph or adjacency matrix}
 }
 \value{
 acyclic directed graph orientation (igraph)
 }
 \description{
-Find the DAG with same skeleton as the UG and
-with the minimum number of v-structures added.
+Find the DAG whose skeleton is a triangulation of a given
+undirected graph.
 }
