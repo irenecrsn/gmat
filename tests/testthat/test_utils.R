@@ -76,13 +76,20 @@ test_that("the skeleton of the oriented dag is chordal", {
   d <- 0.5
 
   ug <- rgraph(p = p, d = d)
+
+  # We force a non chordal graph
+  while(igraph::is_chordal(ug)$chordal == TRUE) {
+    ug <- rgraph(p = p, d = d)
+  }
+
   dag <- ug_to_dag(ug = ug)
 
   expect_true(igraph::is_chordal(igraph::as.undirected(dag))$chordal)
 
 })
 
-test_that("the skeleton of the oriented dag contains the original ug", {
+test_that("the skeleton of the oriented dag contains the original ug, keeping
+the order", {
 
   p <- 10
   d <- 0.5
@@ -91,6 +98,9 @@ test_that("the skeleton of the oriented dag contains the original ug", {
   dag <- ug_to_dag(ug = ug)
   ug_cover <- igraph::as.undirected(dag)
 
-  expect_true(igraph::is_subgraph_isomorphic_to(ug, ug_cover))
+  # This forces to keep the order
+  domains <- as.list(1:p)
+
+  expect_true(igraph::is_subgraph_isomorphic_to(ug, ug_cover, domains = domains))
 
 })
