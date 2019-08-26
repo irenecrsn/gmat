@@ -97,8 +97,7 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
                                         type = "both",
                                         sparse = FALSE
     )
-    madjD <- ugTwodag(madj)
-    dag <- igraph::graph_from_adjacency_matrix(madjD, "directed")
+    dag <- ug_to_dag(ug)
     sam <- mh_u(N, p = p, dag = dag, ...)
     for (n in 1:N) {
       temp <- .C(

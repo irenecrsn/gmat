@@ -2,15 +2,16 @@ context("Utility functions")
 
 test_that("random dags are actually dags", {
   p <- 10
+  d <- 0.5
 
-  dag <- rgraph(p, 0.5, dag = TRUE)
+  dag <- rgraph(p = p, d = d, dag = TRUE)
   expect_true(igraph::is_dag(dag))
 
   # Two random order checks
-  dag <- rgraph(p, 0.5, dag = TRUE, ordered = FALSE)
+  dag <- rgraph(p = p, d = d, dag = TRUE, ordered = FALSE)
   expect_true(igraph::is_dag(dag))
 
-  dag <- rgraph(p, 0.5, dag = TRUE, ordered = FALSE)
+  dag <- rgraph(p = p, d = d, dag = TRUE, ordered = FALSE)
   expect_true(igraph::is_dag(dag))
 })
 
@@ -56,4 +57,50 @@ test_that("the condition number is correctly set", {
   for (n in 1:N) {
     expect_equal(kappa(sample[, , n], exact = TRUE), k)
   }
+})
+
+test_that("the dag orientation of an ug is actually a dag", {
+
+  p <- 10
+  d <- 0.5
+
+  ug <- rgraph(p = p, d = d)
+  dag <- ug_to_dag(ug = ug)
+  expect_true(igraph::is_dag(dag))
+
+})
+
+test_that("the skeleton of the oriented dag is chordal", {
+
+  p <- 10
+  d <- 0.5
+
+  ug <- rgraph(p = p, d = d)
+
+  # We force a non chordal graph
+  while(igraph::is_chordal(ug)$chordal == TRUE) {
+    ug <- rgraph(p = p, d = d)
+  }
+
+  dag <- ug_to_dag(ug = ug)
+
+  expect_true(igraph::is_chordal(igraph::as.undirected(dag))$chordal)
+
+})
+
+test_that("the skeleton of the oriented dag contains the original ug, keeping
+the order", {
+
+  p <- 10
+  d <- 0.5
+
+  ug <- rgraph(p = p, d = d)
+  dag <- ug_to_dag(ug = ug)
+  ug_cover <- igraph::as.undirected(dag)
+
+  # This forces to keep the order
+  domains <- as.list(1:p)
+
+  expect_true(igraph::is_subgraph_isomorphic_to(ug, ug_cover, domains = domains))
+
 })
