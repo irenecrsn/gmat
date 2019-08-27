@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{ug_to_dag}
 \alias{ug_to_dag}
-\title{Minimal DAG from UG}
+\title{Moral DAG from non chordal UG}
 \usage{
 ug_to_dag(ug)
 }
@@ -13,6 +13,6 @@ ug_to_dag(ug)
 acyclic directed graph orientation (igraph)
 }
 \description{
-Find the DAG whose skeleton is a triangulation of a given
-undirected graph.
+Find the DAG with no v-structures whose skeleton is a
+triangulation of a given undirected graph.
 }

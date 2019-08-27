@@ -24,5 +24,7 @@ Suggests:
 	testthat,
 	covr
 Imports:
+	gRbase,
 	igraph,
+	methods,
 	stats
