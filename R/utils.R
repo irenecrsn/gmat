@@ -83,28 +83,44 @@ set_cond_number <- function(sample, k) {
 }
 
 
-#' Minimal DAG from UG
+#' Moral DAG from non chordal UG
 #' 
-#' Find the DAG whose skeleton is a triangulation of a given 
-#' undirected graph. 
+#' Find the DAG with no v-structures whose skeleton is a
+#' triangulation of a given undirected graph.
 #' 
 #' @param ug igraph graph or adjacency matrix
 #' @return acyclic directed graph orientation (igraph)
 #' @export
 ug_to_dag <- function(ug){
+
+  if (igraph::is.igraph(ug)){
+    ug <- igraph::as_adjacency_matrix(ug, sparse = FALSE)
+  }
+  colnames(ug) <- 1:ncol(ug)
+  rownames(ug) <- 1:nrow(ug)
+  ug <- gRbase::triangulateMAT(ug)
+  dag_topo_sort <- gRbase::mcs(ug, index = TRUE)
+  inv <- order(dag_topo_sort)
+  ug <- ug[dag_topo_sort, dag_topo_sort]
+  ug[lower.tri(ug)] <- 0
+  colnames(ug) <- NULL
+  rownames(ug) <- NULL
+
+
   # We triangulate the undirected graph if it is not chordal
-  ug <- igraph::is_chordal(ug, newgraph = TRUE)$newgraph
+  #ug <- igraph::is_chordal(ug, newgraph = TRUE)$newgraph
 
   # We get the max_cardinality sort == perfect ordering
-  ug_mcsort <- igraph::max_cardinality(ug)
+  #ug_mcsort <- igraph::max_cardinality(ug)
 
   # The perfect ordering will be the ancestral ordering of orientation
-  dag_topo_sort <- ug_mcsort$alpha
-
-  inv <- ug_mcsort$alpham1
-  ug_mat <- igraph::as_adjacency_matrix(ug, sparse = FALSE)
-  ug_mat <- ug_mat[dag_topo_sort, dag_topo_sort]
-  ug_mat[lower.tri(ug_mat)] <- 0
-  dag <- igraph::graph_from_adjacency_matrix(ug_mat[inv, inv], mode = "directed")
+  # By construction this cannot induce v-structures
+  #dag_topo_sort <- ug_mcsort$alpha
+  #inv <- ug_mcsort$alpham1
+  
+  #ug_mat <- igraph::as_adjacency_matrix(ug, sparse = FALSE)
+  #dag_mat <- ug_mat[dag_topo_sort, dag_topo_sort]
+  #dag_mat[lower.tri(dag_mat)] <- 0
+  dag <- igraph::graph_from_adjacency_matrix(ug[inv, inv], mode = "directed")
   return(dag)
 }

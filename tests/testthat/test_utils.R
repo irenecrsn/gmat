@@ -104,3 +104,18 @@ the order", {
   expect_true(igraph::is_subgraph_isomorphic_to(ug, ug_cover, domains = domains))
 
 })
+
+
+test_that("the oriented dag does not contain v-structures", {
+
+  p <- 10
+  d <- 0.5
+
+  ug <- rgraph(p = p, d = d)
+  dag <- ug_to_dag(ug = ug)
+
+  v_struct <- igraph::make_directed_graph(edges = c(1, 3, 2, 3))
+
+  expect_false(igraph::is_subgraph_isomorphic_to(v_struct, dag, induced = TRUE))
+
+})
