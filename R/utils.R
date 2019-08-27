@@ -93,34 +93,26 @@ set_cond_number <- function(sample, k) {
 #' @export
 ug_to_dag <- function(ug){
 
-  if (igraph::is.igraph(ug)){
-    ug <- igraph::as_adjacency_matrix(ug, sparse = FALSE)
-  }
-  colnames(ug) <- 1:ncol(ug)
-  rownames(ug) <- 1:nrow(ug)
-  ug <- gRbase::triangulateMAT(ug)
-  dag_topo_sort <- gRbase::mcs(ug, index = TRUE)
-  inv <- order(dag_topo_sort)
-  ug <- ug[dag_topo_sort, dag_topo_sort]
-  ug[lower.tri(ug)] <- 0
-  colnames(ug) <- NULL
-  rownames(ug) <- NULL
-
-
   # We triangulate the undirected graph if it is not chordal
-  #ug <- igraph::is_chordal(ug, newgraph = TRUE)$newgraph
+  ug_cover <- gRbase::triangulate(igraph::as_graphnel(ug))
 
   # We get the max_cardinality sort == perfect ordering
-  #ug_mcsort <- igraph::max_cardinality(ug)
-
   # The perfect ordering will be the ancestral ordering of orientation
-  # By construction this cannot induce v-structures
+  # By construction this ordering cannot induce v-structures
+  dag_topo_sort <- gRbase::mcs(ug_cover, index = TRUE)
+  inv <- order(dag_topo_sort)
+  dag_mat <- as(ug_cover, "matrix")
+  dag_mat <- dag_mat[dag_topo_sort, dag_topo_sort]
+  dag_mat[lower.tri(dag_mat)] <- 0
+
+  #ug <- igraph::is_chordal(ug, newgraph = TRUE)$newgraph
+  #ug_mcsort <- igraph::max_cardinality(ug) BUGGED FOR NOW SO USING GRBASE
   #dag_topo_sort <- ug_mcsort$alpha
   #inv <- ug_mcsort$alpham1
-  
   #ug_mat <- igraph::as_adjacency_matrix(ug, sparse = FALSE)
   #dag_mat <- ug_mat[dag_topo_sort, dag_topo_sort]
   #dag_mat[lower.tri(dag_mat)] <- 0
-  dag <- igraph::graph_from_adjacency_matrix(ug[inv, inv], mode = "directed")
+
+  dag <- igraph::graph_from_adjacency_matrix(dag_mat[inv, inv], mode = "directed")
   return(dag)
 }
