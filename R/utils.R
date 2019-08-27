@@ -101,7 +101,7 @@ ug_to_dag <- function(ug){
   # By construction this ordering cannot induce v-structures
   dag_topo_sort <- gRbase::mcs(ug_cover, index = TRUE)
   inv <- order(dag_topo_sort)
-  dag_mat <- as(ug_cover, "matrix")
+  dag_mat <- methods::as(ug_cover, "matrix")
   dag_mat <- dag_mat[dag_topo_sort, dag_topo_sort]
   dag_mat[lower.tri(dag_mat)] <- 0
 
