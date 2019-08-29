@@ -47,6 +47,34 @@ rgraph <- function(p, d, dag = FALSE, ordered = TRUE) {
   return(g)
 }
 
+
+#' Get the upper factor of the upper Cholesky decomposition of a SPD matrix
+#'
+#' @param m Matrix to factorize
+#'
+#' @details The upper factor `U` such that `m = U %*% t(U)`. `U` is equal to the
+#' transpose with respect to the anti-diagonal of the standard Cholesky factor
+#' `L` in `m_rev = L %*% t(L)`, where `m_rev` is the matrix resulting from
+#' reverting the order of rows and columns in `m` (see Córdoba et al., 2019,
+#' Section 2.2 for more details). The function uses the base `chol` method.
+#' @return A `p*p` upper triangular matrix
+#'
+#' @references Córdoba I., Varando G., Bielza C., Larrañaga P., Generating
+#' random Gaussian graphical models, arXiv eprint.
+#' @export
+uchol <- function(m) {
+  p <- nrow(m)
+
+  # Reverse order of rows and columns of the given matrix
+  m <- m[p:1, p:1]
+
+  # Upper standard Cholesky factor
+  u <- chol(m)
+
+  # Transpose with respect to the antidiagonal
+  return(t(u[p:1, p:1]))
+}
+
 #' Vectorize a sample of covariance/correlation matrices
 #'
 #' @param sample Array, the `p x p x N` sample to vectorize
