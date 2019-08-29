@@ -137,13 +137,15 @@ test_that("the dag structure is preserved", {
 
   expect_equal_dag <- function(m, dag) {
     topsort <- gRbase::topoSort(igraph::as_graphnel(dag), index = TRUE)
-    U <- uchol(m[topsort, topsort])
+
 	madj <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
-    madj_learned <- zapsmall(U) != 0
-    inv <- order(topsort)
-    madj_learned <- madj_learned[inv, inv]
-    diag(madj_learned) <- FALSE
-    expect_equal(length(which((madj - madj_learned) != 0)), 0)
+    madj <- madj[topsort, topsort]
+
+	u <- uchol(m[topsort, topsort])
+    u <- (zapsmall(u) != 0) # For ignoring numeric errors
+    diag(u) <- FALSE
+
+	expect_equal(length(which((madj - u) != 0)), 0)
   }
 
   # With the natural ancestral order

@@ -56,7 +56,7 @@ rgraph <- function(p, d, dag = FALSE, ordered = TRUE) {
 #' transpose with respect to the anti-diagonal of the standard Cholesky factor
 #' `L` in `m_rev = L %*% t(L)`, where `m_rev` is the matrix resulting from
 #' reverting the order of rows and columns in `m` (see Córdoba et al., 2019,
-#' Section 2.2 for more details).
+#' Section 2.2 for more details). The function uses the base `chol` method.
 #' @return A `p*p` upper triangular matrix
 #'
 #' @references Córdoba I., Varando G., Bielza C., Larrañaga P., Generating
