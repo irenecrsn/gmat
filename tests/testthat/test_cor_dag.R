@@ -1,11 +1,12 @@
 context("Correlation matrices, possibly with a zero pattern on the Cholesky factor")
 
 test_that("upper Cholesky factors are of Cholesky", {
-  p <- 5; d <- 0.2
+  p <- 5
+  d <- 0.2
 
   expect_cholesky <- function(u) {
     m <- tcrossprod(u)
-	expect_equal(u, uchol(m))
+    expect_equal(u, uchol(m))
   }
 
   # No zero pattern
@@ -106,7 +107,7 @@ test_that("matrices are of correlation", {
     check_cor_sample <- function(sample) {
       p <- dim(sample)[1]
       for (i in 1:(p - 1)) {
-		expect_equal(sample[i, i, 1], 1)
+        expect_equal(sample[i, i, 1], 1)
         for (j in (i + 1):p) {
           expect_gt(sample[i, j, 1], -1)
           expect_lt(sample[i, j, 1], 1)
@@ -138,14 +139,14 @@ test_that("the dag structure is preserved", {
   expect_equal_dag <- function(m, dag) {
     topsort <- gRbase::topoSort(igraph::as_graphnel(dag), index = TRUE)
 
-	madj <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
+    madj <- igraph::as_adjacency_matrix(dag, sparse = FALSE)
     madj <- madj[topsort, topsort]
 
-	u <- uchol(m[topsort, topsort])
+    u <- uchol(m[topsort, topsort])
     u <- (zapsmall(u) != 0) # For ignoring numeric errors
     diag(u) <- FALSE
 
-	expect_equal(length(which((madj - u) != 0)), 0)
+    expect_equal(length(which((madj - u) != 0)), 0)
   }
 
   # With the natural ancestral order
