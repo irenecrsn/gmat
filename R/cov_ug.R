@@ -13,7 +13,7 @@
 #' @param ug An [igraph](https://CRAN.R-project.org/package=igraph) undirected graph specifying the zero pattern in the sampled matrices.
 #' @param zapzeros Boolean, convert to zero extremely low entries? Defaults to `TRUE`.
 #' @param rfun Function that generates the random entries in the initial matrix
-#' @param ... additional parameters to be passed to \code{rfun} or to 
+#' @param ... additional parameters to be passed to \code{rfun} or to
 #'             \code{mh_u}
 #'
 #' @details Function [port()] uses the method described in
@@ -35,21 +35,21 @@
 #' ## Partial orthogonalization
 #' # Generate a full matrix (default behaviour)
 #' port()
-#' 
+#'
 #' # Generate a matrix with a percentage of zeros
 #' port(d = 0.5)
 #' port(d = 0.5, zapzeros = FALSE) # no zero zap
-#' 
+#'
 #' # Generate a random undirected graph structure
 #' ug <- rgraph(p = 3, d = 0.5)
 #' igraph::print.igraph(ug)
-#' 
+#'
 #' # Generate a matrix complying with the predefined zero pattern
 #' port(ug = ug)
 #' port(ug = ug, zapzeros = FALSE) # no zero zap
 #' @useDynLib gmat
 #' @export
-port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, 
+port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
                  rfun = rnorm, ...) {
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
@@ -86,16 +86,16 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 #' @rdname cov_ug
 #' @useDynLib gmat
 #' @export
-port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, 
-                  ...) {
+port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
+                      ...) {
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
   if (is.null(ug) == FALSE) {
     p <- length(igraph::V(ug))
     madj <- igraph::as_adjacency_matrix(ug,
-                                        type = "both",
-                                        sparse = FALSE
+      type = "both",
+      sparse = FALSE
     )
     dag <- ug_to_dag(ug)
     sam <- mh_u(N, p = p, dag = dag, ...)
@@ -107,12 +107,12 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
         as.double(t(sam[, , n])),
         as.integer(p)
       )[[1]]
-      sam[, , n] <- matrix(temp[- (p*p+1)],
-                           ncol = p,
-                           byrow = TRUE
+      sam[, , n] <- matrix(temp[-(p * p + 1)],
+        ncol = p,
+        byrow = TRUE
       )
       sam[, , n] <- tcrossprod(sam[, , n])
-      
+
       if (zapzeros == TRUE) {
         sam[, , n] <- zapsmall(sam[, , n])
       }
@@ -124,7 +124,7 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 
 
 #' @rdname cov_ug
-#' 
+#'
 #' @details We also provide an implementation of the most commonly used in the
 #' literature [diagdom()]. By contrast, this method produces a random matrix `M`
 #' with zeros corresponding to missing edges in `ug`, and then enforces a
@@ -137,10 +137,10 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 #' ## Diagonal dominance
 #' # Generate a full matrix (default behaviour)
 #' diagdom()
-#' 
+#'
 #' # Generate a matrix with a percentage of zeros
 #' diagdom(d = 0.5)
-#' 
+#'
 #' # Generate a matrix complying with the predefined zero pattern
 #' igraph::print.igraph(ug)
 #' diagdom(ug = ug)

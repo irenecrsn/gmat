@@ -11,7 +11,7 @@
 #' @param p Matrix dimension. Ignored if `dag` is provided.
 #' @param d Number in `[0,1]`, the proportion of non-zero
 #' entries in the Cholesky factor of the sampled matrices.
-#' Ignored if `dag` is provided. 
+#' Ignored if `dag` is provided.
 #' @param dag An
 #' [igraph](https://CRAN.R-project.org/package=igraph) acyclic
 #' digraph specifying the zero pattern in the upper Cholesky
@@ -28,20 +28,20 @@
 #'
 #' @references Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
 #' Metropolis-Hastings method for generating random correlation matrices. _Lecture Notes in
-#' Computer Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018. 
+#' Computer Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018.
 #'
 #' @examples
 #' ## Cholesky sampling via Metropolis-Hastings
 #' # Generate a full matrix (default behaviour)
 #' chol_mh()
-#' 
+#'
 #' # Generate a matrix with a percentage of zeros
 #' chol_mh(d = 0.5)
-#' 
+#'
 #' # Generate a random acyclic digraph structure
 #' dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
 #' igraph::print.igraph(dag)
-#' 
+#'
 #' # Generate a matrix complying with the predefined zero pattern
 #' chol_mh(dag = dag)
 #' @export
@@ -52,7 +52,7 @@ chol_mh <- function(N = 1,
                     ...) {
   if (is.null(dag) == TRUE & d != 1) {
     # We generate the dag if a zero pattern is requested
-      dag <- rgraph(p = p, d = d, dag = TRUE)
+    dag <- rgraph(p = p, d = d, dag = TRUE)
   }
   if (is.null(dag) == FALSE) {
     U <- mh_u(N = N, dag = dag, ...)
@@ -78,10 +78,10 @@ chol_mh <- function(N = 1,
 #' ## Cholesky sampling via i.i.d. Cholesky factor
 #' # Generate a full matrix (default behaviour)
 #' chol_iid()
-#' 
+#'
 #' # Generate a matrix with a percentage of zeros
 #' chol_iid(d = 0.5)
-#' 
+#'
 #' # Generate a matrix complying with the predefined zero pattern
 #' igraph::print.igraph(dag)
 #' chol_iid(dag = dag)
@@ -118,15 +118,15 @@ chol_iid <- function(N = 1,
   return(R)
 }
 
-#' Upper Cholesky factor sampling using Metropolis-Hastings 
-#' 
+#' Upper Cholesky factor sampling using Metropolis-Hastings
+#'
 #' Metropolis-Hasting algorithms to sample the upper Cholesky factor, using
-#' positive hemispheres of different dimensions. A zero pattern may be specified 
+#' positive hemispheres of different dimensions. A zero pattern may be specified
 #' using an acyclic digraph.
-#' 
+#'
 #' @name metropolis-hastings sampling
 #'
-#' @rdname mh 
+#' @rdname mh
 #'
 #' @param N Number of samples.
 #' @param p Dimension of the upper Cholesky factor.
@@ -146,21 +146,21 @@ chol_iid <- function(N = 1,
 #' specified by `dag`.
 #'
 #' @examples
-#' ## Upper Cholesky factor sampling 
-#' # Generate a random acyclic digraph 
+#' ## Upper Cholesky factor sampling
+#' # Generate a random acyclic digraph
 #' dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
 #' igraph::print.igraph(dag)
-#' 
+#'
 #' # Generate an upper Cholesky factor complying with such zero pattern
 #' mh_u(dag = dag)
 #' # We may also generate it with no zero pattern (full upper triangular)
 #' mh_u()
 #' @export
 mh_u <- function(N = 1,
-                      p = 3,
-                      dag = NULL,
-                      h = 100,
-                      eps = 0.1) {
+                 p = 3,
+                 dag = NULL,
+                 h = 100,
+                 eps = 0.1) {
   if (is.null(dag) == FALSE) {
     p <- length(igraph::V(dag))
     dag_topo_sort <- as.numeric(igraph::topological.sort(dag))
@@ -191,7 +191,7 @@ mh_u <- function(N = 1,
 }
 
 
-#' @rdname mh 
+#' @rdname mh
 #'
 #' @param k Dimension of the hemisphere from which the sample is taken.
 #' @param i Integer, power of the first coordinate in the density.
