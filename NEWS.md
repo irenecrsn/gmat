@@ -1,41 +1,41 @@
 # gmat 0.2.1
 
 This update of `gmat` incorporates functions necessary to run the experiments in
-Córdoba et al. (2019) <arXiv:1909.01062>, and some minor improvements and bug
-fixes.
+[Córdoba et al. (2019)](https://arxiv.org/abs/1909.01062), and some minor
+improvements and bug fixes.
 
 ## Breaking changes
-- Now we also import package
+* Now we also import package
   [gRbase](https://CRAN.R-project.org/package=gRbase), mainly for its
   functionality regarding triangulation and chordal graphs.
-- Function `chol_polar()` has been removed because a faster implementation has
-  been recently provided by
+* Function `chol_polar()` has been removed because a faster implementation has
+  been recently provided by the
   [randcorr](https://CRAN.R-project.org/package=randcorr) package.
-- Function `anti_t()` has been replaced by a more useful function `uchol()`,
+* Function `anti_t()` has been replaced by a more useful function `uchol()`,
   which by transposing with respect to the antidiagonal obtains the upper
   Cholesky factor of a positive definite diagonal matrix (see Córdoba et al.
   2019, and the documentation of the function).
-- All sampling functions now return correlation matrices instead of covariance
+* All sampling functions now return correlation matrices instead of covariance
   matrix. This is more coherent with the return value of functions already added
   in version 0.2.0, and also has yielded more numerical stability and less
   execution time.
 
 ## New features
-- Function `port_chol()` which implements a combination of the algorithms in
+* New function `port_chol()` which implements a combination of the algorithms in
   `chol_mh()` and `port()`, see Córdoba et al. (2019) for the details.
-- Utility function `ug_to_dag()` for obtaining a chordal graph from a given
+* Utility function `ug_to_dag()` for obtaining a chordal graph from a given
   acyclic digraph.
 
 ## Minor improvements and bug fixes
-- Styled R files using [styler](https://CRAN.R-project.org/package=styler)
+* Styled R files using [styler](https://CRAN.R-project.org/package=styler)
   package.
-- The user can now specify how to generate the random initial factors in both
-  `port()` and `diagdom()`.
-- Improved sample initialization in `port()`, now it is faster.
-- Function `rgraph()` allows now to generate acyclic digraphs with any
-  topological sorting of their nodes. Examples have also been added to the
-  documentation of this function.
-- Now function `mh_u()` works for any topological sort of a dag, not just the
+* The user can now specify how to generate the random entries in the initial
+  factors for both `port()` and `diagdom()`.
+* Improved sample initialization in `port()`, now it is faster.
+* Function `rgraph()` allows now to generate acyclic digraphs with any
+  topological sorting of their nodes, by setting to `FALSE` its new `ordered`
+  argument. Examples have also been added to the documentation of this function.
+* Now function `mh_u()` works for any topological sort of a dag, not just the
   standard `1, ..., p`.
 
 # gmat 0.2.0
