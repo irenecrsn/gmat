@@ -59,6 +59,12 @@ test_that("the condition number is correctly set", {
   }
 })
 
+test_that("upper Cholesky factor is of Cholesky", {
+  m <- port()[, , 1]
+  u <- uchol(m)
+  expect_equal(m, tcrossprod(u))
+})
+
 test_that("the dag orientation of an ug is actually a dag", {
   p <- 10
   d <- 0.5
