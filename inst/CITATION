@@ -5,10 +5,35 @@ bibentry(bibtype = "Inproceedings",
                    person(given = "Gherardo", family = "Varando"),
                    person(given = "Concha", family = "Bielza"),
                    person(given = "Pedro", family = "Larrañaga")),
-  booktitle = "Proceedings of the 9th International Conference on Probabilistic
-  Graphical Models",
   location = "Prague, Czech Republic",
-  publisher    = "PMLR",
+  booktitle = "Proceedings of Machine Learning Research (PGM 2018)",
   year         = "2018",
-  note         = "Accepted",
+  volume = "72",
+  pages = "61-72",
+  header = "If exclusively using the partial orthogonalization method, cite as:"
+)
+bibentry(bibtype = "Article",
+  title        = "Generating random correlation matrices",
+  author       = c(person(given = "Irene", family = "Córdoba"),
+                   person(given = "Gherardo", family = "Varando"),
+                   person(given = "Concha", family = "Bielza"),
+                   person(given = "Pedro", family = "Larrañaga")),
+  journal = "arXiv",
+  number = "1909.01062",
+  year = "2019",
+  header = "If using a reasonable amount of the package functionality, cite as:"
+)
+bibentry(bibtype = "Inproceedings",
+  title        = "A fast Metropolis-Hastings method for generating random
+  correlation matrices",
+  author       = c(person(given = "Irene", family = "Córdoba"),
+                   person(given = "Gherardo", family = "Varando"),
+                   person(given = "Concha", family = "Bielza"),
+                   person(given = "Pedro", family = "Larrañaga")),
+  booktitle = "Lecture Notes in Computer Science (IDEAL 2018)",
+  location = "Madrid, Spain",
+  year         = "2018",
+  volume = "113114",
+  pages = "117-124",
+  header = "When using Metropolis-Hastings functions, cite as:"
 )
