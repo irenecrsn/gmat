@@ -192,6 +192,6 @@ diagdom <- function(N = 1, p = 3, d = 1, ug = NULL, rfun = rnorm, ...) {
   ))
   return(array(dim = dim(sam), data = apply(
     X = sam, MARGIN = 3, FUN =
-      cov2cor
+      stats::cov2cor
   )))
 }
