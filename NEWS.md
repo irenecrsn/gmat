@@ -23,8 +23,8 @@ improvements and bug fixes.
 ## New features
 * New function `port_chol()` which implements a combination of the algorithms in
   `chol_mh()` and `port()`, see Córdoba et al. (2019) for the details.
-* Utility function `ug_to_dag()` for obtaining a chordal graph from a given
-  acyclic digraph.
+* Utility function `ug_to_dag()` for obtaining an acyclic digraph with no
+  v-structures from the chordal cover of an undirected graph.
 
 ## Minor improvements and bug fixes
 * Styled R files using [styler](https://CRAN.R-project.org/package=styler)
