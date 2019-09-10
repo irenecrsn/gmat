@@ -2,18 +2,20 @@
 % Please edit documentation in R/utils.R
 \name{uchol}
 \alias{uchol}
-\title{Get the upper factor of the upper Cholesky decomposition of a SPD matrix}
+\title{Get the upper factor of the upper Cholesky decomposition of a symmetric
+positive definite matrix.}
 \usage{
 uchol(m)
 }
 \arguments{
-\item{m}{Matrix to factorize}
+\item{m}{Matrix to factorize.}
 }
 \value{
-A \code{p*p} upper triangular matrix
+A \code{p*p} upper triangular matrix.
 }
 \description{
-Get the upper factor of the upper Cholesky decomposition of a SPD matrix
+Get the upper factor of the upper Cholesky decomposition of a symmetric
+positive definite matrix.
 }
 \details{
 The upper factor \code{U} such that \code{m = U \%*\% t(U)}. \code{U} is equal to the
@@ -24,5 +26,5 @@ Section 2.2 for more details). The function uses the base \code{chol} method.
 }
 \references{
 Córdoba I., Varando G., Bielza C., Larrañaga P., Generating
-random Gaussian graphical models, arXiv eprint.
+random Gaussian graphical models, \emph{arXiv}:1909.01062, 2019.
 }

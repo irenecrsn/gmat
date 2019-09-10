@@ -7,18 +7,17 @@
 rgraph(p, d, dag = FALSE, ordered = TRUE)
 }
 \arguments{
-\item{p}{Number of vertices of the sampled graph}
+\item{p}{Number of vertices of the sampled graph.}
 
-\item{d}{Proportion of edges in the generated graph}
+\item{d}{Proportion of edges in the generated graph.}
 
-\item{dag}{Whether the generated graph should be acyclic directed}
+\item{dag}{Whether the generated graph should be acyclic directed.}
 
 \item{ordered}{When generating an acyclic directed graph, whether the nodes
 should follow the ancestral order \code{1, ..., p}.}
 }
 \value{
-g The generated graph. If \code{dag = TRUE}, the nodes follow by default
-the ancestral order \code{1, ..., p}, where \code{1} has no parents.
+The generated graph.
 }
 \description{
 Wrapper of functionality from package \code{igraph} for random generation of

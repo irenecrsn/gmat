@@ -7,12 +7,13 @@
 set_cond_number(sample, k)
 }
 \arguments{
-\item{sample}{Array, the \code{p x p x N} matrix sample}
+\item{sample}{Array, the \code{p x p x N} matrix sample.}
 
-\item{k}{Condition number to be set}
+\item{k}{Condition number to be set.}
 }
 \value{
-A \code{p x p x N} array containing the matrices with the fixed condition number
+A \code{p x p x N} array containing the matrices with the fixed condition
+number.
 }
 \description{
 Set the condition number of the matrices in a sample of covariance/correlation matrices
