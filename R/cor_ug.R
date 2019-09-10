@@ -1,20 +1,21 @@
-#' Simulation of covariance matrices.
+#' Simulation of correlation matrices.
 #'
-#' Sample covariance matrices, possibly with a zero pattern constrained by an
+#' Sample correlation matrices, possibly with a zero pattern constrained by an
 #' undirected graph.
 #'
-#' @name ug-constrained covariance matrices
-#' @rdname cov_ug
+#' @name ug-constrained correlation matrices
+#' @rdname cor_ug
 #'
 #' @param N Number of samples.
 #' @param p Matrix dimension. Ignored if `ug` is provided.
 #' @param d Number in `[0,1]`, the proportion of non-zero
 #' entries in the sampled matrices. Ignored if `ug` is provided.
-#' @param ug An [igraph](https://CRAN.R-project.org/package=igraph) undirected graph specifying the zero pattern in the sampled matrices.
+#' @param ug An igraph undirected graph specifying the zero pattern in the sampled matrices.
 #' @param zapzeros Boolean, convert to zero extremely low entries? Defaults to `TRUE`.
-#' @param rfun Function that generates the random entries in the initial matrix
-#' @param ... additional parameters to be passed to \code{rfun} or to
-#'             \code{mh_u}
+#' @param rfun Function that generates the random entries in the initial
+#' factors, except for [port_chol()] which uses [mh_u()] to obtain it.
+#' @param ... Additional parameters to be passed to \code{rfun} or to
+#'            [mh_u()].
 #'
 #' @details Function [port()] uses the method described in
 #' Córdoba et al. (2018). In summary, it consists on generating a random
@@ -24,7 +25,7 @@
 #' introducing unwanted independences. The resulting matrix after the process
 #' has finished is the cross product of `Q`.
 #'
-#' @return  A three-dimensional array of length `p x p x N`
+#' @return  A three-dimensional array of length `p x p x N`.
 #'
 #' @references Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. A partial
 #' orthogonalization method for simulation covariance and concentration graph
@@ -83,8 +84,21 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 }
 
 
-#' @rdname cov_ug
+#' @rdname cor_ug
 #' @useDynLib gmat
+#'
+#' @details Function [port_chol()] uses the method described in Córdoba et
+#' al. (2019), combining uniform sampling with partial orthogonalization as
+#' follows. If the graph provided is not chordal, then a chordal cover is found
+#' using [gRbase::triangulate()]. Then uniform sampling for the upper Choleksy
+#' factor corresponding to such chordal cover is performed with [mh_u()].
+#' Finally, it uses partial orthogonalization as [port()] to add the missing
+#' zeros (corresponding to fill-in edges in the chordal cover). The behaviour of
+#' this function is the same as [port()].
+#'
+#' @references Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. Generating
+#' random Gaussian graphical models_arXiv_:1909.01062, 2019.
+#'
 #' @export
 port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
                       ...) {
@@ -123,7 +137,7 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 
 
 
-#' @rdname cov_ug
+#' @rdname cor_ug
 #'
 #' @details We also provide an implementation of the most commonly used in the
 #' literature [diagdom()]. By contrast, this method produces a random matrix `M`
@@ -167,7 +181,7 @@ diagdom <- function(N = 1, p = 3, d = 1, ug = NULL, rfun = rnorm, ...) {
       }
     }
   } else {
-    # Full covariance matrix
+    # Full correlation matrix
     sam <- array(dim = c(p, p, N))
     for (i in 1:p) {
       for (j in 1:p) {

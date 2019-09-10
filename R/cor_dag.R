@@ -13,7 +13,7 @@
 #' entries in the Cholesky factor of the sampled matrices.
 #' Ignored if `dag` is provided.
 #' @param dag An
-#' [igraph](https://CRAN.R-project.org/package=igraph) acyclic
+#' igraph acyclic
 #' digraph specifying the zero pattern in the upper Cholesky
 #' factor of the sampled matrices. Nodes must be in ancestral
 #' order, with the first one having no parents.
@@ -24,7 +24,7 @@
 #' on a Metropolis-Hastings algorithm over the upper Cholesky
 #' factorization.
 #'
-#' @return A three-dimensional array of length `p x p x N`
+#' @return A three-dimensional array of length `p x p x N`.
 #'
 #' @references Córdoba I., Varando G., Bielza C., Larrañaga P. A fast
 #' Metropolis-Hastings method for generating random correlation matrices. _Lecture Notes in
@@ -131,12 +131,11 @@ chol_iid <- function(N = 1,
 #' @param N Number of samples.
 #' @param p Dimension of the upper Cholesky factor.
 #' @param dag An
-#' [igraph](https://CRAN.R-project.org/package=igraph) acyclic
+#' igraph acyclic
 #' digraph specifying the zero pattern in the upper Cholesky
 #' factor of the sampled matrices. Nodes must be in ancestral
 #' order, with the first one having no parents.
-#' @param h Heating phase size for [mh_sphere()].
-#' @param eps Perturbation variance for [mh_sphere()].
+#' @param ... Additional parameters for [mh_sphere()].
 #'
 #' @author Gherardo Varando \email{gherardo.varando@math.ku.dk}
 #'
@@ -159,8 +158,7 @@ chol_iid <- function(N = 1,
 mh_u <- function(N = 1,
                  p = 3,
                  dag = NULL,
-                 h = 100,
-                 eps = 0.1) {
+                 ...) {
   if (is.null(dag) == FALSE) {
     p <- length(igraph::V(dag))
     dag_topo_sort <- as.numeric(igraph::topological.sort(dag))
@@ -174,7 +172,7 @@ mh_u <- function(N = 1,
 
   if (is.null(dag) == TRUE) {
     for (i in 1:(p - 1)) {
-      su <- mh_sphere(N = N, k = p - i + 1, i = i, h = h, eps = eps)
+      su <- mh_sphere(N = N, k = p - i + 1, i = i, ...)
       U[i, i:p, 1:N] <- t(su)
     }
   } else {
@@ -182,7 +180,7 @@ mh_u <- function(N = 1,
     ch <- igraph::degree(dag, mode = "out")[dag_topo_sort]
     pa <- igraph::degree(dag, mode = "in")[dag_topo_sort]
     for (j in 1:(p - 1)) {
-      su <- mh_sphere(N = N, k = ch[j] + 1, i = pa[j] + 1, h = h, eps = eps)
+      su <- mh_sphere(N = N, k = ch[j] + 1, i = pa[j] + 1, ...)
       U[j, U[j, , 1] > 0, 1:N] <- t(su)
     }
     U <- array(data = U[inv, inv, ], dim = dim(U))
@@ -195,6 +193,8 @@ mh_u <- function(N = 1,
 #'
 #' @param k Dimension of the hemisphere from which the sample is taken.
 #' @param i Integer, power of the first coordinate in the density.
+#' @param h Heating phase size.
+#' @param eps Perturbation variance.
 #'
 #' @details The details of the algorithm implemented by [mh_sphere()] can be found in the
 #' paper Córdoba et al. (2018), including a discussion on
