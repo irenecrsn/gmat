@@ -8,7 +8,11 @@ test_that("the size of the sample is correct", {
   check_sample_size <- function(N, ...) {
     sample <- port(N = N, ...)
     expect_equal(dim(sample)[3], N)
+
     sample <- diagdom(N = N, ...)
+    expect_equal(dim(sample)[3], N)
+
+    sample <- port_chol(N = N, ...)
     expect_equal(dim(sample)[3], N)
   }
 
@@ -32,7 +36,12 @@ test_that("matrix dimension is correct", {
     sample <- port(N = N, ...)
     expect_equal(dim(sample)[1], dim(sample)[2])
     expect_equal(dim(sample)[1], p_exp)
+
     sample <- diagdom(N = N, ...)
+    expect_equal(dim(sample)[1], dim(sample)[2])
+    expect_equal(dim(sample)[1], p_exp)
+
+    sample <- port_chol(N = N, ...)
     expect_equal(dim(sample)[1], dim(sample)[2])
     expect_equal(dim(sample)[1], p_exp)
   }
@@ -56,9 +65,13 @@ test_that("matrices are symmetric positive definite", {
   check_spd <- function(...) {
     sample <- port(...)
     expect_equal(sample[, , 1], t(sample[, , 1]))
-    # here we do not test positive definiteness since
-    # sometimes condition numbers are very high
+    expect_gt(min(eigen(sample[, , 1])$values), 0)
+
     sample <- diagdom(...)
+    expect_equal(sample[, , 1], t(sample[, , 1]))
+    expect_gt(min(eigen(sample[, , 1])$values), 0)
+
+    sample <- port_chol(...)
     expect_equal(sample[, , 1], t(sample[, , 1]))
     expect_gt(min(eigen(sample[, , 1])$values), 0)
   }
@@ -119,7 +132,7 @@ test_that("the graph structure is preserved", {
 
   sample <- diagdom(ug = ug)
   expect_equal_ug(m = sample[, , 1], ug = ug)
-  
+
   sample <- port_chol(ug = ug)
   expect_equal_ug(m = sample[, , 1], ug = ug)
 })

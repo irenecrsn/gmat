@@ -7,10 +7,10 @@
 ug_to_dag(ug)
 }
 \arguments{
-\item{ug}{igraph graph or adjacency matrix}
+\item{ug}{An igraph undirected graph.}
 }
 \value{
-acyclic directed graph orientation (igraph)
+An igraph acyclic directed graph orientation.
 }
 \description{
 Find the DAG with no v-structures whose skeleton is a

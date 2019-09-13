@@ -20,7 +20,7 @@ entries in the Cholesky factor of the sampled matrices.
 Ignored if \code{dag} is provided.}
 
 \item{dag}{An
-\href{https://CRAN.R-project.org/package=igraph}{igraph} acyclic
+igraph acyclic
 digraph specifying the zero pattern in the upper Cholesky
 factor of the sampled matrices. Nodes must be in ancestral
 order, with the first one having no parents.}
@@ -28,7 +28,7 @@ order, with the first one having no parents.}
 \item{...}{Additional parameters for \code{\link[=mh_u]{mh_u()}}.}
 }
 \value{
-A three-dimensional array of length \code{p x p x N}
+A three-dimensional array of length \code{p x p x N}.
 }
 \description{
 Sample correlation matrices, possibly with a zero pattern in its Cholesky

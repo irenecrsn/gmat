@@ -6,7 +6,7 @@
 \alias{mh_sphere}
 \title{Upper Cholesky factor sampling using Metropolis-Hastings}
 \usage{
-mh_u(N = 1, p = 3, dag = NULL, h = 100, eps = 0.1)
+mh_u(N = 1, p = 3, dag = NULL, ...)
 
 mh_sphere(N = 1, k, i = 1, h = 100, eps = 0.01)
 }
@@ -16,18 +16,20 @@ mh_sphere(N = 1, k, i = 1, h = 100, eps = 0.01)
 \item{p}{Dimension of the upper Cholesky factor.}
 
 \item{dag}{An
-\href{https://CRAN.R-project.org/package=igraph}{igraph} acyclic
+igraph acyclic
 digraph specifying the zero pattern in the upper Cholesky
 factor of the sampled matrices. Nodes must be in ancestral
 order, with the first one having no parents.}
 
-\item{h}{Heating phase size for \code{\link[=mh_sphere]{mh_sphere()}}.}
-
-\item{eps}{Perturbation variance for \code{\link[=mh_sphere]{mh_sphere()}}.}
+\item{...}{Additional parameters for \code{\link[=mh_sphere]{mh_sphere()}}.}
 
 \item{k}{Dimension of the hemisphere from which the sample is taken.}
 
 \item{i}{Integer, power of the first coordinate in the density.}
+
+\item{h}{Heating phase size.}
+
+\item{eps}{Perturbation variance.}
 }
 \description{
 Metropolis-Hasting algorithms to sample the upper Cholesky factor, using
@@ -46,8 +48,8 @@ theoretical convergence and numerical experiments for
 choosing its hyper parameters \code{h} and \code{eps}.
 }
 \examples{
-## Upper Cholesky factor sampling 
-# Generate a random acyclic digraph 
+## Upper Cholesky factor sampling
+# Generate a random acyclic digraph
 dag <- rgraph(p = 3, d = 0.5, dag = TRUE)
 igraph::print.igraph(dag)
 

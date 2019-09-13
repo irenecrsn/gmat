@@ -7,10 +7,10 @@
 vectorize(sample)
 }
 \arguments{
-\item{sample}{Array, the \code{p x p x N} sample to vectorize}
+\item{sample}{Array, the \code{p x p x N} sample to vectorize.}
 }
 \value{
-A \code{p*(p - 1)/2 x N} matrix containing the vectorized sample
+A \code{p*(p - 1)/2 x N} matrix containing the vectorized sample.
 }
 \description{
 Vectorize a sample of covariance/correlation matrices

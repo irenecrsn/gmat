@@ -59,38 +59,39 @@ test_that("the condition number is correctly set", {
   }
 })
 
-test_that("the dag orientation of an ug is actually a dag", {
+test_that("upper Cholesky factor is of Cholesky", {
+  m <- port()[, , 1]
+  u <- uchol(m)
+  expect_equal(m, tcrossprod(u))
+})
 
+test_that("the dag orientation of an ug is actually a dag", {
   p <- 10
   d <- 0.5
 
   ug <- rgraph(p = p, d = d)
   dag <- ug_to_dag(ug = ug)
   expect_true(igraph::is_dag(dag))
-
 })
 
 test_that("the skeleton of the oriented dag is chordal", {
-
   p <- 10
   d <- 0.5
 
   ug <- rgraph(p = p, d = d)
 
   # We force a non chordal graph
-  while(igraph::is_chordal(ug)$chordal == TRUE) {
+  while (igraph::is_chordal(ug)$chordal == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
 
   dag <- ug_to_dag(ug = ug)
 
   expect_true(igraph::is_chordal(igraph::as.undirected(dag))$chordal)
-
 })
 
 test_that("the skeleton of the oriented dag contains the original ug, keeping
 the order", {
-
   p <- 10
   d <- 0.5
 
@@ -102,12 +103,10 @@ the order", {
   domains <- as.list(1:p)
 
   expect_true(igraph::is_subgraph_isomorphic_to(ug, ug_cover, domains = domains))
-
 })
 
 
 test_that("the oriented dag does not contain v-structures", {
-
   p <- 10
   d <- 0.5
 
@@ -117,5 +116,4 @@ test_that("the oriented dag does not contain v-structures", {
   v_struct <- igraph::make_directed_graph(edges = c(1, 3, 2, 3))
 
   expect_false(igraph::is_subgraph_isomorphic_to(v_struct, dag, induced = TRUE))
-
 })
