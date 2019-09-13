@@ -49,8 +49,7 @@ The package mostly implements methods described in the following papers:
   Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018.
 * Córdoba I., Varando G., Bielza C., Larrañaga P. __A partial orthogonalization
   method for simulating covariance and concentration graph matrices__.
-  _Proceedings of Machine Learning Research_ (PGM 2018), vol 72, pp. 61-72,
-  2018.
+  _Proceedings of Machine Learning Research_ (PGM 2018), vol 72, pp. 61-72, 2018.
 * Córdoba I., Varando G., Bielza C., Larrañaga P. __Generating random Gaussian
   graphical models__. _arXiv:1909.01062_, 2019.
 

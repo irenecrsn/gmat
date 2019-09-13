@@ -46,8 +46,7 @@ The package mostly implements methods described in the following papers:
   - Córdoba I., Varando G., Bielza C., Larrañaga P. **A partial
     orthogonalization method for simulating covariance and concentration
     graph matrices**. *Proceedings of Machine Learning Research* (PGM
-    2018), vol 72, pp. 61-72,
-    2018. 
+    2018), vol 72, pp. 61-72, 2018.
   - Córdoba I., Varando G., Bielza C., Larrañaga P. **Generating random
     Gaussian graphical models**. *arXiv:1909.01062*, 2019.
 
@@ -60,24 +59,24 @@ matrices consistent with such random graphical structure.
 ``` r
 ug <- gmat::rgraph(p = 3, d = 0.5)
 igraph::print.igraph(ug)
-#> IGRAPH 564efb2 U--- 3 1 -- Erdos renyi (gnp) graph
+#> IGRAPH c54f1ce U--- 3 2 -- Erdos renyi (gnp) graph
 #> + attr: name (g/c), type (g/c), loops (g/l), p (g/n)
-#> + edge from 564efb2:
-#> [1] 2--3
+#> + edges from c54f1ce:
+#> [1] 1--2 1--3
 gmat::port(N = 2, ug = ug)
 #> , , 1
 #> 
-#>      [,1]      [,2]      [,3]
-#> [1,]    1 0.0000000 0.0000000
-#> [2,]    0 1.0000000 0.8574111
-#> [3,]    0 0.8574111 1.0000000
+#>            [,1]       [,2]       [,3]
+#> [1,]  1.0000000 -0.3084469 -0.8615382
+#> [2,] -0.3084469  1.0000000  0.0000000
+#> [3,] -0.8615382  0.0000000  1.0000000
 #> 
 #> , , 2
 #> 
-#>      [,1]      [,2]      [,3]
-#> [1,]    1  0.000000  0.000000
-#> [2,]    0  1.000000 -0.642288
-#> [3,]    0 -0.642288  1.000000
+#>            [,1]       [,2]      [,3]
+#> [1,]  1.0000000 -0.7442018 0.4804328
+#> [2,] -0.7442018  1.0000000 0.0000000
+#> [3,]  0.4804328  0.0000000 1.0000000
 ```
 
 We appreciate how the zero pattern is shared by all of the simulated
@@ -93,16 +92,16 @@ gmat::chol_iid(N = 2)
 #> , , 1
 #> 
 #>            [,1]       [,2]       [,3]
-#> [1,]  1.0000000 -0.1440407 -0.1535844
-#> [2,] -0.1440407  1.0000000 -0.7167654
-#> [3,] -0.1535844 -0.7167654  1.0000000
+#> [1,]  1.0000000 -0.5736727 -0.3748520
+#> [2,] -0.5736727  1.0000000 -0.1880879
+#> [3,] -0.3748520 -0.1880879  1.0000000
 #> 
 #> , , 2
 #> 
-#>            [,1]        [,2]        [,3]
-#> [1,]  1.0000000 -0.35987932 -0.35787183
-#> [2,] -0.3598793  1.00000000 -0.09487107
-#> [3,] -0.3578718 -0.09487107  1.00000000
+#>            [,1]       [,2]       [,3]
+#> [1,]  1.0000000 -0.2140087 -0.1489077
+#> [2,] -0.2140087  1.0000000 -0.1502781
+#> [3,] -0.1489077 -0.1502781  1.0000000
 ```
 
 A specific zero pattern can be enforced in `U` using an acyclic digraph.
@@ -110,9 +109,9 @@ A specific zero pattern can be enforced in `U` using an acyclic digraph.
 ``` r
 dag <- gmat::rgraph(p = 3, d = 0.5, dag = TRUE)
 igraph::print.igraph(dag)
-#> IGRAPH af3d6f6 D--- 3 1 -- 
-#> + edge from af3d6f6:
-#> [1] 2->3
+#> IGRAPH 390731a D--- 3 1 -- 
+#> + edge from 390731a:
+#> [1] 1->2
 top_sort <- igraph::topo_sort(dag)
 peo_sort <- rev(top_sort)
 inv_top <- order(top_sort)
@@ -127,20 +126,20 @@ U_chol <- chol(m_peo_sort)
 # Upper Cholesky factor (upper Cholesky decomposition)
 U <- gmat::uchol(m_top_sort)
 print(U_chol[inv_peo, inv_peo])
-#>      [,1]       [,2] [,3]
-#> [1,]    1  0.0000000    0
-#> [2,]    0  0.9658269    0
-#> [3,]    0 -0.2591879    1
+#>            [,1] [,2] [,3]
+#> [1,]  0.8836329    0    0
+#> [2,] -0.4681803    1    0
+#> [3,]  0.0000000    0    1
 print(U[inv_top, inv_top])
-#>      [,1]      [,2]       [,3]
-#> [1,]    1 0.0000000  0.0000000
-#> [2,]    0 0.9658269 -0.2591879
-#> [3,]    0 0.0000000  1.0000000
+#>           [,1]       [,2] [,3]
+#> [1,] 0.8836329 -0.4681803    0
+#> [2,] 0.0000000  1.0000000    0
+#> [3,] 0.0000000  0.0000000    1
 print(m)
-#>      [,1]       [,2]       [,3]
-#> [1,]    1  0.0000000  0.0000000
-#> [2,]    0  1.0000000 -0.2591879
-#> [3,]    0 -0.2591879  1.0000000
+#>            [,1]       [,2] [,3]
+#> [1,]  1.0000000 -0.4681803    0
+#> [2,] -0.4681803  1.0000000    0
+#> [3,]  0.0000000  0.0000000    1
 ```
 
 The zeros are correctly reflected in the upper Cholesky factor when
