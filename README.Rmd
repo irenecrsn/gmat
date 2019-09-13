@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 # gmat
-An R package for simulating positive definite matrices constrained by acyclic
+An R package for simulating correlation matrices possibly constrained by acyclic
 directed and undirected graphs.
 
 [![Build Status](https://travis-ci.com/irenecrsn/gmat.svg?branch=master)](https://travis-ci.com/irenecrsn/gmat)
@@ -23,6 +23,17 @@ directed and undirected graphs.
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/gmat)](https://CRAN.R-project.org/package=gmat)
 [![CRAN status](http://www.r-pkg.org/badges/version/gmat)](https://CRAN.R-project.org/package=gmat)
+
+The package mostly implements methods described in the following papers:
+- Córdoba I., Varando G., Bielza C., Larrañaga P. A fast Metropolis-Hastings
+  method for generating random correlation matrices. _Lecture Notes in Computer
+  Science_ (IDEAL 2018), vol 11314, pp. 117-124, 2018.
+- Córdoba I., Varando G., Bielza C., Larrañaga P. A partial orthogonalization
+  method for simulating covariance and concentration graph matrices.
+  _Proceedings of Machine Learning Research_ (PGM 2018), vol 72, pp. 61-72,
+  2018.
+- Córdoba I., Varando G., Bielza C., Larrañaga P. Generating random Gaussian
+  graphical models, _arXiv:1909.01062_, 2019.
 
 ## Installation
 
@@ -37,8 +48,8 @@ Alternatively, using the R package `devtools` one may install the development ve
 devtools::install_github("irenecrsn/gmat")
 ```
 
-The only R package required for `gmat` is `igraph`, which can also be installed
-from CRAN.
+The other R packages required for `gmat` are `igraph` and `gRbase`, which can
+also be installed from CRAN.
 
 ## An example of use 
 
