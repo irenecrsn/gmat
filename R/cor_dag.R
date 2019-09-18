@@ -108,9 +108,9 @@ chol_iid <- function(N = 1,
 
   for (n in 1:N) {
     L <- L_init
-    L[L != 0] <- -runif(n = n_edges, min = 0.1, max = 1)
+    L[L != 0] <- - stats::runif(n = n_edges, min = 0.1, max = 1)
     diag(L) <- 1
-    D <- diag(x = runif(p, 0.1, 1))
+    D <- diag(x = stats::runif(p, 0.1, 1))
     Omega <- t(L) %*% solve(D) %*% L
     R[, , n] <- stats::cov2cor(Omega)
   }
@@ -217,17 +217,17 @@ mh_sphere <-
              eps = 0.01) {
     Tot <- h + N # total number of iteration of MH
     Sample <- matrix(nrow = Tot, ncol = k) # obj initialization
-    Sample[1, ] <- rnorm(n = k, mean = 0, sd = 1) # first point
+    Sample[1, ] <- stats::rnorm(n = k, mean = 0, sd = 1) # first point
     Sample[1, 1] <-
       abs(Sample[1, 1]) # absolute value first component (has to be positive)
     Sample[1, ] <-
       Sample[1, ] / sqrt(sum(Sample[1, ]^2)) # normalization
     for (j in 2:Tot) {
       prop <-
-        Sample[j - 1, ] + rnorm(n = k, mean = 0, sd = eps) # perturbate previous sample
+        Sample[j - 1, ] + stats::rnorm(n = k, mean = 0, sd = eps) # perturbate previous sample
       prop <- prop / sqrt(sum(prop^2)) # normalize proposed
       if ((prop[1] > 0) &&
-        (log(runif(1)) <= i * log((prop[1])) - i * log(Sample[j - 1, 1]))) {
+        (log(stats::runif(1)) <= i * log((prop[1])) - i * log(Sample[j - 1, 1]))) {
         Sample[j, ] <- prop
       } else {
         Sample[j, ] <- Sample[j - 1, ]

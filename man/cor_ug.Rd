@@ -8,11 +8,11 @@
 \title{Simulation of correlation matrices.}
 \usage{
 port(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
-  rfun = rnorm, ...)
+  rfun = stats::rnorm, ...)
 
 port_chol(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, ...)
 
-diagdom(N = 1, p = 3, d = 1, ug = NULL, rfun = rnorm, ...)
+diagdom(N = 1, p = 3, d = 1, ug = NULL, rfun = stats::rnorm, ...)
 }
 \arguments{
 \item{N}{Number of samples.}

@@ -1,7 +1,7 @@
 Package: gmat
 Type: Package
 Title: Simulation of Graphical Correlation Matrices
-Version: 0.2.1
+Version: 0.2.1.9000
 Date: 2019-09-09
 Encoding: UTF-8
 Authors@R: c(

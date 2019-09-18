@@ -51,7 +51,7 @@
 #' @useDynLib gmat
 #' @export
 port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
-                 rfun = rnorm, ...) {
+                 rfun = stats::rnorm, ...) {
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
@@ -159,7 +159,7 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 #' igraph::print.igraph(ug)
 #' diagdom(ug = ug)
 #' @export
-diagdom <- function(N = 1, p = 3, d = 1, ug = NULL, rfun = rnorm, ...) {
+diagdom <- function(N = 1, p = 3, d = 1, ug = NULL, rfun = stats::rnorm, ...) {
 
   # We generated the ug if a zero pattern is requested
   if (is.null(ug) == TRUE & d != 1) {
