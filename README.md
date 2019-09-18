@@ -7,7 +7,7 @@ acyclic directed and undirected graphs.
 
 [![Build
 Status](https://travis-ci.com/irenecrsn/gmat.svg?branch=master)](https://travis-ci.com/irenecrsn/gmat)
-[![codecov](https://codecov.io/gh/irenecrsn/gmat/branch/dev/graph/badge.svg)](https://codecov.io/gh/irenecrsn/gmat)
+[![codecov](https://codecov.io/gh/irenecrsn/gmat/branch/master/graph/badge.svg)](https://codecov.io/gh/irenecrsn/gmat)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN
