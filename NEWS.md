@@ -1,5 +1,9 @@
 # gmat 0.2.1.9000
 
+## Minor improvements and bug fixes
+* Fix codecov badge.
+* Now referencing functions from `stats` with `::`.
+
 # gmat 0.2.1
 
 This update of `gmat` incorporates functions necessary to run the experiments in
