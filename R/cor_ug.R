@@ -48,7 +48,6 @@
 #' # Generate a matrix complying with the predefined zero pattern
 #' port(ug = ug)
 #' port(ug = ug, zapzeros = FALSE) # no zero zap
-#' @useDynLib gmat
 #' @export
 port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
                  rfun = stats::rnorm, ...) {
@@ -64,7 +63,7 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
     sam <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
     for (n in 1:N) {
       sam[, , n] <- matrix(.C(
-        "gram_schmidt_sel",
+        C_gram_schmidt_sel,
         double(p * p),
         as.logical(madj),
         as.double(t(sam[, , n])),
@@ -85,7 +84,6 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 
 
 #' @rdname cor_ug
-#' @useDynLib gmat
 #'
 #' @details Function [port_chol()] uses the method described in Córdoba et
 #' al. (2019), combining uniform sampling with partial orthogonalization as
@@ -115,7 +113,7 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
     sam <- mh_u(N, p = p, dag = dag, ...)
     for (n in 1:N) {
       temp <- .C(
-        "gram_schmidt_sel",
+        C_gram_schmidt_sel,
         double(p * p),
         as.logical(madj),
         as.double(t(sam[, , n])),
