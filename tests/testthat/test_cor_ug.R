@@ -98,7 +98,7 @@ test_that("selective gram schmidt actually selects", {
   madj <- madj + t(madj)
 
   span_ort <- matrix(.C(
-    "gram_schmidt_sel",
+    C_gram_schmidt_sel,
     double(p * p),
     as.logical(madj),
     as.double(t(span)),
