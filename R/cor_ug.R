@@ -62,17 +62,8 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
     )
     sam <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
     for (n in 1:N) {
-      sam[, , n] <- matrix(.C(
-        C_gram_schmidt_sel,
-        double(p * p),
-        as.logical(madj),
-        as.double(t(sam[, , n])),
-        as.integer(p)
-      )[[1]],
-      ncol = p,
-      byrow = TRUE
-      )
-      sam[, , n] <- tcrossprod(sam[, , n])
+      sam[, , n] <- .Call(C_gram_schmidt_sel, madj, t(sam[, , n]))
+      sam[, , n] <- crossprod(sam[, , n])
 
       if (zapzeros == TRUE) {
         sam[, , n] <- zapsmall(sam[, , n])
@@ -112,18 +103,8 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
     dag <- ug_to_dag(ug)
     sam <- mh_u(N, p = p, dag = dag, ...)
     for (n in 1:N) {
-      temp <- .C(
-        C_gram_schmidt_sel,
-        double(p * p),
-        as.logical(madj),
-        as.double(t(sam[, , n])),
-        as.integer(p)
-      )[[1]]
-      sam[, , n] <- matrix(temp[-(p * p + 1)],
-        ncol = p,
-        byrow = TRUE
-      )
-      sam[, , n] <- tcrossprod(sam[, , n])
+      sam[, , n] <- .Call(C_gram_schmidt_sel, madj, t(sam[, , n]))
+      sam[, , n] <- crossprod(sam[, , n])
 
       if (zapzeros == TRUE) {
         sam[, , n] <- zapsmall(sam[, , n])

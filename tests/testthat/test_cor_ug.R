@@ -93,22 +93,12 @@ test_that("selective gram schmidt actually selects", {
 
   span <- matrix(ncol = p, nrow = p, stats::rnorm(p^2))
 
-  madj <- upper.tri(matrix(NA, p, p))
-  madj[madj] <- stats::rbinom(n = (p - 1) * p / 2, size = 1, prob = d)
-  madj <- madj + t(madj)
+  ug <- rgraph(p = p, d = d)
+  madj <- igraph::as_adjacency_matrix(ug, type = "both", sparse = FALSE)
 
-  span_ort <- matrix(.C(
-    C_gram_schmidt_sel,
-    double(p * p),
-    as.logical(madj),
-    as.double(t(span)),
-    as.integer(p)
-  )[[1]],
-  ncol = p,
-  byrow = TRUE
-  )
+  span_ort <- .Call(C_gram_schmidt_sel, madj, t(span))
 
-  span_dot_prod <- tcrossprod(span_ort)
+  span_dot_prod <- crossprod(span_ort)
   madj_learned <- (zapsmall(span_dot_prod) != 0) * 1
   diag(madj_learned) <- 0
   expect_equal(length(which((madj_learned - madj) != 0)), 0)
