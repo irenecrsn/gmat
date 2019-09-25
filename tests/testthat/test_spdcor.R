@@ -1,10 +1,12 @@
 context("Basic properties of the sampled matrices")
 
-f_test <- c(chol_mh,
-			chol_iid,
-			port,
-			diagdom,
-			port_chol)
+f_test <- c(
+  chol_mh,
+  chol_iid,
+  port,
+  diagdom,
+  port_chol
+)
 f_test_dag <- c(chol_mh, chol_iid)
 
 f_test_ug <- c(port, diagdom, port_chol)
@@ -39,13 +41,13 @@ test_that("matrices are symmetric positive definite", {
   }
 
   for (f in f_test) {
-  	# no zeros
-	sample <- f(p = p)
-  	check_spd(sample)
+    # no zeros
+    sample <- f(p = p)
+    check_spd(sample)
 
-  	# with a percentage of zeros
-	sample <- f(p = p, d = d)
-  	check_spd(sample)
+    # with a percentage of zeros
+    sample <- f(p = p, d = d)
+    check_spd(sample)
   }
 
   # with predefined zero patterns
@@ -79,19 +81,18 @@ test_that("matrices are of correlation", {
         expect_lt(sample[i, j, 1], 1)
       }
     }
-
   }
 
   for (f in f_test) {
-  	# no zeros
-	sample <- f(p = p)
-  	check_cor(sample)
+    # no zeros
+    sample <- f(p = p)
+    check_cor(sample)
 
-  	# with a percentage of zeros
-	sample <- f(p = p, d = d)
-  	check_cor(sample)
+    # with a percentage of zeros
+    sample <- f(p = p, d = d)
+    check_cor(sample)
   }
-  
+
   # with predefined zero patterns
   dag <- rgraph(p = p, d = d, dag = TRUE)
   for (f in f_test_dag) {
