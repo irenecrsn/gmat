@@ -11,8 +11,7 @@ test_that("selective gram schmidt actually selects", {
 
   span_ort <- .Call(C_port, madj, span)
 
-  span_dot_prod <- crossprod(span_ort[, , 1])
-  madj_learned <- (zapsmall(span_dot_prod) != 0) * 1
+  madj_learned <- (zapsmall(span_ort[, , 1]) != 0) * 1
   diag(madj_learned) <- 0
   expect_equal(length(which((madj_learned - madj) != 0)), 0)
 })

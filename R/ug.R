@@ -61,10 +61,6 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
   )
   Q <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
   sample <- .Call(C_port, madj, Q)
-  sample <- array(
-    data = apply(X = sample, MARGIN = 3, FUN = crossprod),
-    dim = dim(sample)
-  )
 
   if (zapzeros == TRUE) {
     sample <- array(
@@ -106,10 +102,6 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
   dag <- ug_to_dag(ug)
   U <- mh_u(N, p = p, dag = dag, ...)
   sample <- .Call(C_port, madj, U)
-  sample <- array(
-    data = apply(X = sample, MARGIN = 3, FUN = crossprod),
-    dim = dim(sample)
-  )
 
   if (zapzeros == TRUE) {
     sample <- array(
