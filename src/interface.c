@@ -19,7 +19,6 @@ SEXP C_port (SEXP madj, SEXP Q) {
 
 	for (i = 0; i < N; i++) {
 		gram_schmidt_sel(p_mort + matrix_dim*i, p_madj, p_Q + matrix_dim*i, dims[0]);
-		crossprod(p_mort + matrix_dim*i,
 	}
 
 	UNPROTECT(1);

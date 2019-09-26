@@ -105,7 +105,6 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
   }
   dag <- ug_to_dag(ug)
   U <- mh_u(N, p = p, dag = dag, ...)
-  U <- array(apply(X = U, MARGIN = 3, FUN = t), dim = dim(U))
   sample <- .Call(C_port, madj, U)
   sample <- array(
     data = apply(X = sample, MARGIN = 3, FUN = crossprod),

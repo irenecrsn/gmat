@@ -18,7 +18,7 @@ int gram_schmidt_sel (double *mort, double *madj, double *mcov,
 	double **span_sel = NULL, **ort_base = NULL;
 	double *v_proj = NULL;
 	unsigned int i = 0, j = 0;
-	unsigned int n_span = 0, i_current = 0;
+	unsigned int n_span = 0, j_current = 0;
 	
 	if (mort == NULL || madj == NULL || mcov == NULL) {
 		return -1;
@@ -55,25 +55,25 @@ int gram_schmidt_sel (double *mort, double *madj, double *mcov,
 		}
 	}
 
-	for (i = 0; i < dim; i++) {
+	for (j = 0; j < dim; j++) {
 	
-		i_current = i * dim;
-		memcpy(mort + i_current, mcov + i_current, sizeof(double) * dim);
+		j_current = j * dim;
+		memcpy(mort + j_current, mcov + j_current, sizeof(double) * dim);
 		n_span = 0;
 
-		for (j = 0; j < i; j++) {
-			if (madj[i_current + j] == 0) {
-				span_sel[n_span] = mort + j * dim;
+		for (i = 0; i < j; i++) {
+			if (madj[j_current + i] == 0) {
+				span_sel[n_span] = mort + i * dim;
 				n_span++;
 			}
 		}
-		span_sel[n_span] = mort + i_current;
+		span_sel[n_span] = mort + j_current;
 		n_span++;
 
 		/* we orthonormalize the span obtained for the current row */
 		gram_schmidt(ort_base, span_sel, &n_span, dim);
-		for (j = 0; j < dim; j++) {
-			mort[i_current + j] = ort_base[n_span - 1][j];
+		for (i = 0; i < dim; i++) {
+			mort[j_current + i] = ort_base[n_span - 1][i];
 		}
 	}
 	
