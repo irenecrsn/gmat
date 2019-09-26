@@ -108,7 +108,7 @@ chol_iid <- function(N = 1,
 
   for (n in 1:N) {
     L <- L_init
-    L[L != 0] <- - stats::runif(n = n_edges, min = 0.1, max = 1)
+    L[L != 0] <- -stats::runif(n = n_edges, min = 0.1, max = 1)
     diag(L) <- 1
     D <- diag(x = stats::runif(p, 0.1, 1))
     Omega <- t(L) %*% solve(D) %*% L

@@ -54,23 +54,25 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
-  if (is.null(ug) == FALSE) {
-    p <- length(igraph::V(ug))
-    madj <- igraph::as_adjacency_matrix(ug,
-      type = "both",
-      sparse = FALSE
-    )
-    sam <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
-    for (n in 1:N) {
-      sam[, , n] <- .Call(C_gram_schmidt_sel, madj, t(sam[, , n]))
-      sam[, , n] <- crossprod(sam[, , n])
+  p <- length(igraph::V(ug))
+  madj <- igraph::as_adjacency_matrix(ug,
+    type = "both",
+    sparse = FALSE
+  )
+  Q <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
+  sample <- .Call(C_port, madj, Q)
+  sample <- array(
+    data = apply(X = sample, MARGIN = 3, FUN = crossprod),
+    dim = dim(sample)
+  )
 
-      if (zapzeros == TRUE) {
-        sam[, , n] <- zapsmall(sam[, , n])
-      }
-    }
+  if (zapzeros == TRUE) {
+    sample <- array(
+      data = apply(X = sample, MARGIN = 3, FUN = zapsmall),
+      dim = dim(sample)
+    )
   }
-  return(sam)
+  return(sample)
 }
 
 
@@ -100,18 +102,23 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
       type = "both",
       sparse = FALSE
     )
-    dag <- ug_to_dag(ug)
-    sam <- mh_u(N, p = p, dag = dag, ...)
-    for (n in 1:N) {
-      sam[, , n] <- .Call(C_gram_schmidt_sel, madj, t(sam[, , n]))
-      sam[, , n] <- crossprod(sam[, , n])
-
-      if (zapzeros == TRUE) {
-        sam[, , n] <- zapsmall(sam[, , n])
-      }
-    }
   }
-  return(sam)
+  dag <- ug_to_dag(ug)
+  U <- mh_u(N, p = p, dag = dag, ...)
+  U <- array(apply(X = U, MARGIN = 3, FUN = t), dim = dim(U))
+  sample <- .Call(C_port, madj, U)
+  sample <- array(
+    data = apply(X = sample, MARGIN = 3, FUN = crossprod),
+    dim = dim(sample)
+  )
+
+  if (zapzeros == TRUE) {
+    sample <- array(
+      data = apply(X = sample, MARGIN = 3, FUN = zapsmall),
+      dim = dim(sample)
+    )
+  }
+  return(sample)
 }
 
 

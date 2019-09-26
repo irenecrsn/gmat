@@ -7,7 +7,7 @@
 
 /* .Call calls */
 static const R_CallMethodDef R_CallDef[] = {
-    CALLDEF(C_gram_schmidt_sel, 2),
+    CALLDEF(C_port, 2),
     {NULL, NULL, 0}
 };
 

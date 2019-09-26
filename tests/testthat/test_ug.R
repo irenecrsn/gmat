@@ -4,14 +4,14 @@ test_that("selective gram schmidt actually selects", {
   p <- 5
   d <- 0.25
 
-  span <- matrix(ncol = p, nrow = p, stats::rnorm(p^2))
+  span <- array(data = stats::rnorm(p^2), dim = c(p, p, 1))
 
   ug <- rgraph(p = p, d = d)
   madj <- igraph::as_adjacency_matrix(ug, type = "both", sparse = FALSE)
 
-  span_ort <- .Call(C_gram_schmidt_sel, madj, t(span))
+  span_ort <- .Call(C_port, madj, span)
 
-  span_dot_prod <- crossprod(span_ort)
+  span_dot_prod <- crossprod(span_ort[, , 1])
   madj_learned <- (zapsmall(span_dot_prod) != 0) * 1
   diag(madj_learned) <- 0
   expect_equal(length(which((madj_learned - madj) != 0)), 0)
