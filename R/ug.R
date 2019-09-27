@@ -38,7 +38,6 @@
 #'
 #' # Generate a matrix with a percentage of zeros
 #' port(d = 0.5)
-#' port(d = 0.5, zapzeros = FALSE) # no zero zap
 #'
 #' # Generate a random undirected graph structure
 #' ug <- rgraph(p = 3, d = 0.5)
