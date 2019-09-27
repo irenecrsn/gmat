@@ -7,15 +7,16 @@ static int crossproduct (double *mort, double *madj, double *res,
 SEXP C_port (SEXP R_madj, SEXP R_Q) {
 	int *dims = NULL;
 	unsigned int i = 0, N = 0, m_dim = 0, p = 0;
-	SEXP R_mort = NULL, R_res = NULL;
+	SEXP R_mort = NULL, R_res = NULL, R_dims = NULL;
 	double *mort, *madj, *Q, *res;
 
 	/* Initialize problem dimensions */
 	/* Arrays always have dim attribute so no null check needed */
-	dims = INTEGER(getAttrib(R_Q, R_DimSymbol));
-	if (length(dims) != 3) {
+	R_dims = getAttrib(R_Q, R_DimSymbol);
+	if (length(R_dims) != 3) {
 		error("Expected 3 dimensions for Q array\n");
 	}
+	dims = INTEGER(R_dims);
 	if (dims[0] != dims[1]) {
 		error("Q factors must be square.\n");
 	}
