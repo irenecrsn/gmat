@@ -1,20 +1,18 @@
 #include "interface.h"
 #include "gmn_sampling.h"
 
-static int crossproduct (double *mort, double *madj, double *res,
-							 unsigned int p);
-
 SEXP C_port (SEXP R_madj, SEXP R_Q) {
 	int *dims = NULL;
 	unsigned int i = 0, N = 0, m_dim = 0, p = 0;
 	SEXP R_mort = NULL, R_res = NULL, R_dims = NULL;
 	double *mort, *madj, *Q, *res;
+	gmat_errno_t gmat_errno;
 
 	/* Initialize problem dimensions */
 	/* Arrays always have dim attribute so no null check needed */
 	R_dims = getAttrib(R_Q, R_DimSymbol);
 	if (length(R_dims) != 3) {
-		error("Expected 3 dimensions for Q array\n");
+		error("Expected 3 dimensions for Q array.\n");
 	}
 	dims = INTEGER(R_dims);
 	if (dims[0] != dims[1]) {
@@ -32,43 +30,18 @@ SEXP C_port (SEXP R_madj, SEXP R_Q) {
 	madj = REAL(R_madj); Q = REAL(R_Q);
 
 	for (i = 0; i < N; i++) {
-		gram_schmidt_sel(mort + m_dim*i, madj, Q + m_dim*i, p);
-		crossproduct(mort + m_dim*i, madj, res + m_dim*i, p);
+		gmat_errno = gram_schmidt_sel(mort + m_dim*i, madj, Q + m_dim*i, p);
+		if (gmat_errno != GMAT_OK) {
+			UNPROTECT(2);
+			error("%s.\n", gmat_strerror(gmat_errno));
+		}
+		gmat_errno = crossproduct(res + m_dim*i, mort + m_dim*i, madj, p);
+		if (gmat_errno != GMAT_OK) {
+			UNPROTECT(2);
+			error("%s\n", gmat_strerror(gmat_errno));
+		}
 	}
 
 	UNPROTECT(2);
 	return R_res;
-}
-
-static int crossproduct (double *mort, double *madj, double *res,
-							 unsigned int p) {
-	unsigned int i = 0, j = 0, k = 0, j_current = 0, i_current = 0;
-	double sum = 0;
-
-	/* Upper triangle first */
-	for (j = 0; j < p; j++) {
-		j_current = j * p;
-		for (i = 0; i < j; i++) {
-			if (madj[j_current + i] == 0) {
-				res[j_current + i] = 0; /* Hard-code 0s for missing edges */
-			} else { /* Crossproduct */
-				sum = 0;
-				i_current = i * p;
-				for (k = 0; k < p; k++) {
-					sum += (mort[j_current + k]*mort[k + i_current]);
-				}
-				res[j_current + i] = sum;
-			}
-		}
-	}
-
-	/* Lower triangle == transpose of upper triangle (crossproduct) */
-	for (j = 0; j < p; j++) {
-		res[j * p + j] = 1; /* Diagonal = 1 (normalized vectors) */
-		for (i = j + 1; i < p; i++) {
-			res[j * p + i] = res[i * p + j];
-		}
-	}
-
-	return 0;
 }
