@@ -2,6 +2,9 @@
 #include <string.h>
 #include <math.h>
 
+#define NDEBUG
+#include <assert.h>
+
 #include "gmn_sampling.h"
 
 
@@ -103,9 +106,7 @@ int gram_schmidt (double **span_ort, double **span,
 	unsigned int i = 0, j = 0, k = 0;
 	double norm = 0;
 
-	if (span_ort == NULL || span == NULL || nvec == NULL) {
-		return -1;
-	}
+	assert(span_ort != NULL); assert(span != NULL); assert(nvec != NULL);
 
 	for (i = 0; i < nvec[0]; i++) {
 		memcpy(span_ort[i], span[i], sizeof(double) * dim);
@@ -147,10 +148,9 @@ int proj_ort (double *v_proj_u, double *v, double *u, unsigned int dim)
 	unsigned int i = 0;
 	double dot_uv = 0;
 
-	if (v_proj_u == NULL || v == NULL || u == NULL) {
-		return -1;
-	}
-	
+	assert(u != NULL); assert(v != NULL);
+	assert(v_proj_u != NULL);
+
 	for (i = 0; i < dim; i++) {
 		dot_uv += (u[i] * v[i]);
 	}
