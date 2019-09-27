@@ -4,14 +4,13 @@
 #' undirected graph.
 #'
 #' @name ug-constrained correlation matrices
-#' @rdname cor_ug
+#' @rdname ug
 #'
 #' @param N Number of samples.
 #' @param p Matrix dimension. Ignored if `ug` is provided.
 #' @param d Number in `[0,1]`, the proportion of non-zero
 #' entries in the sampled matrices. Ignored if `ug` is provided.
 #' @param ug An igraph undirected graph specifying the zero pattern in the sampled matrices.
-#' @param zapzeros Boolean, convert to zero extremely low entries? Defaults to `TRUE`.
 #' @param rfun Function that generates the random entries in the initial
 #' factors, except for [port_chol()] which uses [mh_u()] to obtain it.
 #' @param ... Additional parameters to be passed to \code{rfun} or to
@@ -47,10 +46,8 @@
 #'
 #' # Generate a matrix complying with the predefined zero pattern
 #' port(ug = ug)
-#' port(ug = ug, zapzeros = FALSE) # no zero zap
 #' @export
-port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
-                 rfun = stats::rnorm, ...) {
+port <- function(N = 1, p = 3, d = 1, ug = NULL, rfun = stats::rnorm, ...) {
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
@@ -62,17 +59,11 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
   Q <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
   sample <- .Call(C_port, madj, Q)
 
-  if (zapzeros == TRUE) {
-    sample <- array(
-      data = apply(X = sample, MARGIN = 3, FUN = zapsmall),
-      dim = dim(sample)
-    )
-  }
   return(sample)
 }
 
 
-#' @rdname cor_ug
+#' @rdname ug
 #'
 #' @details Function [port_chol()] uses the method described in Córdoba et
 #' al. (2019), combining uniform sampling with partial orthogonalization as
@@ -87,8 +78,7 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 #' random Gaussian graphical models_arXiv_:1909.01062, 2019.
 #'
 #' @export
-port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
-                      ...) {
+port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, ...) {
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
@@ -103,18 +93,12 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
   U <- mh_u(N, p = p, dag = dag, ...)
   sample <- .Call(C_port, madj, U)
 
-  if (zapzeros == TRUE) {
-    sample <- array(
-      data = apply(X = sample, MARGIN = 3, FUN = zapsmall),
-      dim = dim(sample)
-    )
-  }
   return(sample)
 }
 
 
 
-#' @rdname cor_ug
+#' @rdname ug
 #'
 #' @details We also provide an implementation of the most commonly used in the
 #' literature [diagdom()]. By contrast, this method produces a random matrix `M`

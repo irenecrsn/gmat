@@ -7,10 +7,9 @@
 \alias{diagdom}
 \title{Simulation of correlation matrices.}
 \usage{
-port(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
-  rfun = stats::rnorm, ...)
+port(N = 1, p = 3, d = 1, ug = NULL, rfun = stats::rnorm, ...)
 
-port_chol(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE, ...)
+port_chol(N = 1, p = 3, d = 1, ug = NULL, ...)
 
 diagdom(N = 1, p = 3, d = 1, ug = NULL, rfun = stats::rnorm, ...)
 }
@@ -23,8 +22,6 @@ diagdom(N = 1, p = 3, d = 1, ug = NULL, rfun = stats::rnorm, ...)
 entries in the sampled matrices. Ignored if \code{ug} is provided.}
 
 \item{ug}{An igraph undirected graph specifying the zero pattern in the sampled matrices.}
-
-\item{zapzeros}{Boolean, convert to zero extremely low entries? Defaults to \code{TRUE}.}
 
 \item{rfun}{Function that generates the random entries in the initial
 factors, except for \code{\link[=port_chol]{port_chol()}} which uses \code{\link[=mh_u]{mh_u()}} to obtain it.}
@@ -80,7 +77,6 @@ igraph::print.igraph(ug)
 
 # Generate a matrix complying with the predefined zero pattern
 port(ug = ug)
-port(ug = ug, zapzeros = FALSE) # no zero zap
 ## Diagonal dominance
 # Generate a full matrix (default behaviour)
 diagdom()

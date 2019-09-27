@@ -5,7 +5,7 @@
 #'
 #' @name dag-constrained correlation matrices
 #'
-#' @rdname cor_dag
+#' @rdname dag
 #'
 #' @param N Number of samples.
 #' @param p Matrix dimension. Ignored if `dag` is provided.
@@ -65,7 +65,7 @@ chol_mh <- function(N = 1,
   return(C)
 }
 
-#' @rdname cor_dag
+#' @rdname dag
 #'
 #' @details The entries in the upper Cholesky factor are sampled i.i.d. by
 #' function [chol_iid()], following Kalisch and Buhlmann (2007).
