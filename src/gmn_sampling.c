@@ -8,7 +8,7 @@
 #include "gmn_sampling.h"
 
 static int gram_schmidt (double **span_ort, double **span,
-		unsigned int *nvec, unsigned int dim);
+		const unsigned int nvec, const unsigned int dim);
 
 static void proj_ort (double *v_proj_u, const double *v,
 		const double *u, const unsigned int dim);
@@ -142,7 +142,7 @@ const char * gmat_strerror (const gmat_errno_t gmat_errno) {
  * @param nvec Number of vectors to orthogonalize (rows of span)
  * @param dim Dimension of vectors (columns of span)
  */
-static int gram_schmidt (double **span_ort, const double **span,
+static int gram_schmidt (double **span_ort, double **span,
 		const unsigned int nvec, const unsigned int dim)
 {
 	double *v_proj = NULL;
