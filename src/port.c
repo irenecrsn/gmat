@@ -2,7 +2,9 @@
 #include <string.h>
 #include <math.h>
 
+#ifndef
 #define NDEBUG
+#endif
 #include <assert.h>
 
 #include "port.h"
