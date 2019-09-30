@@ -22,7 +22,7 @@ int gram_schmidt_sel (double *mort, const double *madj,
 
 	double *v_proj = NULL, *ort_base = NULL, **span_sel = NULL;
 	unsigned int i = 0, j = 0;
-	unsigned int n_span = 0, j_current = 0;
+	unsigned int n_span = 0, jp = 0;
 
 	if (mort == NULL || madj == NULL || mcov == NULL) {
 		return GMAT_ENULL;
@@ -41,24 +41,23 @@ int gram_schmidt_sel (double *mort, const double *madj,
 
 	for (j = 0; j < p; j++) {
 
-		j_current = j * p;
-		memcpy(mort + j_current, mcov + j_current, sizeof(double) * p);
+		jp = j * p;
+		memcpy(mort + jp, mcov + jp, sizeof(double) * p);
 		n_span = 0;
 
 		for (i = 0; i < j; i++) {
-			if (madj[j_current + i] == 0) {
+			if (madj[jp + i] == 0) {
 				span_sel[n_span] = mort + i * p;
 				n_span++;
 			}
 		}
-		span_sel[n_span] = mort + j_current;
+		span_sel[n_span] = mort + jp;
 		n_span++;
 
 		/* we orthonormalize the span obtained for the current row */
 		gram_schmidt(ort_base, span_sel, n_span, p);
-		for (i = 0; i < p; i++) {
-			mort[j_current + i] = ort_base[(n_span - 1)*p + i];
-		}
+		/* the last vector of the orthonormalized span is the new j-th column */
+		memcpy(mort + jp, ort_base + (n_span - 1)*p, sizeof(double) * p);
 	}
 
 	free(v_proj); v_proj = NULL;
@@ -68,9 +67,12 @@ int gram_schmidt_sel (double *mort, const double *madj,
 }
 
 
+/*
+ * Performs the crossproduct of two matrices in column major format.
+ */
 int crossproduct (double * res, const double *mort, const double *madj,
 							 const unsigned int p) {
-	unsigned int i = 0, j = 0, k = 0, j_current = 0, i_current = 0;
+	unsigned int i = 0, j = 0, k = 0, jp = 0, ip = 0;
 	double sum = 0;
 
 	if (mort == NULL || madj == NULL) {
@@ -79,17 +81,17 @@ int crossproduct (double * res, const double *mort, const double *madj,
 
 	/* Upper triangle first */
 	for (j = 0; j < p; j++) {
-		j_current = j * p;
+		jp = j * p;
 		for (i = 0; i < j; i++) {
-			if (madj[j_current + i] == 0) {
-				res[j_current + i] = 0; /* Hard-code 0s for missing edges */
+			if (madj[jp + i] == 0) {
+				res[jp + i] = 0; /* Hard-code 0s for missing edges */
 			} else { /* Crossproduct */
 				sum = 0;
-				i_current = i * p;
+				ip = i * p;
 				for (k = 0; k < p; k++) {
-					sum += (mort[j_current + k]*mort[k + i_current]);
+					sum += (mort[jp + k]*mort[k + ip]);
 				}
-				res[j_current + i] = sum;
+				res[jp + i] = sum;
 			}
 		}
 	}
@@ -117,35 +119,32 @@ static int gram_schmidt (double *span_ort, double **span,
 		const unsigned int nvec, const unsigned int p)
 {
 	double *v_proj = NULL;
-	unsigned int i = 0, j = 0, k = 0, i_current = 0;
+	unsigned int i = 0, j = 0, k = 0, ip = 0;
 	double norm = 0;
 
 	assert(span_ort != NULL); assert(span != NULL); assert(nvec != NULL);
-
-	for (i = 0; i < nvec; i++) {
-		memcpy(span_ort + i*p, span[i], sizeof(double) * p);
-	}
 
 	if ((v_proj = calloc(p, sizeof(double))) == NULL) {
 		return GMAT_ENOMEM;
 	}
 
 	for (i = 0; i < nvec; i++) {
-		i_current = i * p;
+		memcpy(span_ort + i*p, span[i], sizeof(double) * p);
+		ip = i * p;
 		for (j = 0; j < i; j++) {
-			proj_ort(v_proj, span_ort + i_current, span_ort + j*p, p);
+			proj_ort(v_proj, span_ort + ip, span_ort + j*p, p);
 			for (k = 0; k < p; k++) {
-				span_ort[i_current + k] -= v_proj[k];
+				span_ort[ip + k] -= v_proj[k];
 			}
 		}
 		/* we normalize the resulting vector */
 		norm = 0;
 		for (k = 0; k < p; k++) {
-			norm += span_ort[i_current + k] * span_ort[i_current + k];
+			norm += span_ort[ip + k] * span_ort[ip + k];
 		}
 		norm = 1 / sqrt(norm);
 		for (k = 0; k < p; k++) {
-			span_ort[i_current + k] = span_ort[i_current + k] * norm;
+			span_ort[ip + k] *= norm;
 		}
 	}
 
