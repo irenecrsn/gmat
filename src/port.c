@@ -2,7 +2,7 @@
 #include <string.h>
 #include <math.h>
 
-#ifndef
+#ifndef NDEBUG
 #define NDEBUG
 #endif
 #include <assert.h>
