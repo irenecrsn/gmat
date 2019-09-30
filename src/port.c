@@ -5,7 +5,8 @@
 #define NDEBUG
 #include <assert.h>
 
-#include "gmn_sampling.h"
+#include "port.h"
+#include "error.h"
 
 static int gram_schmidt (double **span_ort, double **span,
 		const unsigned int nvec, const unsigned int dim);
@@ -120,18 +121,6 @@ int crossproduct (double * res, const double *mort, const double *madj,
 	}
 
 	return GMAT_OK;
-}
-
-const char * gmat_strerror (const gmat_errno_t gmat_errno) {
-
-	switch(gmat_errno) {
-		case GMAT_ENULL:
-			return "Unexpected NULL pointer";
-		case GMAT_ENOMEM:
-			return "Could not allocate more memory";
-		default:
-			return "Unknown error code";
-	}
 }
 
 /*

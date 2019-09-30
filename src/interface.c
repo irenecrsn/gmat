@@ -1,5 +1,6 @@
 #include "interface.h"
-#include "gmn_sampling.h"
+#include "port.h"
+#include "error.h"
 
 SEXP C_port (SEXP R_madj, SEXP R_Q) {
 	int *dims = NULL;
