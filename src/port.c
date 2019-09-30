@@ -20,8 +20,8 @@
  * poor numeric properties of Gram Schmidt orthogonalization).
  * @param p Matrix dimension (p x p)
  */
-static void crossproduct (double *res, const double *Q,
-		const double *madj, const unsigned int p);
+static void crossproduct (double *res, double *Q,
+		double *madj, unsigned int p);
 
 /*
  * Gram Schmidt algorithm
@@ -31,19 +31,18 @@ static void crossproduct (double *res, const double *Q,
  * @param nvec Number of vectors to orthogonalize (rows of span)
  * @param p Dimension of vectors (columns of span)
  */
-static int gram_schmidt (double *span_ort, double **span,
-		const unsigned int nvec, const unsigned int p);
+static void gram_schmidt (double *span_ort, double **span,
+		unsigned int nvec, unsigned int p);
 
-static void proj_ort (double *v_proj_u, const double *v,
-		const double *u, const unsigned int p);
+static void proj_ort (double *v_proj_u, double *v,
+		double *u, unsigned int p);
 
 /*
  * Selective Gram Schmidt algorithm
  */
-int port(double *res, const double *madj,
-		const double *Q, const unsigned int p) {
+int port(double *res, double *madj,	double *Q, unsigned int p) {
 
-	double *v_proj = NULL, *ort_base = NULL, **span_sel = NULL, *mort = NULL;
+	double *span_sel[p], *ort_base = NULL, *mort = NULL;
 	unsigned int i = 0, j = 0;
 	unsigned int n_span = 0, jp = 0, m_dim = 0;
 
@@ -52,14 +51,10 @@ int port(double *res, const double *madj,
 	}
 
 	m_dim = p * p;
-	v_proj = calloc(p, sizeof(double));
-	span_sel = calloc(p, sizeof(double *));
 	ort_base = calloc(m_dim, sizeof(double));
 	mort = calloc(m_dim, sizeof(double));
 
-	if (v_proj == NULL || span_sel == NULL || ort_base == NULL || mort == NULL) {
-		free(v_proj); v_proj = NULL;
-		free(span_sel); span_sel = NULL;
+	if (ort_base == NULL || mort == NULL) {
 		free(ort_base); ort_base = NULL;
 		free(mort); mort = NULL;
 		return GMAT_ENOMEM;
@@ -89,9 +84,8 @@ int port(double *res, const double *madj,
 	/* Crossproduct t(Q) * Q of the resulting factors */
 	crossproduct(res, mort, madj, p);
 
-	free(v_proj); v_proj = NULL;
-	free(span_sel); span_sel = NULL;
 	free(ort_base); ort_base = NULL;
+	free(mort); mort = NULL;
 	return GMAT_OK;
 }
 
@@ -99,8 +93,8 @@ int port(double *res, const double *madj,
 /*
  * Performs the crossproduct of two matrices in column major format.
  */
-static void crossproduct (double * res, const double *mort, const double *madj,
-							 const unsigned int p) {
+static void crossproduct (double *res, double *mort, double *madj,
+							 unsigned int p) {
 	unsigned int i = 0, j = 0, k = 0, jp = 0, ip = 0;
 	double sum = 0;
 
@@ -135,18 +129,14 @@ static void crossproduct (double * res, const double *mort, const double *madj,
 /*
  * Gram Schmidt algorithm
  */
-static int gram_schmidt (double *span_ort, double **span,
-		const unsigned int nvec, const unsigned int p)
+static void gram_schmidt (double *span_ort, double **span,
+		unsigned int nvec, unsigned int p)
 {
-	double *v_proj = NULL;
+	double v_proj[p];
 	unsigned int i = 0, j = 0, k = 0, ip = 0;
 	double norm = 0;
 
 	assert(span_ort != NULL); assert(span != NULL); assert(nvec != NULL);
-
-	if ((v_proj = calloc(p, sizeof(double))) == NULL) {
-		return GMAT_ENOMEM;
-	}
 
 	for (i = 0; i < nvec; i++) {
 		memcpy(span_ort + i*p, span[i], sizeof(double) * p);
@@ -167,24 +157,18 @@ static int gram_schmidt (double *span_ort, double **span,
 			span_ort[ip + k] *= norm;
 		}
 	}
-
-	free(v_proj); v_proj = NULL;
-
-	return GMAT_OK;
 }
 
 /*
  * Orthogonal projection of v onto direction u.
  * Vector u is assumed to already be normalized.
  */
-static void proj_ort (double *v_proj_u, const double *v, const double *u,
-		const unsigned int p)
+static void proj_ort (double *v_proj_u, double *v, double *u, unsigned int p)
 {
 	unsigned int i = 0;
 	double dot_uv = 0;
 
-	assert(u != NULL); assert(v != NULL);
-	assert(v_proj_u != NULL);
+	assert(u != NULL); assert(v != NULL); assert(v_proj_u != NULL);
 
 	for (i = 0; i < p; i++) {
 		dot_uv += (u[i] * v[i]);
