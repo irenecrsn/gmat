@@ -8,6 +8,27 @@
 #include "port.h"
 #include "error.h"
 
+/*
+ * Performs the crossproduct of two matrices in column major format.
+ *
+ * @param res Crossproduct matrix result (t(Q) * Q)
+ * @param Q Matrix which will be multiplied
+ * @param madj For hard-coding the zeros in the result (otherwise, extremely
+ * small values are returned in such entries instead of zeros, because of the
+ * poor numeric properties of Gram Schmidt orthogonalization).
+ * @param p Matrix dimension (p x p)
+ */
+static void crossproduct (double *res, const double *Q,
+		const double *madj, const unsigned int p);
+
+/*
+ * Gram Schmidt algorithm
+ *
+ * @param span_ort Matrix with rows containing the orthogonal vectors
+ * @param span Matrix with rows containing the vectors to orthogonalize
+ * @param nvec Number of vectors to orthogonalize (rows of span)
+ * @param p Dimension of vectors (columns of span)
+ */
 static int gram_schmidt (double *span_ort, double **span,
 		const unsigned int nvec, const unsigned int p);
 
@@ -17,32 +38,36 @@ static void proj_ort (double *v_proj_u, const double *v,
 /*
  * Selective Gram Schmidt algorithm
  */
-int gram_schmidt_sel (double *mort, const double *madj,
-		const double *mcov, const unsigned int p) {
+int port(double *res, const double *madj,
+		const double *Q, const unsigned int p) {
 
-	double *v_proj = NULL, *ort_base = NULL, **span_sel = NULL;
+	double *v_proj = NULL, *ort_base = NULL, **span_sel = NULL, *mort = NULL;
 	unsigned int i = 0, j = 0;
-	unsigned int n_span = 0, jp = 0;
+	unsigned int n_span = 0, jp = 0, m_dim = 0;
 
-	if (mort == NULL || madj == NULL || mcov == NULL) {
+	if (res == NULL || madj == NULL || Q == NULL) {
 		return GMAT_ENULL;
 	}
 
+	m_dim = p * p;
 	v_proj = calloc(p, sizeof(double));
 	span_sel = calloc(p, sizeof(double *));
-	ort_base = calloc(p * p, sizeof(double));
+	ort_base = calloc(m_dim, sizeof(double));
+	mort = calloc(m_dim, sizeof(double));
 
-	if (v_proj == NULL || span_sel == NULL || ort_base == NULL) {
+	if (v_proj == NULL || span_sel == NULL || ort_base == NULL || mort == NULL) {
 		free(v_proj); v_proj = NULL;
 		free(span_sel); span_sel = NULL;
 		free(ort_base); ort_base = NULL;
+		free(mort); mort = NULL;
 		return GMAT_ENOMEM;
 	}
+	memcpy(mort, Q, sizeof(double) * m_dim);
 
+	/* Partial orthogonalization of the initial Q factors */
 	for (j = 0; j < p; j++) {
 
 		jp = j * p;
-		memcpy(mort + jp, mcov + jp, sizeof(double) * p);
 		n_span = 0;
 
 		for (i = 0; i < j; i++) {
@@ -59,6 +84,8 @@ int gram_schmidt_sel (double *mort, const double *madj,
 		/* the last vector of the orthonormalized span is the new j-th column */
 		memcpy(mort + jp, ort_base + (n_span - 1)*p, sizeof(double) * p);
 	}
+	/* Crossproduct t(Q) * Q of the resulting factors */
+	crossproduct(res, mort, madj, p);
 
 	free(v_proj); v_proj = NULL;
 	free(span_sel); span_sel = NULL;
@@ -70,14 +97,12 @@ int gram_schmidt_sel (double *mort, const double *madj,
 /*
  * Performs the crossproduct of two matrices in column major format.
  */
-int crossproduct (double * res, const double *mort, const double *madj,
+static void crossproduct (double * res, const double *mort, const double *madj,
 							 const unsigned int p) {
 	unsigned int i = 0, j = 0, k = 0, jp = 0, ip = 0;
 	double sum = 0;
 
-	if (mort == NULL || madj == NULL) {
-		return GMAT_ENULL;
-	}
+	assert(mort != NULL); assert(madj != NULL);
 
 	/* Upper triangle first */
 	for (j = 0; j < p; j++) {
@@ -103,17 +128,10 @@ int crossproduct (double * res, const double *mort, const double *madj,
 			res[j * p + i] = res[i * p + j];
 		}
 	}
-
-	return GMAT_OK;
 }
 
 /*
  * Gram Schmidt algorithm
- *
- * @param span_ort Matrix with rows containing the orthogonal vectors
- * @param span Matrix with rows containing the vectors to orthogonalize
- * @param nvec Number of vectors to orthogonalize (rows of span)
- * @param p Dimension of vectors (columns of span)
  */
 static int gram_schmidt (double *span_ort, double **span,
 		const unsigned int nvec, const unsigned int p)
