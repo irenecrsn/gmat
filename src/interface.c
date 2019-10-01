@@ -4,10 +4,10 @@
 
 SEXP C_port (SEXP R_madj, SEXP R_Q) {
 	int *dims = NULL;
-	unsigned int i = 0, N = 0, m_dim = 0, p = 0;
+	unsigned int N = 0, p = 0;
 	SEXP R_res = NULL, R_dims = NULL;
 	double *madj, *Q, *res;
-	gmat_errno_t gmat_errno;
+	port_errno_t port_errno;
 
 	/* Initialize problem dimensions */
 	/* Arrays always have dim attribute so no null check needed */
@@ -19,7 +19,7 @@ SEXP C_port (SEXP R_madj, SEXP R_Q) {
 	if (dims[0] != dims[1]) {
 		error("Q factors must be square.\n");
 	}
-	p = dims[0]; N = dims[2]; m_dim = p * p;
+	p = dims[0]; N = dims[2];
 
 	/* Initialize R objects */
 	R_res = PROTECT(alloc3DArray(REALSXP, p, p, N));
@@ -28,12 +28,10 @@ SEXP C_port (SEXP R_madj, SEXP R_Q) {
 	/* Get argument pointers */
 	madj = REAL(R_madj); Q = REAL(R_Q);
 
-	for (i = 0; i < N; i++) {
-		gmat_errno = port(res + m_dim*i, madj, Q + m_dim*i, p);
-		if (gmat_errno != GMAT_OK) {
-			UNPROTECT(2);
-			error("%s.\n", gmat_strerror(gmat_errno));
-		}
+	port_errno = port_sample(res, madj, Q, p, N);
+	if (port_errno != PORT_OK) {
+		UNPROTECT(1);
+		error("%s.\n", port_strerror(port_errno));
 	}
 
 	UNPROTECT(1);

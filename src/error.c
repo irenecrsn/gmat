@@ -1,11 +1,11 @@
 #include "error.h"
 
-const char * gmat_strerror (const gmat_errno_t gmat_errno) {
+const char * port_strerror (const port_errno_t port_errno) {
 
-	switch(gmat_errno) {
-		case GMAT_ENULL:
+	switch(port_errno) {
+		case PORT_ENULL:
 			return "Unexpected NULL pointer";
-		case GMAT_ENOMEM:
+		case PORT_ENOMEM:
 			return "Could not allocate more memory";
 		default:
 			return "Unknown error code";

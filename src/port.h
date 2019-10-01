@@ -9,7 +9,9 @@
  * vectors)
  * @param mcov Matrix containing as columns the initial matrix sample
  * @param p Dimension of the matrices (p x p)
+ * @param N Sample size
  */
-int port(double *res, double *madj,	double *mcov, unsigned int p);
+int port_sample(double *res, double *madj,	double *mcov, unsigned int p,
+	unsigned int N);
 
 #endif
