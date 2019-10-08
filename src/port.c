@@ -39,13 +39,12 @@ int port_sample(double *res, double *madj,	double *Q, unsigned int p,
 	unsigned int N) {
 
 	double mort[p * p];
-	unsigned int n = 0;
 
 	if (res == NULL || madj == NULL || Q == NULL) {
 		return PORT_ENULL;
 	}
 
-	for (n = 0; n < N; n++) {
+	for (int n = 0; n < N; n++) {
 		/* Partial orthogonalization of the initial Q factors */
 		port(mort, madj, Q + n*p*p, p);
 		/* Crossproduct t(Q) * Q of the resulting factors */
@@ -58,16 +57,16 @@ int port_sample(double *res, double *madj,	double *Q, unsigned int p,
 static void port(double *res, double *madj, double *Q, unsigned int p) {
 
 	double *span_sel[p], ort_base[p * p];
-	unsigned int i = 0, j = 0, n_span = 0, jp = 0;
+	unsigned int n_span = 0, jp = 0;
 
 	memcpy(res, Q, sizeof(double) * p * p);
 
-	for (j = 0; j < p; j++) {
+	for (int j = 0; j < p; j++) {
 
 		jp = j * p;
 		n_span = 0;
 
-		for (i = 0; i < j; i++) {
+		for (int i = 0; i < j; i++) {
 			if (madj[jp + i] == 0) {
 				span_sel[n_span] = res + i * p;
 				n_span++;
@@ -90,28 +89,29 @@ static void gram_schmidt (double *res, double **span,
 		unsigned int nvec, unsigned int p) {
 
 	double norm = 0, dot_prod = 0;
-	unsigned int i = 0, j = 0, k = 0, ip = 0, jp = 0;
+	unsigned int ip = 0, jp = 0;
 
-	for (i = 0; i < nvec; i++) {
-		memcpy(res + i*p, span[i], sizeof(double) * p);
-		ip = i * p; jp = j * p;
-		for (j = 0; j < i; j++) {
+	for (int i = 0; i < nvec; i++) {
+		ip = i * p;
+		memcpy(res + ip, span[i], sizeof(double) * p);
+		for (int j = 0; j < i; j++) {
+			jp = j * p;
 			/* Orthogonal projection */
 			dot_prod = 0;
-			for (k = 0; k < p; k++) {
+			for (int k = 0; k < p; k++) {
 				dot_prod += (res[ip + k] * res[jp + k]);
 			}
-			for (k = 0; k < p; k++) {
+			for (int k = 0; k < p; k++) {
 				res[ip + k] -= (dot_prod * res[jp + k]);
 			}
 		}
 		/* Normalization */
 		norm = 0;
-		for (k = 0; k < p; k++) {
+		for (int k = 0; k < p; k++) {
 			norm += (res[ip + k] * res[ip + k]);
 		}
 		norm = 1 / sqrt(norm);
-		for (k = 0; k < p; k++) {
+		for (int k = 0; k < p; k++) {
 			res[ip + k] *= norm;
 		}
 	}
@@ -122,19 +122,19 @@ static void gram_schmidt (double *res, double **span,
  */
 static void crossproduct (double *res, double *mort, double *madj,
 							 unsigned int p) {
-	unsigned int i = 0, j = 0, k = 0, jp = 0, ip = 0;
+	unsigned int jp = 0, ip = 0;
 	double sum = 0;
 
 	/* Upper triangle first */
-	for (j = 0; j < p; j++) {
+	for (int j = 0; j < p; j++) {
 		jp = j * p;
-		for (i = 0; i < j; i++) {
+		for (int i = 0; i < j; i++) {
 			if (madj[jp + i] == 0) {
 				res[jp + i] = 0; /* Hard-code 0s for missing edges */
 			} else { /* Crossproduct */
 				sum = 0;
 				ip = i * p;
-				for (k = 0; k < p; k++) {
+				for (int k = 0; k < p; k++) {
 					sum += (mort[jp + k]*mort[k + ip]);
 				}
 				res[jp + i] = sum;
@@ -143,9 +143,9 @@ static void crossproduct (double *res, double *mort, double *madj,
 	}
 
 	/* Lower triangle == transpose of upper triangle (crossproduct) */
-	for (j = 0; j < p; j++) {
+	for (int j = 0; j < p; j++) {
 		res[j * p + j] = 1; /* Diagonal = 1 (normalized vectors) */
-		for (i = j + 1; i < p; i++) {
+		for (int i = j + 1; i < p; i++) {
 			res[j * p + i] = res[i * p + j];
 		}
 	}

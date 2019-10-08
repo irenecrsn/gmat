@@ -11,7 +11,7 @@ test_that("selective gram schmidt actually selects", {
 
   span_ort <- .Call(C_port, madj, span)
 
-  madj_learned <- (zapsmall(span_ort[, , 1]) != 0) * 1
+  madj_learned <- (span_ort[, , 1] != 0) * 1
   diag(madj_learned) <- 0
   expect_equal(length(which((madj_learned - madj) != 0)), 0)
 })
@@ -22,7 +22,7 @@ test_that("the graph structure is preserved", {
 
   expect_equal_ug <- function(m, ug) {
     madj <- igraph::as_adjacency_matrix(ug, sparse = FALSE)
-    madj_learned <- zapsmall(m) != 0
+    madj_learned <- m != 0
     diag(madj_learned) <- FALSE
     expect_equal(length(which((madj - madj_learned) != 0)), 0)
   }
