@@ -4,14 +4,13 @@
 #' undirected graph.
 #'
 #' @name ug-constrained correlation matrices
-#' @rdname cor_ug
+#' @rdname ug
 #'
 #' @param N Number of samples.
 #' @param p Matrix dimension. Ignored if `ug` is provided.
 #' @param d Number in `[0,1]`, the proportion of non-zero
 #' entries in the sampled matrices. Ignored if `ug` is provided.
 #' @param ug An igraph undirected graph specifying the zero pattern in the sampled matrices.
-#' @param zapzeros Boolean, convert to zero extremely low entries? Defaults to `TRUE`.
 #' @param rfun Function that generates the random entries in the initial
 #' factors, except for [port_chol()] which uses [mh_u()] to obtain it.
 #' @param ... Additional parameters to be passed to \code{rfun} or to
@@ -39,7 +38,6 @@
 #'
 #' # Generate a matrix with a percentage of zeros
 #' port(d = 0.5)
-#' port(d = 0.5, zapzeros = FALSE) # no zero zap
 #'
 #' # Generate a random undirected graph structure
 #' ug <- rgraph(p = 3, d = 0.5)
@@ -47,43 +45,24 @@
 #'
 #' # Generate a matrix complying with the predefined zero pattern
 #' port(ug = ug)
-#' port(ug = ug, zapzeros = FALSE) # no zero zap
 #' @export
-port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
-                 rfun = stats::rnorm, ...) {
+port <- function(N = 1, p = 3, d = 1, ug = NULL, rfun = stats::rnorm, ...) {
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
-  if (is.null(ug) == FALSE) {
-    p <- length(igraph::V(ug))
-    madj <- igraph::as_adjacency_matrix(ug,
-      type = "both",
-      sparse = FALSE
-    )
-    sam <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
-    for (n in 1:N) {
-      sam[, , n] <- matrix(.C(
-        C_gram_schmidt_sel,
-        double(p * p),
-        as.logical(madj),
-        as.double(t(sam[, , n])),
-        as.integer(p)
-      )[[1]],
-      ncol = p,
-      byrow = TRUE
-      )
-      sam[, , n] <- tcrossprod(sam[, , n])
+  p <- length(igraph::V(ug))
+  madj <- igraph::as_adjacency_matrix(ug,
+    type = "both",
+    sparse = FALSE
+  )
+  Q <- array(dim = c(p, p, N), data = rfun(p * p * N, ...))
+  sample <- .Call(C_port, madj, Q)
 
-      if (zapzeros == TRUE) {
-        sam[, , n] <- zapsmall(sam[, , n])
-      }
-    }
-  }
-  return(sam)
+  return(sample)
 }
 
 
-#' @rdname cor_ug
+#' @rdname ug
 #'
 #' @details Function [port_chol()] uses the method described in Córdoba et
 #' al. (2019), combining uniform sampling with partial orthogonalization as
@@ -98,8 +77,7 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
 #' random Gaussian graphical models_arXiv_:1909.01062, 2019.
 #'
 #' @export
-port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
-                      ...) {
+port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, ...) {
   if (is.null(ug) == TRUE) {
     ug <- rgraph(p = p, d = d)
   }
@@ -109,33 +87,17 @@ port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, zapzeros = TRUE,
       type = "both",
       sparse = FALSE
     )
-    dag <- ug_to_dag(ug)
-    sam <- mh_u(N, p = p, dag = dag, ...)
-    for (n in 1:N) {
-      temp <- .C(
-        C_gram_schmidt_sel,
-        double(p * p),
-        as.logical(madj),
-        as.double(t(sam[, , n])),
-        as.integer(p)
-      )[[1]]
-      sam[, , n] <- matrix(temp[-(p * p + 1)],
-        ncol = p,
-        byrow = TRUE
-      )
-      sam[, , n] <- tcrossprod(sam[, , n])
-
-      if (zapzeros == TRUE) {
-        sam[, , n] <- zapsmall(sam[, , n])
-      }
-    }
   }
-  return(sam)
+  dag <- ug_to_dag(ug)
+  U <- mh_u(N, p = p, dag = dag, ...)
+  sample <- .Call(C_port, madj, U)
+
+  return(sample)
 }
 
 
 
-#' @rdname cor_ug
+#' @rdname ug
 #'
 #' @details We also provide an implementation of the most commonly used in the
 #' literature [diagdom()]. By contrast, this method produces a random matrix `M`
