@@ -18,7 +18,7 @@ diagdom(N = 1, p = 3, d = 1, ug = NULL, rfun = stats::rnorm, ...)
 
 \item{p}{Matrix dimension. Ignored if \code{ug} is provided.}
 
-\item{d}{Number in \code{[0,1]}, the proportion of non-zero
+\item{d}{Number in \verb{[0,1]}, the proportion of non-zero
 entries in the sampled matrices. Ignored if \code{ug} is provided.}
 
 \item{ug}{An igraph undirected graph specifying the zero pattern in the sampled matrices.}
@@ -30,7 +30,7 @@ factors, except for \code{\link[=port_chol]{port_chol()}} which uses \code{\link
 \code{\link[=mh_u]{mh_u()}}.}
 }
 \value{
-A three-dimensional array of length \code{p x p x N}.
+A three-dimensional array of length \verb{p x p x N}.
 }
 \description{
 Sample correlation matrices, possibly with a zero pattern constrained by an
@@ -93,6 +93,6 @@ orthogonalization method for simulation covariance and concentration graph
 matrices. \emph{Proceedings of Machine Learning Research} (PGM 2018), vol. 72, pp.
 61 - 72, 2018.
 
-Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. Generating
+Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. On generating
 random Gaussian graphical models_arXiv_:1909.01062, 2019.
 }

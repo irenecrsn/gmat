@@ -16,7 +16,7 @@ Authors@R: c(
 Description: Simulation of correlation matrices possibly constrained by a given undirected or acyclic directed graph. In particular, the package provides functions that implement the simulation methods described in Córdoba et al. (2018a) <doi:10.1007/978-3-030-03493-1_13>, Córdoba et al. (2018b) <doi:10.1145/2695664.2695717> and Córdoba et al. (2019) <arXiv:1909.01062>.
 License: GPL (>=2)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 ByteCompile: true
 URL: https://github.com/irenecrsn/gmat
 BugReports: https://github.com/irenecrsn/gmat/issues

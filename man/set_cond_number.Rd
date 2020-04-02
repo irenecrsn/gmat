@@ -7,12 +7,12 @@
 set_cond_number(sample, k)
 }
 \arguments{
-\item{sample}{Array, the \code{p x p x N} matrix sample.}
+\item{sample}{Array, the \verb{p x p x N} matrix sample.}
 
 \item{k}{Condition number to be set.}
 }
 \value{
-A \code{p x p x N} array containing the matrices with the fixed condition
+A \verb{p x p x N} array containing the matrices with the fixed condition
 number.
 }
 \description{
