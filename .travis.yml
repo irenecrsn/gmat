@@ -7,9 +7,6 @@ branches:
     only:
         - master
 
-bioc_packages:
-        - graph
-
 matrix:
     include:
         - os: linux

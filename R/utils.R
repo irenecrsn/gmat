@@ -123,14 +123,15 @@ set_cond_number <- function(sample, k) {
 ug_to_dag <- function(ug) {
 
   # We triangulate the undirected graph if it is not chordal
-  ug_cover <- gRbase::triangulate(igraph::as_graphnel(ug))
+  ug_cover <- igraph::is_chordal(ug, newgraph = TRUE)$newgraph
 
   # We get the max_cardinality sort == perfect ordering
   # The perfect ordering will be the ancestral ordering of orientation
   # By construction this ordering cannot induce v-structures
-  dag_topo_sort <- gRbase::mcs(ug_cover, index = TRUE)
-  inv <- order(dag_topo_sort)
-  dag_mat <- methods::as(ug_cover, "matrix")
+  ug_cover_mcsort <- igraph::max_cardinality(ug_cover)
+  dag_topo_sort <- ug_cover_mcsort$alpha
+  inv <- ug_cover_mcsort$alpham1
+  dag_mat <- igraph::as_adjacency_matrix(ug_cover, sparse = FALSE)
   dag_mat <- dag_mat[dag_topo_sort, dag_topo_sort]
   dag_mat[lower.tri(dag_mat)] <- 0
 
