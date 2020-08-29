@@ -1,8 +1,7 @@
 ## Test environments
 * Local Ubuntu 20.04.1 LTS, R 3.6.3
-* Ubuntu 16.04.6 LTS (on travis-ci), R 3.6.1, R devel and R 3.5.3
-* Mac OS X 10.13.3 (on travis-ci), R 3.6.1 and R 3.5.3
-* win-builder (R 3.6.1, R devel and R 3.5.3)
+* r-hub, R 4.0.0, R devel and R 3.6.3
+* win-builder (R 4.0.2, R devel and R 3.6.3)
 
 ## R CMD check results
 There is a NOTE informing about the change in maintainer.
