@@ -13,14 +13,15 @@ bibentry(bibtype = "Inproceedings",
   header = "If exclusively using the partial orthogonalization method, cite as:"
 )
 bibentry(bibtype = "Article",
-  title        = "Generating random correlation matrices",
+  title        = "On generating random correlation matrices",
   author       = c(person(given = "Irene", family = "Córdoba"),
                    person(given = "Gherardo", family = "Varando"),
                    person(given = "Concha", family = "Bielza"),
                    person(given = "Pedro", family = "Larrañaga")),
-  journal = "arXiv",
-  number = "1909.01062",
-  year = "2019",
+  journal = "International Journal of Approximate Reasoning",
+  volume = "125",
+  year = "2020",
+  pages = "240-250",
   header = "If using a reasonable amount of the package functionality, cite as:"
 )
 bibentry(bibtype = "Inproceedings",
