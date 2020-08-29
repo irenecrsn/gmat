@@ -48,7 +48,7 @@ has finished is the cross product of \code{Q}.
 Function \code{\link[=port_chol]{port_chol()}} uses the method described in Córdoba et
 al. (2019), combining uniform sampling with partial orthogonalization as
 follows. If the graph provided is not chordal, then a chordal cover is found
-using \code{\link[gRbase:triangulate]{gRbase::triangulate()}}. Then uniform sampling for the upper Choleksy
+using \code{\link[gRbase:graph-triangulate]{gRbase::triangulate()}}. Then uniform sampling for the upper Choleksy
 factor corresponding to such chordal cover is performed with \code{\link[=mh_u]{mh_u()}}.
 Finally, it uses partial orthogonalization as \code{\link[=port]{port()}} to add the missing
 zeros (corresponding to fill-in edges in the chordal cover). The behaviour of
@@ -93,6 +93,7 @@ orthogonalization method for simulation covariance and concentration graph
 matrices. \emph{Proceedings of Machine Learning Research} (PGM 2018), vol. 72, pp.
 61 - 72, 2018.
 
-Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. On generating
-random Gaussian graphical models_arXiv_:1909.01062, 2019.
+Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. On
+generating random Gaussian graphical models. \emph{International Journal of
+Approximate Reasoning} , vol. 125, pp.240 - 250, 2020.
 }

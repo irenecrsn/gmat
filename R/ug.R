@@ -73,8 +73,9 @@ port <- function(N = 1, p = 3, d = 1, ug = NULL, rfun = stats::rnorm, ...) {
 #' zeros (corresponding to fill-in edges in the chordal cover). The behaviour of
 #' this function is the same as [port()].
 #'
-#' @references Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. On generating
-#' random Gaussian graphical models_arXiv_:1909.01062, 2019.
+#' @references Córdoba, I., Varando, G., Bielza, C. and Larrañaga, P. On 
+#' generating random Gaussian graphical models. _International Journal of
+#' Approximate Reasoning_ , vol. 125, pp.240 - 250, 2020.
 #'
 #' @export
 port_chol <- function(N = 1, p = 3, d = 1, ug = NULL, ...) {
