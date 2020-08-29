@@ -47,8 +47,9 @@ The package mostly implements methods described in the following papers:
     orthogonalization method for simulating covariance and concentration
     graph matrices**. *Proceedings of Machine Learning Research* (PGM
     2018), vol 72, pp. 61-72, 2018.
-  - Córdoba I., Varando G., Bielza C., Larrañaga P. **Generating random
-    Gaussian graphical models**. *arXiv:1909.01062*, 2019.
+  - Córdoba I., Varando G., Bielza C., Larrañaga P. **On generating random
+    Gaussian graphical models**. *International Journal of Approximate
+    Reasoning*, vol 125, pp. 240-250, 2020.
 
 ## An example of use
 
