@@ -28,7 +28,7 @@ devtools::install_github("irenecrsn/gmat")
 ```
 
 The other R packages required for `gmat` are `igraph` and `gRbase`,
-which can also be installed from CRAN.
+which can be installed from CRAN and Bioconductor.
 
 ## Overview
 
