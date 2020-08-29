@@ -5,7 +5,6 @@ acyclic directed and undirected graphs.
 
 [![CRAN
 status](http://www.r-pkg.org/badges/version/gmat)](https://CRAN.R-project.org/package=gmat)
-[![codecov](https://codecov.io/gh/irenecrsn/gmat/branch/master/graph/badge.svg)](https://codecov.io/gh/irenecrsn/gmat)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN
@@ -47,5 +46,4 @@ The package mostly implements methods described in the following papers:
     Gaussian graphical models**. *International Journal of Approximate
     Reasoning*, vol 125, pp. 240-250, 2020.
 
-See examples of use and more at [the documentation
-website](https://gherardovarando.github.io/gmat/) for the package.
+See examples of use and more at package's manual.
