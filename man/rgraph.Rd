@@ -14,7 +14,7 @@ rgraph(p, d, dag = FALSE, ordered = TRUE)
 \item{dag}{Whether the generated graph should be acyclic directed.}
 
 \item{ordered}{When generating an acyclic directed graph, whether the nodes
-should follow the ancestral order \code{1, ..., p}.}
+should follow the ancestral order \verb{1, ..., p}.}
 }
 \value{
 The generated graph.

@@ -1,25 +1,25 @@
 Package: gmat
 Type: Package
 Title: Simulation of Graphical Correlation Matrices
-Version: 0.2.1.9000
-Date: 2019-09-09
+Version: 0.2.2
+Date: 2020-08-29
 Encoding: UTF-8
 Authors@R: c(
-    person(given = "Irene", family = "Córdoba", email = "irene.cordoba@upm.es", role = c("aut", "cre"),
+    person(given = "Irene", family = "Córdoba", role = "aut",
 	comment = c(ORCID = "0000-0002-3252-4234")),
-    person(given = "Gherardo", family = "Varando", role = "aut",
+    person(given = "Gherardo", family = "Varando", email = "gherardo.varando@math.ku.dk", role = c("aut", "cre"),
 	comment = c(ORCID = "0000-0002-6708-1103")),
     person(given = "Concha", family = "Bielza", role = "ths",
 	comment = c(ORCID = "0000-0001-7109-2668")),
     person(given = "Pedro", family = "Larrañaga", role = "ths",
 	comment = c(ORCID = "0000-0003-0652-9872")))
-Description: Simulation of correlation matrices possibly constrained by a given undirected or acyclic directed graph. In particular, the package provides functions that implement the simulation methods described in Córdoba et al. (2018a) <doi:10.1007/978-3-030-03493-1_13>, Córdoba et al. (2018b) <doi:10.1145/2695664.2695717> and Córdoba et al. (2019) <arXiv:1909.01062>.
+Description: Simulation of correlation matrices possibly constrained by a given undirected or acyclic directed graph. In particular, the package provides functions that implement the simulation methods described in Córdoba et al. (2018) <doi:10.1007/978-3-030-03493-1_13> and Córdoba et al. (2020) <doi:10.1016/j.ijar.2020.07.007>.
 License: GPL (>=2)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 ByteCompile: true
-URL: https://github.com/irenecrsn/gmat
-BugReports: https://github.com/irenecrsn/gmat/issues
+URL: https://github.com/gherardovarando/gmat
+BugReports: https://github.com/gherardovarando/gmat/issues
 Suggests:
 	testthat,
 	covr

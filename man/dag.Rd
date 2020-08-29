@@ -15,7 +15,7 @@ chol_iid(N = 1, p = 3, d = 1, dag = NULL)
 
 \item{p}{Matrix dimension. Ignored if \code{dag} is provided.}
 
-\item{d}{Number in \code{[0,1]}, the proportion of non-zero
+\item{d}{Number in \verb{[0,1]}, the proportion of non-zero
 entries in the Cholesky factor of the sampled matrices.
 Ignored if \code{dag} is provided.}
 
@@ -28,7 +28,7 @@ order, with the first one having no parents.}
 \item{...}{Additional parameters for \code{\link[=mh_u]{mh_u()}}.}
 }
 \value{
-A three-dimensional array of length \code{p x p x N}.
+A three-dimensional array of length \verb{p x p x N}.
 }
 \description{
 Sample correlation matrices, possibly with a zero pattern in its Cholesky

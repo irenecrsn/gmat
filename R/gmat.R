@@ -1,4 +1,6 @@
-#' gmat: Graphically constrained matrices.
+#' gmat
+#'
+#' @description Simulation of graphical correlation matrices
 #'
 #' @useDynLib gmat, .registration = TRUE
 #'

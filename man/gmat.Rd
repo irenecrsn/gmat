@@ -3,8 +3,7 @@
 \docType{package}
 \name{gmat}
 \alias{gmat}
-\alias{gmat-package}
-\title{gmat: Graphically constrained matrices.}
+\title{gmat}
 \description{
-gmat: Graphically constrained matrices.
+Simulation of graphical correlation matrices
 }
